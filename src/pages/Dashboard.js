@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+// Dashboard.js
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import ProjectList from '../components/ProjectList';
-import ApplicationForm from '../components/ApplicationForm';
 import { useTheme } from '../context/ThemeContext';
 
 const Dashboard = () => {
   const { isDarkMode, toggleTheme } = useTheme();
-  const [showForm, setShowForm] = useState(false); // State to control form visibility
+  const navigate = useNavigate(); // Use React Router's navigate function
 
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100">
@@ -55,11 +56,10 @@ const Dashboard = () => {
             )}
           </button>
         </div>
-        {/* Pass function to open the form to ProjectList */}
-        <ProjectList onOpenApplication={() => setShowForm(true)} />
+        
+        {/* Project List with Navigation to Application Form */}
+        <ProjectList onOpenApplication={() => navigate('/application-form')} />
       </div>
-      {/* Conditionally render ApplicationForm */}
-      {showForm && <ApplicationForm onClose={() => setShowForm(false)} />}
     </div>
   );
 };
