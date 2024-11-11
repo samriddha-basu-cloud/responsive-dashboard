@@ -124,7 +124,7 @@ const ProjectInformation = ({ onNext, onBack }) => {
                   value={option}
                   checked={info.bmzCoreAreas.includes(option)}
                   onChange={handleBMZCoreAreaChange}
-                  className="mr-2"
+                  className="mr-2 custom-checkbox"
                 />
                 <label htmlFor={`bmz-core-area-${index}`} className="text-gray-700 dark:text-gray-200">
                   {option}
