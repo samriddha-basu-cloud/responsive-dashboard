@@ -160,11 +160,11 @@ const Pathway10 = ({ onNext, onBack }) => {
           Back
         </button>
         <button
-          type="button"
-          onClick={onNext}
-          className="w-full py-3 px-4 rounded-md bg-gradient-to-r from-red-500 to-red-700 text-white hover:from-red-600 hover:to-red-800 transition-colors duration-300"
+          type="submit" // Set as submit button
+          onClick={() => alert('Submitted!')}
+          className="w-full py-3 px-4 rounded-md bg-gradient-to-r from-green-500 to-green-700 text-white hover:from-green-600 hover:to-green-800 transition-colors duration-300"
         >
-          Next
+          Submit
         </button>
       </div>
     </div>
