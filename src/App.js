@@ -1,4 +1,4 @@
-// App.js
+// src/App.js
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Dashboard from './pages/Dashboard';
@@ -10,7 +10,8 @@ import { ThemeProvider } from './context/ThemeContext';
 
 function ProtectedRoute({ children }) {
   const { currentUser } = useAuth();
-  return currentUser ? children : <Navigate to="/login" />;
+  // Redirect to /register if no user is logged in
+  return currentUser ? children : <Navigate to="/register" />;
 }
 
 function App() {
@@ -19,9 +20,14 @@ function App() {
       <ThemeProvider>
         <Router>
           <Routes>
-            <Route path="/" element={<Navigate to="/login" />} />
+            {/* Redirect default route to /register */}
+            <Route path="/" element={<Navigate to="/register" />} />
+            
+            {/* Public routes */}
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
+            
+            {/* Protected routes */}
             <Route
               path="/dashboard"
               element={
