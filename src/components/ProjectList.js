@@ -1,14 +1,62 @@
-import React, { useState } from 'react';
+// src/components/ProjectList.js
+import React, { useState, useEffect } from 'react';
+import { auth, db } from '../firebase';
+import { doc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
+import { v4 as uuidv4 } from 'uuid'; // Import uuid to generate unique project IDs
+import { FiDownload } from 'react-icons/fi'; // Import download icon
+import { FaUser } from 'react-icons/fa'; // Import user icon for Profile Form
 
-const ProjectList = ({ onOpenApplication, onAddNewProject }) => {
+const ProjectList = ({ onOpenApplication }) => {
   const [searchTerm, setSearchTerm] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [projectName, setProjectName] = useState('');
+  const [projectDescription, setProjectDescription] = useState('');
+  const [projects, setProjects] = useState([]); // Projects state for user's projects
 
-  const projects = [
-    { id: 1, name: 'Project Alpha', details: 'This is a detailed description of Project Alpha.' },
-    { id: 2, name: 'Project Beta', details: 'This is a detailed description of Project Beta.' },
-    { id: 3, name: 'Project Gamma', details: 'This is a detailed description of Project Gamma.' },
-    { id: 4, name: 'Project Delta', details: 'This is a detailed description of Project Delta.' },
-  ];
+  // Fetch the user's projects from Firestore on component mount
+  useEffect(() => {
+    const fetchUserProjects = async () => {
+      const user = auth.currentUser;
+      if (user) {
+        const userDocRef = doc(db, 'users', user.uid);
+        const userDoc = await getDoc(userDocRef);
+
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          setProjects(userData.projects || []); // Set projects to user's projects or empty array
+        }
+      }
+    };
+
+    fetchUserProjects();
+  }, []);
+
+  const handleAddNewProject = async () => {
+    if (!projectName || !projectDescription) return; // Basic validation
+
+    const newProject = {
+      id: uuidv4(), // Generate unique ID
+      name: projectName,
+      details: projectDescription,
+    };
+
+    // Add project to Firestore and update UI
+    const user = auth.currentUser;
+    if (user) {
+      const userDocRef = doc(db, 'users', user.uid);
+      await updateDoc(userDocRef, {
+        projects: arrayUnion(newProject), // Add new project to the user's projects array in Firestore
+      });
+
+      // Update the local state with the new project
+      setProjects((prevProjects) => [...prevProjects, newProject]);
+    }
+
+    // Clear inputs and close modal
+    setProjectName('');
+    setProjectDescription('');
+    setIsModalOpen(false);
+  };
 
   const filteredProjects = projects.filter((project) =>
     project.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -18,19 +66,19 @@ const ProjectList = ({ onOpenApplication, onAddNewProject }) => {
     <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-2xl font-bold">Projects</h2>
-        
+
         {/* Button and Search Bar in a Flex Container */}
         <div className="flex items-center space-x-2">
           {/* Add New Project Button */}
           <button
-            onClick={onAddNewProject} // Trigger function when button is clicked
+            onClick={() => setIsModalOpen(true)} // Open modal on button click
             className="px-4 py-2 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 transition-all duration-300"
             style={{
               background: 'linear-gradient(to right, #C31A07, #9E1305)',
               boxShadow: '0 4px 14px rgba(195, 26, 7, 0.4)',
             }}
           >
-            + Add New Project
+            + Add Project
           </button>
 
           {/* Search Bar */}
@@ -59,31 +107,32 @@ const ProjectList = ({ onOpenApplication, onAddNewProject }) => {
           </div>
         </div>
       </div>
-      
+
+      {/* Project Cards */}
       <div className="space-y-4">
         {filteredProjects.map((project) => (
           <div
             key={project.id}
             className="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-700 rounded-lg shadow-md transition-colors duration-300"
           >
-            {/* Project Information */}
             <div className="flex-1">
               <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{project.name}</h3>
               <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{project.details}</p>
               <div className="flex space-x-2 mt-4">
-                {/* Open Application Button */}
+                {/* Profile Form Button */}
                 <button
-                  onClick={onOpenApplication} // Open Application Form
-                  className="px-4 py-2 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 transition-all duration-300"
+                  onClick={onOpenApplication}
+                  className="px-4 py-2 rounded-md text-white flex items-center space-x-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 transition-all duration-300"
                   style={{
                     background: 'linear-gradient(to right, #C31A07, #9E1305)',
                     boxShadow: '0 4px 14px rgba(195, 26, 7, 0.4)',
                   }}
                 >
-                  Open Application
+                  <FaUser className="h-5 w-5" />
+                  <span>Profile Form</span>
                 </button>
 
-                {/* Download Application Button */}
+                {/* Download Form Button */}
                 <button
                   className="px-4 py-2 rounded-md text-white flex items-center space-x-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 transition-all duration-300"
                   style={{
@@ -91,22 +140,8 @@ const ProjectList = ({ onOpenApplication, onAddNewProject }) => {
                     boxShadow: '0 4px 14px rgba(195, 26, 7, 0.4)',
                   }}
                 >
-                  {/* Download Icon */}
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2m-4-4l-4 4m0 0l-4-4m4 4V4"
-                    />
-                  </svg>
-                  <span>Download Application</span>
+                  <FiDownload className="h-5 w-5" />
+                  <span>Download Form</span>
                 </button>
               </div>
             </div>
@@ -133,6 +168,34 @@ const ProjectList = ({ onOpenApplication, onAddNewProject }) => {
           </div>
         ))}
       </div>
+
+      {/* Modal for Adding New Project */}
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-80">
+            <h2 className="text-xl font-semibold mb-4">Add Project</h2>
+            <input
+              type="text"
+              placeholder="Project Name"
+              value={projectName}
+              onChange={(e) => setProjectName(e.target.value)}
+              className="w-full mb-4 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600"
+            />
+            <textarea
+              placeholder="Project Description"
+              value={projectDescription}
+              onChange={(e) => setProjectDescription(e.target.value)}
+              className="w-full mb-4 px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600"
+            />
+            <button
+              onClick={handleAddNewProject}
+              className="w-full bg-gradient-to-r from-red-500 to-red-700 text-white p-2 rounded-md"
+            >
+              Add Project
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

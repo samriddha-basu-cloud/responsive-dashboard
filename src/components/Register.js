@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 import { auth, db } from '../firebase';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom'; // Import Link for navigation
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { FaCheckCircle } from 'react-icons/fa'; // Import check icon from react-icons
 
@@ -156,6 +156,14 @@ const Register = () => {
         <button type="submit" className="w-full bg-gradient-to-r from-red-500 to-red-700 text-white p-2 rounded-md">
           Register
         </button>
+
+        {/* Link to Login if already registered */}
+        <p className="mt-4 text-gray-700 dark:text-gray-300">
+          Already have an account?{' '}
+          <Link to="/login" className="text-blue-500 hover:underline">
+            Login here
+          </Link>
+        </p>
       </form>
     </div>
   );

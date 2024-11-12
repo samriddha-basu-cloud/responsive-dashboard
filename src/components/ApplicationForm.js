@@ -110,7 +110,7 @@ const ApplicationForm = () => {
             </button>
           </div>
           <Link
-            to="/"
+            to="/dashboard"
             className="flex items-center justify-center w-full py-2 px-4 rounded-md bg-gradient-to-r from-red-500 to-red-700 text-white hover:from-red-600 hover:to-red-800 transition-colors duration-300 shadow-md text-sm mt-2"
           >
             Dashboard

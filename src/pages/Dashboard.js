@@ -1,13 +1,30 @@
-// Dashboard.js
-import React from 'react';
+// src/pages/Dashboard.js
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import ProjectList from '../components/ProjectList';
 import { useTheme } from '../context/ThemeContext';
+import { auth, db } from '../firebase';
+import { doc, getDoc } from 'firebase/firestore';
 
 const Dashboard = () => {
   const { isDarkMode, toggleTheme } = useTheme();
-  const navigate = useNavigate(); // Use React Router's navigate function
+  const navigate = useNavigate();
+  const [userName, setUserName] = useState('');
+
+  useEffect(() => {
+    const fetchUserName = async () => {
+      const user = auth.currentUser;
+      if (user) {
+        const userDoc = await getDoc(doc(db, 'users', user.uid));
+        if (userDoc.exists()) {
+          setUserName(userDoc.data().name);
+        }
+      }
+    };
+
+    fetchUserName();
+  }, []);
 
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100">
@@ -56,7 +73,28 @@ const Dashboard = () => {
             )}
           </button>
         </div>
-        
+
+        {/* Welcome Message with Underlined Username
+        <div className="mb-6 text-left">
+          <h1 className="text-2xl font-semibold">
+            Welcome,{' '}
+            <span className="text-[#C31A07] dark:text-[#FF6B6B] underline decoration-[#C31A07] dark:decoration-[#FF6B6B]">
+              {userName}
+            </span>
+          </h1>
+        </div> */}
+
+            {/* Welcome Message with Underlined Username */}
+        <div className="mb-6 text-left">
+          <h1 className="text-3xl font-comic text-[#C31A07] font-semibold">
+            <span className="text-gray-800 dark:text-gray-200">Welcome,</span>{' '}
+            <span
+              className="bg-gradient-to-r from-[#C31A07] to-[#FF6B6B] bg-clip-text text-transparent underline decoration-[#C31A07] dark:decoration-[#FF6B6B] underline-offset-4"
+            >
+              {userName}
+            </span>
+          </h1>
+        </div>
         {/* Project List with Navigation to Application Form */}
         <ProjectList onOpenApplication={() => navigate('/application-form')} />
       </div>
