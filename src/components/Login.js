@@ -1,0 +1,61 @@
+// src/components/Login.js
+import React, { useState } from 'react';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebase';
+import { useNavigate } from 'react-router-dom';
+
+const Login = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      if (user.emailVerified) {
+        navigate('/dashboard'); // Allow access if verified
+      } else {
+        setError('Please verify your email before logging in.');
+      }
+    } catch (error) {
+      setError(error.message);
+    }
+  };
+
+  return (
+    <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
+      <form onSubmit={handleLogin} className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg w-96">
+        <h2 className="text-2xl font-bold mb-4">Login</h2>
+        {error && <p className="text-red-500">{error}</p>}
+        
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+          className="w-full mb-4 px-4 py-2 border rounded-md"
+        />
+
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+          className="w-full mb-4 px-4 py-2 border rounded-md"
+        />
+
+        <button type="submit" className="w-full bg-gradient-to-r from-red-500 to-red-700 text-white p-2 rounded-md">
+          Login
+        </button>
+      </form>
+    </div>
+  );
+};
+
+export default Login;
