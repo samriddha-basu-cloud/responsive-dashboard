@@ -1,6 +1,6 @@
-// ApplicationForm.js
 import React, { useState, useEffect } from 'react';
 import { FaAngleDoubleLeft, FaAngleDoubleRight, FaUser, FaInfoCircle } from 'react-icons/fa';
+import { Link } from 'react-router-dom'; // Import Link component for routing
 import RespondentDetails from './RespondentDetails';
 import ProjectInformation from './ProjectInformation';
 import Pathway1 from './Pathway1';
@@ -19,7 +19,6 @@ const ApplicationForm = () => {
   const [step, setStep] = useState(1);
   const totalSteps = 12;
 
-  // Utility function to convert numbers to Roman numerals for Pathways
   const getRomanNumeral = (number) => {
     const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
     return romanNumerals[number - 1];
@@ -93,21 +92,29 @@ const ApplicationForm = () => {
         ))}
 
         {/* Additional Actions */}
-        <div className="mt-auto flex space-x-4 w-full">
-          <button
-            onClick={backToBeginning}
-            className="flex items-center justify-center w-1/2 py-2 px-4 rounded-md bg-gradient-to-r from-blue-500 to-blue-700 text-white hover:from-blue-600 hover:to-blue-800 transition-colors duration-300 shadow-md text-sm"
+        <div className="mt-auto flex flex-col space-y-2 w-full">
+          <div className="flex space-x-2 w-full">
+            <button
+              onClick={backToBeginning}
+              className="flex items-center justify-center w-1/2 py-2 px-4 rounded-md bg-gradient-to-r from-blue-500 to-blue-700 text-white hover:from-blue-600 hover:to-blue-800 transition-colors duration-300 shadow-md text-sm"
+            >
+              <FaAngleDoubleLeft className="mr-2 text-xs" />
+              <span className="text-xs">Beginning</span>
+            </button>
+            <button
+              onClick={skipToEnd}
+              className="flex items-center justify-center w-1/2 py-2 px-4 rounded-md bg-gradient-to-r from-green-500 to-green-700 text-white hover:from-green-600 hover:to-green-800 transition-colors duration-300 shadow-md text-sm"
+            >
+              <span className="text-xs">End</span>
+              <FaAngleDoubleRight className="ml-2 text-xs" />
+            </button>
+          </div>
+          <Link
+            to="/"
+            className="flex items-center justify-center w-full py-2 px-4 rounded-md bg-gradient-to-r from-red-500 to-red-700 text-white hover:from-red-600 hover:to-red-800 transition-colors duration-300 shadow-md text-sm mt-2"
           >
-            <FaAngleDoubleLeft className="mr-2 text-xs" />
-            <span className="text-xs">Beginning</span>
-          </button>
-          <button
-            onClick={skipToEnd}
-            className="flex items-center justify-center w-1/2 py-2 px-4 rounded-md bg-gradient-to-r from-green-500 to-green-700 text-white hover:from-green-600 hover:to-green-800 transition-colors duration-300 shadow-md text-sm"
-          >
-            <span className="text-xs">End</span>
-            <FaAngleDoubleRight className="ml-2 text-xs" />
-          </button>
+            Dashboard
+          </Link>
         </div>
       </div>
 
