@@ -31,7 +31,7 @@ const Question = ({ question, questionId, onAnswerChange, answer, placeholder, i
         </div>
       ) : (
         <div className="flex space-x-4 mb-2">
-          {["Planned", "Ongoing", "Completed", "Not in Focus"].map((option) => (
+          {["Planned", "Ongoing", "Completed", "Not in Focus", "Not Applicable"].map((option) => (
             <label key={option} className="flex items-center">
               <input
                 type="radio"
