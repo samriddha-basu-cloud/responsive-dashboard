@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db, auth } from '../firebase';
 import './PathwayStyles.css'; // Import custom styles
+import { FaCheckCircle } from 'react-icons/fa';
 
 const Question = ({ question, questionId, onAnswerChange, answer, observation, placeholder }) => {
   return (
@@ -39,6 +40,7 @@ const Question = ({ question, questionId, onAnswerChange, answer, observation, p
 const Pathway10 = ({ onNext, onBack, projectId }) => {
   const [answers, setAnswers] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const fetchPathwayData = async () => {
@@ -104,6 +106,32 @@ const Pathway10 = ({ onNext, onBack, projectId }) => {
         }
       } catch (error) {
         console.error('Error updating Pathway10 answers:', error);
+      }
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (projectId) {
+      try {
+        const userDocRef = doc(db, 'users', auth.currentUser.uid);
+        const userDoc = await getDoc(userDocRef);
+
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          const updatedProjects = userData.projects.map((project) =>
+            project.id === projectId
+              ? {
+                  ...project,
+                  progress: 100, // Update progress to 100%
+                }
+              : project
+          );
+
+          await updateDoc(userDocRef, { projects: updatedProjects });
+          setShowModal(true); // Show Thank You modal
+        }
+      } catch (error) {
+        console.error('Error submitting the form:', error);
       }
     }
   };
@@ -243,13 +271,33 @@ const Pathway10 = ({ onNext, onBack, projectId }) => {
           Back
         </button>
         <button
-          type="submit" // Set as submit button
-          onClick={() => alert('Submitted!')}
+          type="submit"
+          onClick={handleSubmit}
           className="w-full py-3 px-4 rounded-md bg-gradient-to-r from-green-500 to-green-700 text-white hover:from-green-600 hover:to-green-800 transition-colors duration-300"
         >
           Submit
         </button>
       </div>
+
+            {/* Thank You Modal */}
+      {showModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+            <FaCheckCircle className="text-green-500 text-4xl mx-auto mb-4" />
+            <h2 className="text-2xl font-bold mb-4">Thank You!</h2>
+            <p className="text-gray-700">Your responses have been successfully submitted.</p>
+            <button
+              onClick={() => {
+                setShowModal(false);
+                window.location.href = '/dashboard';
+              }}
+              className="mt-4 px-6 py-2 rounded-md bg-gradient-to-r from-green-500 to-green-700 text-white hover:from-green-600 hover:to-green-800 transition-colors duration-300"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

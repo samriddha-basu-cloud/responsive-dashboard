@@ -128,6 +128,7 @@ const Pathway1 = ({ onNext, onBack, projectId }) => {
         observation={answers?.Q1_1?.observation}
         onAnswerChange={handleAnswerChange}
         placeholder="Please note your observations (if any) related to Q-1.1"
+        required
       />
 
       <h2 className="text-xl font-bold mb-4">Principle-2: Reduction of external inputs (P-1)</h2>
@@ -138,6 +139,7 @@ const Pathway1 = ({ onNext, onBack, projectId }) => {
         observation={answers?.Q1_2?.observation}
         onAnswerChange={handleAnswerChange}
         placeholder="Please note your observations (if any) related to Q-1.2"
+        required
       />
 
       <h2 className="text-xl font-bold mb-4">Principle-3: Soil health</h2>

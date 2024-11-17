@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { FaAngleDoubleLeft, FaAngleDoubleRight, FaUser, FaInfoCircle } from 'react-icons/fa';
 import { Link, useLocation } from 'react-router-dom'; // Import Link and useLocation for routing
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { db, auth } from '../firebase';
 import RespondentDetails from './RespondentDetails';
 import ProjectInformation from './ProjectInformation';
 import Pathway1 from './Pathway1';
@@ -22,6 +24,55 @@ const ApplicationForm = () => {
   // Retrieve projectId from the navigation state
   const location = useLocation();
   const { projectId } = location.state || {};
+
+  const [projects, setProjects] = useState([]);
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const userDocRef = doc(db, 'users', auth.currentUser.uid);
+        const userDoc = await getDoc(userDocRef);
+
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          setProjects(userData.projects || []);
+        }
+      } catch (error) {
+        console.error('Error fetching projects:', error);
+      }
+    };
+
+    fetchProjects();
+  }, []);
+
+  const updateProjectProgress = async () => {
+    if (!projectId) {
+      console.error('No projectId provided');
+      return;
+    }
+
+    try {
+      const userDocRef = doc(db, 'users', auth.currentUser.uid);
+      const userDoc = await getDoc(userDocRef);
+
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        const updatedProjects = userData.projects.map((project) =>
+          project.id === projectId
+            ? {
+                ...project,
+                progress: Math.round((step / totalSteps) * 100), // Update progress
+              }
+            : project
+        );
+
+        await updateDoc(userDocRef, { projects: updatedProjects });
+        console.log('Project progress updated successfully');
+      }
+    } catch (error) {
+      console.error('Error updating project progress:', error);
+    }
+  };
 
   const getRomanNumeral = (number) => {
     const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
@@ -50,28 +101,33 @@ const ApplicationForm = () => {
   const renderPathwayComponent = () => {
     switch (step) {
       case 3:
-        return <Pathway1 onNext={() => goToStep(step + 1)} onBack={() => goToStep(step - 1)} projectId={projectId} />;
+        return <Pathway1 onNext={handleNext} onBack={() => goToStep(step - 1)} projectId={projectId} />;
       case 4:
-        return <Pathway2 onNext={() => goToStep(step + 1)} onBack={() => goToStep(step - 1)} projectId={projectId} />;
+        return <Pathway2 onNext={handleNext} onBack={() => goToStep(step - 1)} projectId={projectId} />;
       case 5:
-        return <Pathway3 onNext={() => goToStep(step + 1)} onBack={() => goToStep(step - 1)} projectId={projectId} />;
+        return <Pathway3 onNext={handleNext} onBack={() => goToStep(step - 1)} projectId={projectId} />;
       case 6:
-        return <Pathway4 onNext={() => goToStep(step + 1)} onBack={() => goToStep(step - 1)} projectId={projectId} />;
+        return <Pathway4 onNext={handleNext} onBack={() => goToStep(step - 1)} projectId={projectId} />;
       case 7:
-        return <Pathway5 onNext={() => goToStep(step + 1)} onBack={() => goToStep(step - 1)} projectId={projectId} />;
+        return <Pathway5 onNext={handleNext} onBack={() => goToStep(step - 1)} projectId={projectId} />;
       case 8:
-        return <Pathway6 onNext={() => goToStep(step + 1)} onBack={() => goToStep(step - 1)} projectId={projectId} />;
+        return <Pathway6 onNext={handleNext} onBack={() => goToStep(step - 1)} projectId={projectId} />;
       case 9:
-        return <Pathway7 onNext={() => goToStep(step + 1)} onBack={() => goToStep(step - 1)} projectId={projectId} />;
+        return <Pathway7 onNext={handleNext} onBack={() => goToStep(step - 1)} projectId={projectId} />;
       case 10:
-        return <Pathway8 onNext={() => goToStep(step + 1)} onBack={() => goToStep(step - 1)} projectId={projectId} />;
+        return <Pathway8 onNext={handleNext} onBack={() => goToStep(step - 1)} projectId={projectId} />;
       case 11:
-        return <Pathway9 onNext={() => goToStep(step + 1)} onBack={() => goToStep(step - 1)} projectId={projectId} />;
+        return <Pathway9 onNext={handleNext} onBack={() => goToStep(step - 1)} projectId={projectId} />;
       case 12:
-        return <Pathway10 onNext={() => goToStep(step + 1)} onBack={() => goToStep(step - 1)} projectId={projectId} />;
+        return <Pathway10 onNext={handleNext} onBack={() => goToStep(step - 1)} projectId={projectId} />;
       default:
         return null;
     }
+  };
+
+  const handleNext = () => {
+    updateProjectProgress();
+    goToStep(step + 1);
   };
 
   return (
@@ -81,31 +137,6 @@ const ApplicationForm = () => {
         <div className="p-6 flex flex-col items-start space-y-4 h-full overflow-y-auto">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Navigation</h2>
 
-          {/* Additional Actions */}
-          <div className="mt-auto flex flex-col space-y-2 w-full">
-            <div className="flex space-x-2 w-full">
-              <button
-                onClick={backToBeginning}
-                className="flex items-center justify-center w-1/2 py-2 px-4 rounded-md bg-gradient-to-r from-blue-500 to-blue-700 text-white hover:from-blue-600 hover:to-blue-800 transition-colors duration-300 shadow-md text-sm"
-              >
-                <FaAngleDoubleLeft className="mr-2 text-xs" />
-                <span className="text-xs">Beginning</span>
-              </button>
-              <button
-                onClick={skipToEnd}
-                className="flex items-center justify-center w-1/2 py-2 px-4 rounded-md bg-gradient-to-r from-green-500 to-green-700 text-white hover:from-green-600 hover:to-green-800 transition-colors duration-300 shadow-md text-sm"
-              >
-                <span className="text-xs">End</span>
-                <FaAngleDoubleRight className="ml-2 text-xs" />
-              </button>
-            </div>
-            <Link
-              to="/dashboard"
-              className="flex items-center justify-center w-full py-2 px-4 rounded-md bg-gradient-to-r from-red-500 to-red-700 text-white hover:from-red-600 hover:to-red-800 transition-colors duration-300 shadow-md text-sm mt-2"
-            >
-              Save & Exit
-            </Link>
-          </div>
           {/* Navigation Links */}
           {sectionNames.map((section, index) => (
             <button
@@ -120,6 +151,33 @@ const ApplicationForm = () => {
               {section.name}
             </button>
           ))}
+          
+          {/* Additional Actions */}
+          <div className="mt-auto flex flex-col space-y-2 w-full">
+            {/* <div className="flex space-x-2 w-full">
+              <button
+                onClick={backToBeginning}
+                className="flex items-center justify-center w-1/2 py-2 px-4 rounded-md bg-gradient-to-r from-blue-500 to-blue-700 text-white hover:from-blue-600 hover:to-blue-800 transition-colors duration-300 shadow-md text-sm"
+              >
+                <FaAngleDoubleLeft className="mr-2 text-xs" />
+                <span className="text-xs">Beginning</span>
+              </button>
+              <button
+                onClick={skipToEnd}
+                className="flex items-center justify-center w-1/2 py-2 px-4 rounded-md bg-gradient-to-r from-green-500 to-green-700 text-white hover:from-green-600 hover:to-green-800 transition-colors duration-300 shadow-md text-sm"
+              >
+                <span className="text-xs">End</span>
+                <FaAngleDoubleRight className="ml-2 text-xs" />
+              </button>
+            </div> */}
+            <Link
+              to="/dashboard"
+              className="flex items-center justify-center w-full py-2 px-4 rounded-md bg-gradient-to-r from-red-500 to-red-700 text-white hover:from-red-600 hover:to-red-800 transition-colors duration-300 shadow-md text-sm mt-2"
+            >
+              Save & Exit
+            </Link>
+          </div>
+          
         </div>
       </div>
 
@@ -158,9 +216,9 @@ const ApplicationForm = () => {
         </div>
 
         {/* Render form sections based on step */}
-        {step === 1 && <RespondentDetails onNext={() => goToStep(step + 1)} projectId={projectId} />}
+        {step === 1 && <RespondentDetails onNext={handleNext} projectId={projectId} />}
         {step === 2 && (
-          <ProjectInformation onNext={() => goToStep(step + 1)} onBack={() => goToStep(step - 1)} projectId={projectId} />
+          <ProjectInformation onNext={handleNext} onBack={() => goToStep(step - 1)} projectId={projectId} />
         )}
         {step > 2 && step <= totalSteps && renderPathwayComponent()}
       </div>

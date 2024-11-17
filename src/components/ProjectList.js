@@ -39,6 +39,7 @@ const ProjectList = () => {
       id: uuidv4(), // Generate unique ID
       name: projectName,
       details: projectDescription,
+      progress: 0, // Initialize progress to 0
     };
 
     // Add project to Firestore and update UI
@@ -162,7 +163,12 @@ const ProjectList = () => {
 
               {/* Connector with Progress */}
               <div className="relative w-0.5 h-12 bg-gray-300 dark:bg-gray-600 my-2">
-                <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-1 h-1/2 bg-gradient-to-b from-red-500 to-red-700 rounded-full shadow"></div>
+                <div
+                  className="absolute top-0 left-1/2 transform -translate-x-1/2 w-1 bg-gradient-to-b from-red-500 to-red-700 rounded-full shadow"
+                  style={{
+                    height: `${project.progress}%`,
+                  }}
+                ></div>
               </div>
 
               {/* Application Completed */}
@@ -170,15 +176,26 @@ const ProjectList = () => {
                 <div className="w-4 h-4 bg-gradient-to-r from-red-500 to-red-700 rounded-full shadow-md"></div>
                 <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Application Completed</span>
               </div>
+
+              {/* Progress Percentage */}
+              <span className="text-sm font-medium text-gray-600 dark:text-gray-400 mt-2">
+                {project.progress}%
+              </span>
             </div>
           </div>
         ))}
       </div>
 
-      {/* Modal for Adding New Project */}
+            {/* Modal for Adding New Project */}
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-80">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-80 relative">
+                        <button
+              onClick={() => setIsModalOpen(false)}
+              className="absolute top-2 right-4 text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-500 text-2xl"
+            >
+              &times;
+            </button>
             <h2 className="text-xl font-semibold mb-4">Add Project</h2>
             <input
               type="text"
