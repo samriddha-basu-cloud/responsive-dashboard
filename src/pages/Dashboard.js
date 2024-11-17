@@ -26,6 +26,11 @@ const Dashboard = () => {
     fetchUserName();
   }, []);
 
+  const handleOpenApplication = (projectId) => {
+    // Navigate to ApplicationForm and pass the selected projectId
+    navigate('/application-form', { state: { projectId } });
+  };
+
   return (
     <div className="flex h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100">
       <Sidebar />
@@ -73,18 +78,7 @@ const Dashboard = () => {
             )}
           </button>
         </div>
-
-        {/* Welcome Message with Underlined Username
-        <div className="mb-6 text-left">
-          <h1 className="text-2xl font-semibold">
-            Welcome,{' '}
-            <span className="text-[#C31A07] dark:text-[#FF6B6B] underline decoration-[#C31A07] dark:decoration-[#FF6B6B]">
-              {userName}
-            </span>
-          </h1>
-        </div> */}
-
-            {/* Welcome Message with Underlined Username */}
+        {/* Welcome Message with Underlined Username */}
         <div className="mb-6 text-left">
           <h1 className="text-3xl font-comic text-[#C31A07] font-semibold">
             <span className="text-gray-800 dark:text-gray-200">Welcome,</span>{' '}
@@ -96,7 +90,7 @@ const Dashboard = () => {
           </h1>
         </div>
         {/* Project List with Navigation to Application Form */}
-        <ProjectList onOpenApplication={() => navigate('/application-form')} />
+        <ProjectList onOpenApplication={handleOpenApplication} />
       </div>
     </div>
   );

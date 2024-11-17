@@ -1,12 +1,13 @@
-// Pathway3.js
-import React from 'react';
-import './PathwayStyles.css'; // Import custom styles for gradient radio button
+import React, { useEffect, useState } from 'react';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { db, auth } from '../firebase';
+import './PathwayStyles.css'; // Import custom styles
 
-const Question = ({ question, questionId, onAnswerChange, answer, placeholder }) => {
+const Question = ({ question, questionId, onAnswerChange, answer, observation, placeholder }) => {
   return (
     <div className="mb-8">
       <p className="text-lg font-semibold mb-2">{question}</p>
-      
+
       <div className="flex space-x-4 mb-2">
         {["Planned", "Ongoing", "Completed", "Not in Focus", "Not Applicable"].map((option) => (
           <label key={option} className="flex items-center">
@@ -15,8 +16,8 @@ const Question = ({ question, questionId, onAnswerChange, answer, placeholder })
               name={questionId}
               value={option}
               checked={answer === option}
-              onChange={(e) => onAnswerChange(questionId, e.target.value)}
-              className="mr-2 custom-radio" // Custom radio style
+              onChange={(e) => onAnswerChange(questionId, e.target.value, 'answer')}
+              className="mr-2 custom-radio"
               required
             />
             {option}
@@ -26,23 +27,90 @@ const Question = ({ question, questionId, onAnswerChange, answer, placeholder })
 
       <textarea
         placeholder={placeholder}
+        value={observation || ''}
         className="w-full p-2 border rounded-md text-gray-700 dark:bg-gray-800 dark:text-gray-200 mt-2"
         rows="4"
-        onChange={(e) => onAnswerChange(`${questionId}_observation`, e.target.value)}
+        onChange={(e) => onAnswerChange(questionId, e.target.value, 'observation')}
       ></textarea>
     </div>
   );
 };
 
-const Pathway3 = ({ onNext, onBack }) => {
-  const [answers, setAnswers] = React.useState({});
+const Pathway3 = ({ onNext, onBack, projectId }) => {
+  const [answers, setAnswers] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
 
-  const handleAnswerChange = (questionId, value) => {
-    setAnswers((prevAnswers) => ({
-      ...prevAnswers,
-      [questionId]: value,
-    }));
+  useEffect(() => {
+    const fetchPathwayData = async () => {
+      if (!projectId) {
+        console.log('No projectId provided');
+        return;
+      }
+
+      try {
+        const userDocRef = doc(db, 'users', auth.currentUser.uid);
+        const userDoc = await getDoc(userDocRef);
+
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          const projects = userData.projects || [];
+          const project = projects.find((proj) => proj.id === projectId);
+
+          if (project && project.sections?.Pathway3) {
+            setAnswers(project.sections.Pathway3);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching Pathway3 data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchPathwayData();
+  }, [projectId]);
+
+  const handleAnswerChange = async (questionId, value, type) => {
+    const updatedAnswers = {
+      ...answers,
+      [questionId]: {
+        ...answers[questionId],
+        [type]: value,
+      },
+    };
+
+    setAnswers(updatedAnswers);
+
+    if (projectId) {
+      try {
+        const userDocRef = doc(db, 'users', auth.currentUser.uid);
+        const userDoc = await getDoc(userDocRef);
+
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          const updatedProjects = userData.projects.map((project) =>
+            project.id === projectId
+              ? {
+                  ...project,
+                  sections: {
+                    ...project.sections,
+                    Pathway3: updatedAnswers,
+                  },
+                }
+              : project
+          );
+
+          await updateDoc(userDocRef, { projects: updatedProjects });
+        }
+      } catch (error) {
+        console.error('Error updating Pathway3 answers:', error);
+      }
+    }
   };
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <div className="p-6 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 rounded-lg shadow-md">
@@ -55,117 +123,130 @@ const Pathway3 = ({ onNext, onBack }) => {
       <h2 className="text-xl font-bold mb-4">Principle-1: Storage and Trade</h2>
       <Question
         question="Q-3.1) Does the project actively focus on measures that lead to reduction in food loss and waste in the supply chain?"
-        questionId="Q3.1"
-        answer={answers["Q3.1"]}
+        questionId="Q3_1"
+        answer={answers?.Q3_1?.answer}
+        observation={answers?.Q3_1?.observation}
         onAnswerChange={handleAnswerChange}
-        placeholder="You may skip this question. If you wish to substantiate your choice of response..."
+        placeholder="Please note your observations (if any) related to Q-3.1"
       />
 
       <h2 className="text-xl font-bold mb-4">Principle-2: Packaging and Processing</h2>
       <Question
         question="Q-3.2) Does the project actively focus on measures that lead to lessening environmental footprint of packaging and processing activities?"
-        questionId="Q3.2"
-        answer={answers["Q3.2"]}
+        questionId="Q3_2"
+        answer={answers?.Q3_2?.answer}
+        observation={answers?.Q3_2?.observation}
         onAnswerChange={handleAnswerChange}
-        placeholder="You may skip this question. If you wish to substantiate your choice of response..."
+        placeholder="Please note your observations (if any) related to Q-3.2"
       />
 
       <Question
         question="Q-3.3) Does the project actively focus on food fortification in traditional and mixed food systems?"
-        questionId="Q3.3"
-        answer={answers["Q3.3"]}
+        questionId="Q3_3"
+        answer={answers?.Q3_3?.answer}
+        observation={answers?.Q3_3?.observation}
         onAnswerChange={handleAnswerChange}
-        placeholder="You may skip this question. If you wish to substantiate your choice of response..."
+        placeholder="Please note your observations (if any) related to Q-3.3"
       />
 
       <h2 className="text-xl font-bold mb-4">Principle-3: Retail and Marketing</h2>
       <Question
         question="Q-3.4) Does the project actively focus on facilitating fair participation of the smallholders in the markets?"
-        questionId="Q3.4"
-        answer={answers["Q3.4"]}
+        questionId="Q3_4"
+        answer={answers?.Q3_4?.answer}
+        observation={answers?.Q3_4?.observation}
         onAnswerChange={handleAnswerChange}
-        placeholder="You may skip this question. If you wish to substantiate your choice of response..."
+        placeholder="Please note your observations (if any) related to Q-3.4"
       />
 
       <h2 className="text-xl font-bold mb-4">Principle-4: Recycling (P-3)</h2>
       <Question
         question="Q-3.5) Does the project actively focus on recycling of waste and effluents generated by the food supply chain within a landscape?"
-        questionId="Q3.5"
-        answer={answers["Q3.5"]}
+        questionId="Q3_5"
+        answer={answers?.Q3_5?.answer}
+        observation={answers?.Q3_5?.observation}
         onAnswerChange={handleAnswerChange}
-        placeholder="You may skip this question. If you wish to substantiate your choice of response..."
+        placeholder="Please note your observations (if any) related to Q-3.5"
       />
 
       <h2 className="text-xl font-bold mb-4">Principle-5: Reduction of External Inputs (P-3)</h2>
       <Question
         question="Q-3.6) Does the project actively focus on reducing the dependence of the food supply chain on external inputs within the landscape?"
-        questionId="Q3.6"
-        answer={answers["Q3.6"]}
+        questionId="Q3_6"
+        answer={answers?.Q3_6?.answer}
+        observation={answers?.Q3_6?.observation}
         onAnswerChange={handleAnswerChange}
-        placeholder="You may skip this question. If you wish to substantiate your choice of response..."
+        placeholder="Please note your observations (if any) related to Q-3.6"
       />
 
       <h2 className="text-xl font-bold mb-4">Principle-6: Food Supply Chains</h2>
       <Question
         question="Q-3.7) Does the project actively focus on making the food supply chain more sustainable and robust?"
-        questionId="Q3.7"
-        answer={answers["Q3.7"]}
+        questionId="Q3_7"
+        answer={answers?.Q3_7?.answer}
+        observation={answers?.Q3_7?.observation}
         onAnswerChange={handleAnswerChange}
-        placeholder="You may skip this question. If you wish to substantiate your choice of response..."
+        placeholder="Please note your observations (if any) related to Q-3.7"
       />
 
       <h2 className="text-xl font-bold mb-4">Principle-7: Physical Access to Food</h2>
       <Question
         question="Q-3.8) Does the project actively focus on promoting access points for healthy & safe foods within the landscape?"
-        questionId="Q3.8"
-        answer={answers["Q3.8"]}
+        questionId="Q3_8"
+        answer={answers?.Q3_8?.answer}
+        observation={answers?.Q3_8?.observation}
         onAnswerChange={handleAnswerChange}
-        placeholder="You may skip this question. If you wish to substantiate your choice of response..."
+        placeholder="Please note your observations (if any) related to Q-3.8"
       />
 
       <h2 className="text-xl font-bold mb-4">Principle-8: Economic Access to Food (Affordability)</h2>
       <Question
         question="Q-3.9) Does the project actively focus on ensuring affordability of healthy & safe foods within the landscape?"
-        questionId="Q3.9"
-        answer={answers["Q3.9"]}
+        questionId="Q3_9"
+        answer={answers?.Q3_9?.answer}
+        observation={answers?.Q3_9?.observation}
         onAnswerChange={handleAnswerChange}
-        placeholder="You may skip this question. If you wish to substantiate your choice of response..."
+        placeholder="Please note your observations (if any) related to Q-3.9"
       />
 
       <h2 className="text-xl font-bold mb-4">Principle-9: Acceptability (P-3)</h2>
       <Question
         question="Q-3.10) Does the project actively focus on matching the supply of local food to the preferences of people?"
-        questionId="Q3.10"
-        answer={answers["Q3.10"]}
+        questionId="Q3_10"
+        answer={answers?.Q3_10?.answer}
+        observation={answers?.Q3_10?.observation}
         onAnswerChange={handleAnswerChange}
-        placeholder="You may skip this question. If you wish to substantiate your choice of response..."
+        placeholder="Please note your observations (if any) related to Q-3.10"
       />
 
       <h2 className="text-xl font-bold mb-4">Principle-10: Promotion, Information, Guidelines, and Advertising (P-3)</h2>
       <Question
         question="Q-3.11) Does the project actively focus on promoting healthy food through IEC?"
-        questionId="Q3.11"
-        answer={answers["Q3.11"]}
+        questionId="Q3_11"
+        answer={answers?.Q3_11?.answer}
+        observation={answers?.Q3_11?.observation}
         onAnswerChange={handleAnswerChange}
-        placeholder="You may skip this question. If you wish to substantiate your choice of response..."
+        placeholder="Please note your observations (if any) related to Q-3.11"
       />
 
       <h2 className="text-xl font-bold mb-4">Principle-11: Connectivity (P-3)</h2>
       <Question
         question="Q-3.12) Does the project actively focus on building direct connection between producers and local consumers?"
-        questionId="Q3.12"
-        answer={answers["Q3.12"]}
+        questionId="Q3_12"
+        answer={answers?.Q3_12?.answer}
+        observation={answers?.Q3_12?.observation}
         onAnswerChange={handleAnswerChange}
-        placeholder="You may skip this question. If you wish to substantiate your choice of response..."
+        placeholder="Please note your observations (if any) related to Q-3.12"
       />
 
       <h2 className="text-xl font-bold mb-4">Principle-12: Fairness (P-3)</h2>
       <Question
         question="Q-3.13) Does the project actively focus on promoting fair trade practices?"
-        questionId="Q3.13"
-        answer={answers["Q3.13"]}
+        questionId="Q3_13"
+        answer={answers?.Q3_13?.answer}
+        observation={answers?.Q3_13?.observation}
         onAnswerChange={handleAnswerChange}
-        placeholder="You may skip this question. If you wish to substantiate your choice of response..."
+        placeholder="Please note your observations (if any) related to Q-3.13"
       />
 
       {/* Navigation Buttons */}

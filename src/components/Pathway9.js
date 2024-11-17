@@ -1,12 +1,22 @@
-// Pathway9.js
-import React from 'react';
-import './PathwayStyles.css'; // Import custom styles for gradient radio button
+import React, { useEffect, useState } from 'react';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { db, auth } from '../firebase';
+import './PathwayStyles.css'; // Import custom styles
 
-const Question = ({ question, questionId, onAnswerChange, answer, placeholder, isMultiple = false, options = [] }) => {
+const Question = ({
+  question,
+  questionId,
+  onAnswerChange,
+  answer,
+  observation,
+  placeholder,
+  isMultiple = false,
+  options = [],
+}) => {
   return (
     <div className="mb-8">
       <p className="text-lg font-semibold mb-2">{question}</p>
-      
+
       {isMultiple ? (
         <div className="flex flex-col space-y-2 mb-2">
           {options.map((option) => (
@@ -21,7 +31,7 @@ const Question = ({ question, questionId, onAnswerChange, answer, placeholder, i
                   const updatedAnswer = e.target.checked
                     ? [...(answer || []), value]
                     : (answer || []).filter((item) => item !== value);
-                  onAnswerChange(questionId, updatedAnswer);
+                  onAnswerChange(questionId, updatedAnswer, 'answer');
                 }}
                 className="mr-2 custom-checkbox" // Custom checkbox style for gradient
               />
@@ -38,7 +48,7 @@ const Question = ({ question, questionId, onAnswerChange, answer, placeholder, i
                 name={questionId}
                 value={option}
                 checked={answer === option}
-                onChange={(e) => onAnswerChange(questionId, e.target.value)}
+                onChange={(e) => onAnswerChange(questionId, e.target.value, 'answer')}
                 className="mr-2 custom-radio" // Custom radio style for gradient
                 required
               />
@@ -50,96 +60,171 @@ const Question = ({ question, questionId, onAnswerChange, answer, placeholder, i
 
       <textarea
         placeholder={placeholder}
+        value={observation || ''}
         className="w-full p-2 border rounded-md text-gray-700 dark:bg-gray-800 dark:text-gray-200 mt-2"
         rows="4"
-        onChange={(e) => onAnswerChange(`${questionId}_observation`, e.target.value)}
+        onChange={(e) => onAnswerChange(questionId, e.target.value, 'observation')}
       ></textarea>
     </div>
   );
 };
 
-const Pathway9 = ({ onNext, onBack }) => {
-  const [answers, setAnswers] = React.useState({});
+const Pathway9 = ({ onNext, onBack, projectId }) => {
+  const [answers, setAnswers] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
 
-  const handleAnswerChange = (questionId, value) => {
-    setAnswers((prevAnswers) => ({
-      ...prevAnswers,
-      [questionId]: value,
-    }));
+  useEffect(() => {
+    const fetchPathwayData = async () => {
+      if (!projectId) {
+        console.log('No projectId provided');
+        return;
+      }
+
+      try {
+        const userDocRef = doc(db, 'users', auth.currentUser.uid);
+        const userDoc = await getDoc(userDocRef);
+
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          const projects = userData.projects || [];
+          const project = projects.find((proj) => proj.id === projectId);
+
+          if (project && project.sections?.Pathway9) {
+            setAnswers(project.sections.Pathway9);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching Pathway9 data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchPathwayData();
+  }, [projectId]);
+
+  const handleAnswerChange = async (questionId, value, type) => {
+    const updatedAnswers = {
+      ...answers,
+      [questionId]: {
+        ...answers[questionId],
+        [type]: value,
+      },
+    };
+
+    setAnswers(updatedAnswers);
+
+    if (projectId) {
+      try {
+        const userDocRef = doc(db, 'users', auth.currentUser.uid);
+        const userDoc = await getDoc(userDocRef);
+
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          const updatedProjects = userData.projects.map((project) =>
+            project.id === projectId
+              ? {
+                  ...project,
+                  sections: {
+                    ...project.sections,
+                    Pathway9: updatedAnswers,
+                  },
+                }
+              : project
+          );
+
+          await updateDoc(userDocRef, { projects: updatedProjects });
+        }
+      } catch (error) {
+        console.error('Error updating Pathway9 answers:', error);
+      }
+    }
   };
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <div className="p-6 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 rounded-lg shadow-md">
       <h1 className="text-2xl font-bold mb-6">Pathway-9: Support Systems – Agroecology Adoption</h1>
       <p className="mb-6 text-sm text-gray-500 dark:text-gray-400">
-        If other systems supporting food production/the food supply chains, such as economic systems (including agriculture and agribusiness) and energy systems, also apply the 13 principles of agroecology, then the transformative effects on food systems will be even stronger.
+        If other systems supporting food production/the food supply chains, such as economic systems (including
+        agriculture and agribusiness) and energy systems, also apply the 13 principles of agroecology, then the
+        transformative effects on food systems will be even stronger.
       </p>
 
       {/* Questions for Pathway 9 */}
       <h2 className="text-xl font-bold mb-4">Principle-1: Systems Supporting Food Production/Food Supply Chains</h2>
       <Question
         question="Q-9.1) Ecosystem support"
-        questionId="Q9.1"
-        answer={answers["Q9.1"]}
+        questionId="Q9_1"
+        answer={answers?.Q9_1?.answer}
+        observation={answers?.Q9_1?.observation}
         onAnswerChange={handleAnswerChange}
-        placeholder="You may skip this question. If you wish to substantiate your choice of response..."
+        placeholder="Please note your observations (if any) related to Q-9.1"
       />
 
       <Question
         question="Q-9.2) Economic system support: agriculture"
-        questionId="Q9.2"
-        answer={answers["Q9.2"]}
+        questionId="Q9_2"
+        answer={answers?.Q9_2?.answer}
+        observation={answers?.Q9_2?.observation}
         onAnswerChange={handleAnswerChange}
-        placeholder="You may skip this question. If you wish to substantiate your choice of response..."
+        placeholder="Please note your observations (if any) related to Q-9.2"
       />
 
       <Question
         question="Q-9.3) Economic system support: agribusiness"
-        questionId="Q9.3"
-        answer={answers["Q9.3"]}
+        questionId="Q9_3"
+        answer={answers?.Q9_3?.answer}
+        observation={answers?.Q9_3?.observation}
         onAnswerChange={handleAnswerChange}
-        placeholder="You may skip this question. If you wish to substantiate your choice of response..."
+        placeholder="Please note your observations (if any) related to Q-9.3"
       />
 
       <Question
         question="Q-9.4) Energy system support"
-        questionId="Q9.4"
-        answer={answers["Q9.4"]}
+        questionId="Q9_4"
+        answer={answers?.Q9_4?.answer}
+        observation={answers?.Q9_4?.observation}
         onAnswerChange={handleAnswerChange}
-        placeholder="You may skip this question. If you wish to substantiate your choice of response..."
+        placeholder="Please note your observations (if any) related to Q-9.4"
       />
 
       <Question
         question="Q-9.5) Others (if relevant): human system, health system"
-        questionId="Q9.5"
-        answer={answers["Q9.5"]}
+        questionId="Q9_5"
+        answer={answers?.Q9_5?.answer}
+        observation={answers?.Q9_5?.observation}
         onAnswerChange={handleAnswerChange}
-        placeholder="You may skip this question. If you wish to substantiate your choice of response..."
+        placeholder="Please note your observations (if any) related to Q-9.5"
       />
 
       <h2 className="text-xl font-bold mb-4">Principle-2: 13 Principles of Agroecology (as relevant)</h2>
       <Question
         question="Q-9.6) Which principles of AE are under active focus of the project?"
-        questionId="Q9.6"
-        answer={answers["Q9.6"]}
+        questionId="Q9_6"
+        answer={answers?.Q9_6?.answer}
+        observation={answers?.Q9_6?.observation}
         onAnswerChange={handleAnswerChange}
         isMultiple={true}
         options={[
-          "Recycling",
-          "Input reduction",
-          "Soil health",
-          "Animal health",
-          "Biodiversity",
-          "Synergy",
-          "Economic diversification",
-          "Co-creation of knowledge",
-          "Social values and diets",
-          "Fairness",
-          "Connectivity",
-          "Land and natural resource governance",
-          "Participation",
+          'Recycling',
+          'Input reduction',
+          'Soil health',
+          'Animal health',
+          'Biodiversity',
+          'Synergy',
+          'Economic diversification',
+          'Co-creation of knowledge',
+          'Social values and diets',
+          'Fairness',
+          'Connectivity',
+          'Land and natural resource governance',
+          'Participation',
         ]}
-        placeholder="You may skip this question. If you wish to substantiate your choice of response..."
+        placeholder="Please note your observations (if any) related to Q-9.6"
       />
 
       {/* Navigation Buttons */}

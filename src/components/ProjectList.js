@@ -1,17 +1,18 @@
-// src/components/ProjectList.js
 import React, { useState, useEffect } from 'react';
 import { auth, db } from '../firebase';
 import { doc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid'; // Import uuid to generate unique project IDs
 import { FiDownload } from 'react-icons/fi'; // Import download icon
 import { FaUser } from 'react-icons/fa'; // Import user icon for Profile Form
+import { useNavigate } from 'react-router-dom'; // For navigation to ApplicationForm
 
-const ProjectList = ({ onOpenApplication }) => {
+const ProjectList = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [projectName, setProjectName] = useState('');
   const [projectDescription, setProjectDescription] = useState('');
   const [projects, setProjects] = useState([]); // Projects state for user's projects
+  const navigate = useNavigate(); // Use navigate for routing
 
   // Fetch the user's projects from Firestore on component mount
   useEffect(() => {
@@ -56,6 +57,11 @@ const ProjectList = ({ onOpenApplication }) => {
     setProjectName('');
     setProjectDescription('');
     setIsModalOpen(false);
+  };
+
+  const handleOpenApplication = (projectId) => {
+    // Navigate to the ApplicationForm with the selected project's ID
+    navigate('/application-form', { state: { projectId } });
   };
 
   const filteredProjects = projects.filter((project) =>
@@ -121,7 +127,7 @@ const ProjectList = ({ onOpenApplication }) => {
               <div className="flex space-x-2 mt-4">
                 {/* Profile Form Button */}
                 <button
-                  onClick={onOpenApplication}
+                  onClick={() => handleOpenApplication(project.id)} // Pass projectId to ApplicationForm
                   className="px-4 py-2 rounded-md text-white flex items-center space-x-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 transition-all duration-300"
                   style={{
                     background: 'linear-gradient(to right, #C31A07, #9E1305)',

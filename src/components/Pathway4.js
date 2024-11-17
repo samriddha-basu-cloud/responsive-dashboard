@@ -1,12 +1,13 @@
-// Pathway4.js
-import React from 'react';
-import './PathwayStyles.css'; // Import custom styles for gradient radio button
+import React, { useEffect, useState } from 'react';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
+import { db, auth } from '../firebase';
+import './PathwayStyles.css'; // Import custom styles
 
-const Question = ({ question, questionId, onAnswerChange, answer, placeholder }) => {
+const Question = ({ question, questionId, onAnswerChange, answer, observation, placeholder }) => {
   return (
     <div className="mb-8">
       <p className="text-lg font-semibold mb-2">{question}</p>
-      
+
       <div className="flex space-x-4 mb-2">
         {["Planned", "Ongoing", "Completed", "Not in Focus", "Not Applicable"].map((option) => (
           <label key={option} className="flex items-center">
@@ -15,8 +16,8 @@ const Question = ({ question, questionId, onAnswerChange, answer, placeholder })
               name={questionId}
               value={option}
               checked={answer === option}
-              onChange={(e) => onAnswerChange(questionId, e.target.value)}
-              className="mr-2 custom-radio" // Custom radio style for gradient
+              onChange={(e) => onAnswerChange(questionId, e.target.value, 'answer')}
+              className="mr-2 custom-radio"
               required
             />
             {option}
@@ -26,23 +27,90 @@ const Question = ({ question, questionId, onAnswerChange, answer, placeholder })
 
       <textarea
         placeholder={placeholder}
+        value={observation || ''}
         className="w-full p-2 border rounded-md text-gray-700 dark:bg-gray-800 dark:text-gray-200 mt-2"
         rows="4"
-        onChange={(e) => onAnswerChange(`${questionId}_observation`, e.target.value)}
+        onChange={(e) => onAnswerChange(questionId, e.target.value, 'observation')}
       ></textarea>
     </div>
   );
 };
 
-const Pathway4 = ({ onNext, onBack }) => {
-  const [answers, setAnswers] = React.useState({});
+const Pathway4 = ({ onNext, onBack, projectId }) => {
+  const [answers, setAnswers] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
 
-  const handleAnswerChange = (questionId, value) => {
-    setAnswers((prevAnswers) => ({
-      ...prevAnswers,
-      [questionId]: value,
-    }));
+  useEffect(() => {
+    const fetchPathwayData = async () => {
+      if (!projectId) {
+        console.log('No projectId provided');
+        return;
+      }
+
+      try {
+        const userDocRef = doc(db, 'users', auth.currentUser.uid);
+        const userDoc = await getDoc(userDocRef);
+
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          const projects = userData.projects || [];
+          const project = projects.find((proj) => proj.id === projectId);
+
+          if (project && project.sections?.Pathway4) {
+            setAnswers(project.sections.Pathway4);
+          }
+        }
+      } catch (error) {
+        console.error('Error fetching Pathway4 data:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchPathwayData();
+  }, [projectId]);
+
+  const handleAnswerChange = async (questionId, value, type) => {
+    const updatedAnswers = {
+      ...answers,
+      [questionId]: {
+        ...answers[questionId],
+        [type]: value,
+      },
+    };
+
+    setAnswers(updatedAnswers);
+
+    if (projectId) {
+      try {
+        const userDocRef = doc(db, 'users', auth.currentUser.uid);
+        const userDoc = await getDoc(userDocRef);
+
+        if (userDoc.exists()) {
+          const userData = userDoc.data();
+          const updatedProjects = userData.projects.map((project) =>
+            project.id === projectId
+              ? {
+                  ...project,
+                  sections: {
+                    ...project.sections,
+                    Pathway4: updatedAnswers,
+                  },
+                }
+              : project
+          );
+
+          await updateDoc(userDocRef, { projects: updatedProjects });
+        }
+      } catch (error) {
+        console.error('Error updating Pathway4 answers:', error);
+      }
+    }
   };
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <div className="p-6 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 rounded-lg shadow-md">
@@ -55,18 +123,20 @@ const Pathway4 = ({ onNext, onBack }) => {
       <h2 className="text-xl font-bold mb-4">Principle-1: Economic Gains</h2>
       <Question
         question="Q-4.1) Does the project actively focus on enhancing the incomes of producers and other participants in the food systems?"
-        questionId="Q4.1"
-        answer={answers["Q4.1"]}
+        questionId="Q4_1"
+        answer={answers?.Q4_1?.answer}
+        observation={answers?.Q4_1?.observation}
         onAnswerChange={handleAnswerChange}
-        placeholder="You may skip this question. If you wish to substantiate your choice of response..."
+        placeholder="Please note your observations (if any) related to Q-4.1"
       />
 
       <Question
         question="Q-4.2) Does the project actively focus on investing the monetary gains from the development of the food system for further development of healthy foods and the production systems?"
-        questionId="Q4.2"
-        answer={answers["Q4.2"]}
+        questionId="Q4_2"
+        answer={answers?.Q4_2?.answer}
+        observation={answers?.Q4_2?.observation}
         onAnswerChange={handleAnswerChange}
-        placeholder="You may skip this question. If you wish to substantiate your choice of response..."
+        placeholder="Please note your observations (if any) related to Q-4.2"
       />
 
       {/* Navigation Buttons */}
