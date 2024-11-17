@@ -73,23 +73,9 @@ const ApplicationForm = () => {
   return (
     <div className="flex min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100">
       {/* Sidebar Navigation */}
-      <div className="w-64 bg-gray-200 dark:bg-gray-800 p-6 flex flex-col items-start space-y-4 fixed h-screen">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Navigation</h2>
-        
-        {/* Navigation Links */}
-        {sectionNames.map((section, index) => (
-          <button
-            key={index}
-            onClick={() => goToStep(index + 1)}
-            className={`w-full text-left py-2 px-4 rounded-md transition-colors duration-300 ${
-              step === index + 1
-                ? 'bg-gradient-to-r from-red-500 to-red-700 text-white shadow-lg'
-                : 'text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-700'
-            }`}
-          >
-            {section.name}
-          </button>
-        ))}
+    <div className="w-64 bg-gray-200 dark:bg-gray-800 fixed h-screen">
+      <div className="p-6 flex flex-col items-start space-y-4 h-full overflow-y-auto">
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Navigation</h2>
 
         {/* Additional Actions */}
         <div className="mt-auto flex flex-col space-y-2 w-full">
@@ -113,10 +99,25 @@ const ApplicationForm = () => {
             to="/dashboard"
             className="flex items-center justify-center w-full py-2 px-4 rounded-md bg-gradient-to-r from-red-500 to-red-700 text-white hover:from-red-600 hover:to-red-800 transition-colors duration-300 shadow-md text-sm mt-2"
           >
-            Dashboard
+            Save & Exit
           </Link>
         </div>
+        {/* Navigation Links */}
+        {sectionNames.map((section, index) => (
+          <button
+            key={index}
+            onClick={() => goToStep(index + 1)}
+            className={`w-full text-left py-1 px-4 rounded-md transition-colors duration-300 ${
+              step === index + 1
+                ? 'bg-gradient-to-r from-red-500 to-red-700 text-white shadow-lg'
+                : 'text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-700'
+            }`}
+          >
+            {section.name}
+          </button>
+        ))}
       </div>
+    </div>
 
       {/* Main Content */}
       <div className="flex-grow ml-64 p-6">
