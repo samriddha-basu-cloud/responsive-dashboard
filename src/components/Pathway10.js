@@ -4,6 +4,7 @@ import { db, auth } from '../firebase';
 import './PathwayStyles.css'; // Import custom styles
 import { FaCheckCircle } from 'react-icons/fa';
 import SurveyComponent from './SurveyComponent';
+import html2pdf from 'html2pdf.js'; 
 
 const Question = ({ question, questionId, onAnswerChange, answer, observation, placeholder }) => {
   return (
@@ -320,24 +321,67 @@ const Pathway10 = ({ onNext, onBack, projectId }) => {
 
       {/* Review Modal */}
       {showReviewModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div
-            className="bg-white rounded-lg shadow-lg w-2/3 h-5/6  p-6 relative"
-            style={{ height: '90%' }}
-          >
-            {/* Close Button */}
-            <button
-              onClick={() => setShowReviewModal(false)}
-              className="absolute top-3 right-3 text-gray-700 hover:text-gray-900 text-2xl"
-            >
-              &times; {/* Close button */}
-            </button>
-            <h2 className="text-2xl font-bold mb-4">Review Responses</h2>
-            {/* Render the SurveyComponent */}
-            <SurveyComponent projectId={projectId} />
-          </div>
-        </div>
-      )}
+  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+    <div
+      id="review-modal-content" // Add an ID for PDF rendering
+      className="bg-white rounded-lg shadow-lg w-2/3 h-5/6 p-6 relative"
+      style={{ height: '90%' }}
+    >
+      {/* Close Button */}
+      <button
+        onClick={() => setShowReviewModal(false)}
+        className="absolute top-3 right-3 text-gray-700 hover:text-gray-900 text-2xl"
+        title="Close Review Modal"
+      >
+        &times; {/* Close button */}
+      </button>
+
+      <h2 className="text-2xl font-bold mb-4">Review Responses</h2>
+      
+      {/* Render the SurveyComponent */}
+      <SurveyComponent projectId={projectId} />
+
+      {/* Download Button */}
+<button
+  onClick={() => {
+    const element = document.getElementById('review-modal-content');
+    
+    // Clone the element for modification
+    const clonedElement = element.cloneNode(true);
+    clonedElement.style.width = '100%'; // Adjust width to 100% for PDF rendering
+    clonedElement.style.padding = '10px'; // Reduce padding for the PDF version
+
+    // Append to a temporary container to maintain styles
+    const tempContainer = document.createElement('div');
+    tempContainer.style.width = '100%'; // Keep full width of viewport
+    tempContainer.style.display = 'flex';
+    tempContainer.style.justifyContent = 'center'; // Center align for 100% width
+    tempContainer.appendChild(clonedElement);
+    document.body.appendChild(tempContainer);
+
+    // Generate the PDF
+    const opt = {
+      margin: 1,
+      filename: 'Survey_Review.pdf',
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 5, useCORS: true },
+      jsPDF: { unit: 'in', format: 'A4', orientation: 'landscape' },
+    };
+    html2pdf()
+      .set(opt)
+      .from(tempContainer)
+      .save()
+      .then(() => {
+        document.body.removeChild(tempContainer); // Clean up the temporary container
+      });
+  }}
+  className="mt-4 px-6 py-2 rounded-md bg-gradient-to-r from-blue-500 to-blue-700 text-white hover:from-blue-600 hover:to-blue-800 transition-colors duration-300"
+>
+  Download PDF
+</button>
+    </div>
+  </div>
+)}
     </div>
   );
 };
