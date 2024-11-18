@@ -115,7 +115,7 @@ const Home = () => {
             <img src={gizLogo} alt="GIZ Logo" className="h-12 w-auto" />
           </div>
           <Link
-            to="/survey"
+            to="/login"
             className="px-6 py-2 text-white rounded-lg bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 transition"
           >
             Take a Survey of your Project
@@ -289,7 +289,7 @@ const Home = () => {
 
         <div className="mt-12 text-center">
           <Link
-            to="/survey"
+            to="/login"
             className="inline-block px-8 py-3 text-white rounded-lg bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 transition transform hover:scale-105"
           >
             Take a Survey of your Project
@@ -297,6 +297,15 @@ const Home = () => {
         </div>
       </div> */}
 
+
+            <div className="mt-12 text-center">
+          <Link
+            to="/login"
+            className="inline-block px-8 py-3 text-white rounded-lg bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 transition transform hover:scale-105"
+          >
+            Take a Survey of your Project
+          </Link>
+        </div>
             {/* Footer */}
       <footer className="bg-gray-800 text-white mt-16 py-8">
         <div className="container mx-auto px-4">
