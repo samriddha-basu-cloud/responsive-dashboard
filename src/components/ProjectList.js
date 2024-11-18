@@ -263,7 +263,7 @@ const ProjectList = () => {
       {/* Modals for Add, Edit, and Delete Confirmation */}
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-80 relative">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-1/3 relative">
             <button
               onClick={() => {
                 setIsModalOpen(false);
@@ -300,7 +300,7 @@ const ProjectList = () => {
 
       {isEditModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-80 relative">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-1/3 relative">
             <button
               onClick={() => {
                 setIsEditModalOpen(false);
