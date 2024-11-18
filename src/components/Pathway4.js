@@ -40,6 +40,10 @@ const Pathway4 = ({ onNext, onBack, projectId }) => {
   const [answers, setAnswers] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
+  const isAllQuestionsAnswered = () => {
+    return answers?.Q4_1?.answer !== undefined && answers?.Q4_2?.answer !== undefined;
+  };
+
   useEffect(() => {
     const fetchPathwayData = async () => {
       if (!projectId) {
@@ -149,9 +153,14 @@ const Pathway4 = ({ onNext, onBack, projectId }) => {
           Back
         </button>
         <button
-          type="button"
+          type="submit"
           onClick={onNext}
-          className="w-full py-3 px-4 rounded-md bg-gradient-to-r from-red-500 to-red-700 text-white hover:from-red-600 hover:to-red-800 transition-colors duration-300"
+          className={`w-full py-3 px-4 rounded-md text-white transition-colors duration-300 ${
+            isAllQuestionsAnswered()
+              ? 'bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800'
+              : 'bg-gray-300 cursor-not-allowed'
+          }`}
+          disabled={!isAllQuestionsAnswered()}
         >
           Next
         </button>

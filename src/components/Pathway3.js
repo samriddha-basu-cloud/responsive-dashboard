@@ -40,6 +40,10 @@ const Pathway3 = ({ onNext, onBack, projectId }) => {
   const [answers, setAnswers] = useState({});
   const [isLoading, setIsLoading] = useState(true);
 
+   const isAllQuestionsAnswered = () => {
+    return answers?.Q3_1?.answer !== undefined && answers?.Q3_2?.answer !== undefined && answers?.Q3_3?.answer !== undefined && answers?.Q3_4?.answer !== undefined && answers?.Q3_5?.answer !== undefined && answers?.Q3_6?.answer !== undefined && answers?.Q3_7?.answer !== undefined && answers?.Q3_8?.answer !== undefined && answers?.Q3_9?.answer !== undefined && answers?.Q3_10?.answer !== undefined && answers?.Q3_11?.answer !== undefined && answers?.Q3_12?.answer !== undefined && answers?.Q3_13?.answer !== undefined;
+  };
+
   useEffect(() => {
     const fetchPathwayData = async () => {
       if (!projectId) {
@@ -259,9 +263,14 @@ const Pathway3 = ({ onNext, onBack, projectId }) => {
           Back
         </button>
         <button
-          type="button"
+          type="submit"
           onClick={onNext}
-          className="w-full py-3 px-4 rounded-md bg-gradient-to-r from-red-500 to-red-700 text-white hover:from-red-600 hover:to-red-800 transition-colors duration-300"
+          className={`w-full py-3 px-4 rounded-md text-white transition-colors duration-300 ${
+            isAllQuestionsAnswered()
+              ? 'bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800'
+              : 'bg-gray-300 cursor-not-allowed'
+          }`}
+          disabled={!isAllQuestionsAnswered()}
         >
           Next
         </button>

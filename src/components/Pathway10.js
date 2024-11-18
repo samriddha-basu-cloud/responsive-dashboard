@@ -42,6 +42,10 @@ const Pathway10 = ({ onNext, onBack, projectId }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
 
+  const isAllQuestionsAnswered = () => {
+    return answers?.Q10_1?.answer !== undefined && answers?.Q10_2?.answer !== undefined && answers?.Q10_3?.answer !== undefined && answers?.Q10_4?.answer !== undefined && answers?.Q10_5?.answer !== undefined && answers?.Q10_6?.answer !== undefined && answers?.Q10_7?.answer !== undefined && answers?.Q10_8?.answer !== undefined && answers?.Q10_9?.answer !== undefined && answers?.Q10_10?.answer !== undefined && answers?.Q10_11?.answer !== undefined;
+  };
+
   useEffect(() => {
     const fetchPathwayData = async () => {
       if (!projectId) {
@@ -270,10 +274,16 @@ const Pathway10 = ({ onNext, onBack, projectId }) => {
         >
           Back
         </button>
+
         <button
           type="submit"
           onClick={handleSubmit}
-          className="w-full py-3 px-4 rounded-md bg-gradient-to-r from-green-500 to-green-700 text-white hover:from-green-600 hover:to-green-800 transition-colors duration-300"
+          className={`w-full py-3 px-4 rounded-md text-white transition-colors duration-300 ${
+            isAllQuestionsAnswered()
+              ? 'bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800'
+              : 'bg-gray-300 cursor-not-allowed'
+          }`}
+          disabled={!isAllQuestionsAnswered()}
         >
           Submit
         </button>
@@ -284,8 +294,8 @@ const Pathway10 = ({ onNext, onBack, projectId }) => {
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <div className="bg-white p-6 rounded-lg shadow-lg text-center">
             <FaCheckCircle className="text-green-500 text-4xl mx-auto mb-4" />
-            <h2 className="text-2xl font-bold mb-4">Thank You!</h2>
-            <p className="text-gray-700">Your responses have been successfully submitted.</p>
+            <h2 className="text-2xl font-bold mb-4">Thank you for the responses.</h2>
+            <p className="text-gray-700">Your can review your answers via navigating through the pathways.</p>
             <button
               onClick={() => {
                 setShowModal(false);
@@ -294,6 +304,14 @@ const Pathway10 = ({ onNext, onBack, projectId }) => {
               className="mt-4 px-6 py-2 rounded-md bg-gradient-to-r from-green-500 to-green-700 text-white hover:from-green-600 hover:to-green-800 transition-colors duration-300"
             >
               Close
+            </button>
+            <button
+              onClick={() => {
+                setShowModal(false);
+              }}
+              className="mt-4 ml-12 px-6 py-2 rounded-md bg-gradient-to-r from-yellow-500 to-yellow-700 text-white hover:from-yellow-600 hover:to-yellow-800 transition-colors duration-300"
+            >
+              Review
             </button>
           </div>
         </div>
