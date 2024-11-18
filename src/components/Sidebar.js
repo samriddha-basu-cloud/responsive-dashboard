@@ -5,7 +5,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
 import { FiLogOut, FiMenu, FiX } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
-import gizLogo from '../assets/giz-logo.gif';
+import gizLogo from '../assets/giz-logo.png';
 
 const LogoutDialog = ({ isOpen, onClose, onConfirm }) => {
   if (!isOpen) return null;
@@ -129,7 +129,7 @@ const Sidebar = () => {
                 animate={{ opacity: 1 }}
                 src={gizLogo}
                 alt="Company Logo"
-                className="h-10 w-auto ml-2"
+                className="h-14 w-auto ml-2"
               />
             )}
           </div>
