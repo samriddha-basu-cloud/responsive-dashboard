@@ -3,6 +3,7 @@ import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db, auth } from '../firebase';
 import './PathwayStyles.css'; // Import custom styles
 import { FaCheckCircle } from 'react-icons/fa';
+import SurveyComponent from './SurveyComponent';
 
 const Question = ({ question, questionId, onAnswerChange, answer, observation, placeholder }) => {
   return (
@@ -40,7 +41,9 @@ const Question = ({ question, questionId, onAnswerChange, answer, observation, p
 const Pathway10 = ({ onNext, onBack, projectId }) => {
   const [answers, setAnswers] = useState({});
   const [isLoading, setIsLoading] = useState(true);
-  const [showModal, setShowModal] = useState(false);
+  const [showThankYouModal, setShowThankYouModal] = useState(false);
+  const [showReviewModal, setShowReviewModal] = useState(false);
+
 
   const isAllQuestionsAnswered = () => {
     return answers?.Q10_1?.answer !== undefined && answers?.Q10_2?.answer !== undefined && answers?.Q10_3?.answer !== undefined && answers?.Q10_4?.answer !== undefined && answers?.Q10_5?.answer !== undefined && answers?.Q10_6?.answer !== undefined && answers?.Q10_7?.answer !== undefined && answers?.Q10_8?.answer !== undefined && answers?.Q10_9?.answer !== undefined && answers?.Q10_10?.answer !== undefined && answers?.Q10_11?.answer !== undefined;
@@ -132,7 +135,7 @@ const Pathway10 = ({ onNext, onBack, projectId }) => {
           );
 
           await updateDoc(userDocRef, { projects: updatedProjects });
-          setShowModal(true); // Show Thank You modal
+          setShowThankYouModal(true); 
         }
       } catch (error) {
         console.error('Error submitting the form:', error);
@@ -289,30 +292,49 @@ const Pathway10 = ({ onNext, onBack, projectId }) => {
         </button>
       </div>
 
-            {/* Thank You Modal */}
-      {showModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+      {/* Thank You Modal */}
+      {showThankYouModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg text-center">
             <FaCheckCircle className="text-green-500 text-4xl mx-auto mb-4" />
             <h2 className="text-2xl font-bold mb-4">Thank you for the responses.</h2>
-            <p className="text-gray-700">Your can review your answers via navigating through the pathways.</p>
+            <p className="text-gray-700">You can review your answers by clicking the Review button.</p>
             <button
-              onClick={() => {
-                setShowModal(false);
-                window.location.href = '/dashboard';
-              }}
-              className="mt-4 px-6 py-2 rounded-md bg-gradient-to-r from-green-500 to-green-700 text-white hover:from-green-600 hover:to-green-800 transition-colors duration-300"
+              onClick={() => setShowThankYouModal(false)}
+              className="mt-4 px-6 py-2 rounded-md bg-gradient-to-r from-gray-500 to-gray-700 text-white hover:from-gray-600 hover:to-gray-800 transition-colors duration-300"
             >
               Close
             </button>
             <button
               onClick={() => {
-                setShowModal(false);
+                setShowThankYouModal(false);
+                setShowReviewModal(true); // Open the review modal
               }}
-              className="mt-4 ml-12 px-6 py-2 rounded-md bg-gradient-to-r from-yellow-500 to-yellow-700 text-white hover:from-yellow-600 hover:to-yellow-800 transition-colors duration-300"
+              className="mt-4 ml-4 px-6 py-2 rounded-md bg-gradient-to-r from-yellow-500 to-yellow-700 text-white hover:from-yellow-600 hover:to-yellow-800 transition-colors duration-300"
             >
               Review
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* Review Modal */}
+      {showReviewModal && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div
+            className="bg-white rounded-lg shadow-lg w-2/3 h-5/6  p-6 relative"
+            style={{ height: '90%' }}
+          >
+            {/* Close Button */}
+            <button
+              onClick={() => setShowReviewModal(false)}
+              className="absolute top-3 right-3 text-gray-700 hover:text-gray-900 text-2xl"
+            >
+              &times; {/* Close button */}
+            </button>
+            <h2 className="text-2xl font-bold mb-4">Review Responses</h2>
+            {/* Render the SurveyComponent */}
+            <SurveyComponent projectId={projectId} />
           </div>
         </div>
       )}
