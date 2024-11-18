@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import SunspotLoader from '../components/SunspotLoader'; // Adjust the import path as needed
+import AestheticLoader from '../components/AestheticLoader';
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
@@ -8,15 +9,19 @@ const Home = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setLoading(false);
-    }, 2000);
+    }, 5000);
 
     return () => clearTimeout(timer);
   }, []);
 
+//   if (loading) {
+//     return <AestheticLoader />;
+//   }
+
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
-        <SunspotLoader size="lg" />
+        <AestheticLoader size="lg" />
         {/* loader text */}
         <p className="mt-4 text-gray-600 dark:text-gray-400">Loading...</p> 
       </div>
