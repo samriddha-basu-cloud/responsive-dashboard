@@ -134,18 +134,18 @@ const SurveyComponent = ({ projectId }) => {
         if (project) {
           // Merge predefined questions with existing data
           const mergedSections = { ...project.sections };
-          if (mergedSections.Pathway1) {
-  mergedSections.Pathway1 = {
-    ...PREDEFINED_PATHWAY_QUESTIONS,
-    ...Object.fromEntries(
-      Object.entries(mergedSections.Pathway1).filter(([key]) => key.startsWith('Q1_'))
-    )
-  };
-} else {
-  mergedSections.Pathway1 = Object.fromEntries(
-    Object.entries(PREDEFINED_PATHWAY_QUESTIONS).filter(([key]) => key.startsWith('Q1_'))
-  );
-}
+           for (let i = 1; i <= 10; i++) {
+          const pathwayKey = `Pathway${i}`;
+          mergedSections[pathwayKey] = {
+            ...Object.fromEntries(
+              Object.entries(PREDEFINED_PATHWAY_QUESTIONS).filter(([key]) =>
+                key.startsWith(`Q${i}_`)
+              )
+            ),
+            ...(project.sections?.[pathwayKey] || {})
+          };
+        }
+
           setData(mergedSections);
           setError(null);
         } else {
