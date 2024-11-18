@@ -4,6 +4,7 @@ import { db, auth } from '../firebase';
 import './PathwayStyles.css'; // Import custom styles
 import { FaCheckCircle } from 'react-icons/fa';
 import SurveyComponent from './SurveyComponent';
+import html2pdf from 'html2pdf.js'; 
 
 const Question = ({ question, questionId, onAnswerChange, answer, observation, placeholder }) => {
   return (
@@ -322,19 +323,77 @@ const Pathway10 = ({ onNext, onBack, projectId }) => {
       {showReviewModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
           <div
-            className="bg-white rounded-lg shadow-lg w-2/3 h-5/6  p-6 relative"
+            id="review-modal-content"
+            className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl w-3/4 h-5/6 p-6 relative flex flex-col justify-between"
             style={{ height: '90%' }}
           >
-            {/* Close Button */}
-            <button
-              onClick={() => setShowReviewModal(false)}
-              className="absolute top-3 right-3 text-gray-700 hover:text-gray-900 text-2xl"
-            >
-              &times; {/* Close button */}
-            </button>
-            <h2 className="text-2xl font-bold mb-4">Review Responses</h2>
-            {/* Render the SurveyComponent */}
-            <SurveyComponent projectId={projectId} />
+            {/* Header Section */}
+            <div className="flex justify-between items-center pb-4 border-b border-gray-300 dark:border-gray-700">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Review Responses</h2>
+              <button
+                onClick={() => setShowReviewModal(false)}
+                className="text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-400 text-2xl transition-all duration-300"
+                title="Close Review Modal"
+              >
+                &times; {/* Close button */}
+              </button>
+            </div>
+
+            {/* Main Content */}
+            <div className="overflow-y-auto mt-4 flex-grow">
+              {/* Render the SurveyComponent */}
+              <SurveyComponent projectId={projectId} />
+            </div>
+
+            {/* Footer Section */}
+            <div className="flex justify-end items-center pt-4 border-t border-gray-300 dark:border-gray-700 space-x-4">
+              {/* Close Button */}
+              {/* <button
+                onClick={() => setShowReviewModal(false)}
+                className="px-6 py-2 rounded-md bg-gradient-to-r from-gray-400 to-gray-600 text-white hover:from-gray-500 hover:to-gray-700 transition-all duration-300"
+                title="Close Modal"
+              >
+                Close
+              </button> */}
+              {/* Download Button */}
+              <button
+                onClick={() => {
+                  const element = document.getElementById('review-modal-content');
+                  
+                  // Clone the element for modification
+                  const clonedElement = element.cloneNode(true);
+                  clonedElement.style.width = '90%'; // Adjust width to 90% for PDF rendering
+                  clonedElement.style.padding = '10px'; // Reduce padding for the PDF version
+
+                  // Append to a temporary container to maintain styles
+                  const tempContainer = document.createElement('div');
+                  tempContainer.style.width = '100%'; // Keep full width of viewport
+                  tempContainer.style.display = 'flex';
+                  tempContainer.style.justifyContent = 'center'; // Center align for 90% width
+                  tempContainer.appendChild(clonedElement);
+                  document.body.appendChild(tempContainer);
+
+                  // Generate the PDF
+                  const opt = {
+                    margin: 0.5,
+                    filename: 'Survey_Review.pdf',
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { scale: 2 },
+                    jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' },
+                  };
+                  html2pdf()
+                    .set(opt)
+                    .from(tempContainer)
+                    .save()
+                    .then(() => {
+                      document.body.removeChild(tempContainer); // Clean up the temporary container
+                    });
+                }}
+                className="px-6 py-2 rounded-md bg-gradient-to-r from-red-500 to-red-700 text-white hover:from-red-600 hover:to-red-800 transition-all duration-300"
+              >
+                Download Survey
+              </button>
+            </div>
           </div>
         </div>
       )}

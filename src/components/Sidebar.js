@@ -195,7 +195,7 @@ const Sidebar = () => {
             className="w-full flex items-center px-4 py-3 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
           >
             <FiLogOut className="h-5 w-5" />
-            {isOpen && <span className="ml-4 text-sm font-medium">Log Out</span>}
+            {isOpen && <span className="ml-4 text-sm text-red-700 dark:text-red-500 font-medium">Log Out</span>}
           </button>
           {isOpen && (
             <p className="mt-4 text-xs text-center text-gray-500 dark:text-gray-400">

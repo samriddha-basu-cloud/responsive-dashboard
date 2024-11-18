@@ -196,7 +196,7 @@ const ProjectList = () => {
                   <FaUser className="h-5 w-5" />
                   <span>Profile Form</span>
                 </button>
-                <button
+                {/* <button
                   className="px-4 py-2 rounded-md text-white flex items-center space-x-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 transition-all duration-300"
                   style={{
                     background: 'linear-gradient(to right, #C31A07, #9E1305)',
@@ -205,7 +205,7 @@ const ProjectList = () => {
                 >
                   <FiDownload className="h-5 w-5" />
                   <span>Download Form</span>
-                </button>
+                </button> */}
                 <button
                   onClick={() => handleEditProject(project)}
                   className="px-4 py-2 rounded-md text-white flex items-center space-x-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 transition-all duration-300"
