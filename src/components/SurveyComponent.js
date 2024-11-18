@@ -232,6 +232,7 @@ const PREDEFINED_PATHWAY_QUESTIONS = {
     question: "Q-10.11) Does the project actively focus on promoting platforms, organisations or groups of people to develop, govern and manage the food systems at the local levels?",
     questionId: "Q10_11"
   }
+
 };
 
 const SurveyComponent = ({ projectId }) => {
