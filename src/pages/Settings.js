@@ -9,7 +9,7 @@ const Settings = () => {
       <div className="flex-grow p-6 overflow-auto">
         <h1 className="text-3xl font-bold text-[#C31A07] dark:text-[#FF6B6B]">Settings</h1>
         <div className="mt-4">
-          <p>This is the settings page. Add your settings controls here.</p>
+          <p>This is the settings page. It is Coming Soon...</p>
         </div>
       </div>
     </div>

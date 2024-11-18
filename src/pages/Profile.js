@@ -9,7 +9,7 @@ const Profile = () => {
       <div className="flex-grow p-6 overflow-auto">
         <h1 className="text-3xl font-bold text-[#C31A07] dark:text-[#FF6B6B]">Profile</h1>
         <div className="mt-4">
-          <p>This is the profile page. Add your profile details here.</p>
+          <p>This is the profile page. It is Coming Soon...</p>
         </div>
       </div>
     </div>
