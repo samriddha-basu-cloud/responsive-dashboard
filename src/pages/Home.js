@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import AestheticLoader from '../components/AestheticLoader';
 import gizLogo from '../assets/giz-logo.png';
+import photo1 from '../assets/photo1-giz.jpg';
+import photo2 from '../assets/photo2-giz.jpg';
 import { motion } from 'framer-motion';
 
 
@@ -129,45 +131,82 @@ const Home = () => {
       <motion.h1 
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-5xl font-extrabold text-center mb-16 bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent"
+        className="text-4xl font-extrabold text-center mb-16 bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent"
       >
         Integrated Food Systems and Agroecology Framework
       </motion.h1>
 
       {/* Enhanced Content Sections */}
-      <div className="grid grid-cols-1 gap-12 mb-16">
-        {content.map((para, index) => {
-          const sentences = para.split('.');
-          const isLong = sentences.length > 2;
-          
-          return (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: index * 0.2 }}
-              className="group relative overflow-hidden"
-            >
-              <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 p-8 border border-gray-100 dark:border-gray-700">
-                <div className="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-red-500 to-red-700"/>
-                <p className="text-gray-700 dark:text-gray-200 text-lg leading-relaxed pl-4">
-                  {isLong && !readMore[index]
-                    ? getContentWithDropCap(sentences.slice(0, 5).join('.') + '...')
-                    : getContentWithDropCap(para)}
-                  {isLong && (
-                    <button
-                      onClick={() => toggleReadMore(index)}
-                      className="ml-3 px-4 py-1 text-sm font-medium text-red-600 hover:text-red-800 
-                        hover:bg-red-50 dark:hover:bg-red-900/20 rounded-full transition-colors duration-200"
-                    >
-                      {readMore[index] ? '← Show less' : 'Read more →'}
-                    </button>
-                  )}
-                </p>
-              </div>
-            </motion.div>
-          );
-        })}
+        <div className="container mx-auto p-4 space-y-12">
+        {/* First Section - Text Left, Photo Right */}
+        <div className="flex gap-8">
+          <div className="flex-1 space-y-6">
+            {content[0].map((text, index) => (
+              <motion.div
+                key={`first-${index}`}
+                initial={{ opacity: 0, x: -50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.2 }}
+                className="group relative overflow-hidden"
+              >
+                <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 p-8 border border-gray-100 dark:border-gray-700">
+                  <div className="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-red-500 to-red-700"/>
+                  <p className="text-gray-700 dark:text-gray-200 text-lg leading-relaxed pl-4">
+                    {text}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="w-96 flex items-center"
+          >
+            <div className="bg-gray-200 rounded-xl overflow-hidden aspect-square w-full">
+              <image
+                src="photo1/400/400"
+                alt="Right side image"
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Second Section - Photo Left, Text Right */}
+        <div className="flex gap-8">
+          <motion.div
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="w-96 flex items-center"
+          >
+            <div className="bg-gray-200 rounded-xl overflow-hidden aspect-square w-full">
+              <image
+                src="photo2/400/400"
+                alt="Left side image"
+                className="w-full h-full object-cover"
+              />
+            </div>
+          </motion.div>
+          <div className="flex-1 space-y-6">
+            {content[1].map((text, index) => (
+              <motion.div
+                key={`second-${index}`}
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: index * 0.2 }}
+                className="group relative overflow-hidden"
+              >
+                <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 p-8 border border-gray-100 dark:border-gray-700">
+                  <div className="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-red-500 to-red-700"/>
+                  <p className="text-gray-700 dark:text-gray-200 text-lg leading-relaxed pl-4">
+                    {text}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* Enhanced Tables Section */}
