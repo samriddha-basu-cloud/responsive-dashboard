@@ -131,7 +131,7 @@ const Home = () => {
         <motion.h1 
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-4xl font-extrabold text-center mb-16 bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent"
+            className="text-4xl font-extrabold text-center mb-12 bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent py-2"
         >
             Integrated Food Systems and Agroecology Framework
         </motion.h1>
@@ -183,7 +183,7 @@ const Home = () => {
                         <img
                           src={index === 0 ? photo1 : photo2}
                           alt={`Image for content ${index + 1}`}
-                          className="w-full h-full object-cover"
+                          className="items-center object-cover"
                         />
                       </div>
                     </motion.div>
@@ -200,7 +200,7 @@ const Home = () => {
                         <img
                           src={index === 0 ? photo1 : photo2}
                           alt={`Image for content ${index + 1}`}
-                          className="w-full h-full object-cover"
+                          className=" justify-center place-items-center object-cover"
                         />
                       </div>
                     </motion.div>
