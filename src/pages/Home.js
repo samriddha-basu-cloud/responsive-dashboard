@@ -108,274 +108,237 @@ const Home = () => {
     );
   }
 
-  return (
+    return (
     <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
-     {/* Navbar */}
-      <nav className="bg-white dark:bg-gray-800 shadow-lg p-4">
+        {/* Navbar */}
+        <nav className="bg-white dark:bg-gray-800 shadow-lg p-4">
         <div className="container mx-auto flex justify-between items-center">
-          <div className="flex items-center">
+            <div className="flex items-center">
             <img src={gizLogo} alt="GIZ Logo" className="h-12 w-auto" />
-          </div>
-          <Link
+            </div>
+            <Link
             to="/login"
             className="px-6 py-2 text-white rounded-lg bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 transition"
-          >
-            Take a Survey of your Project
-          </Link>
-        </div>
-      </nav>
-
-      {/* Main Content */}
-      <div className="container mx-auto px-4 py-12">
-      {/* Enhanced Header */}
-      <motion.h1 
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="text-4xl font-extrabold text-center mb-16 bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent"
-      >
-        Integrated Food Systems and Agroecology Framework
-      </motion.h1>
-
-      {/* Enhanced Content Sections */}
-        <div className="container mx-auto p-4 space-y-12">
-        {/* First Section - Text Left, Photo Right */}
-        <div className="flex gap-8">
-          <div className="flex-1 space-y-6">
-            {content[0].map((text, index) => (
-              <motion.div
-                key={`first-${index}`}
-                initial={{ opacity: 0, x: -50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.2 }}
-                className="group relative overflow-hidden"
-              >
-                <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 p-8 border border-gray-100 dark:border-gray-700">
-                  <div className="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-red-500 to-red-700"/>
-                  <p className="text-gray-700 dark:text-gray-200 text-lg leading-relaxed pl-4">
-                    {text}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="w-96 flex items-center"
-          >
-            <div className="bg-gray-200 rounded-xl overflow-hidden aspect-square w-full">
-              <image
-                src="photo1/400/400"
-                alt="Right side image"
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </motion.div>
-        </div>
-
-        {/* Second Section - Photo Left, Text Right */}
-        <div className="flex gap-8">
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="w-96 flex items-center"
-          >
-            <div className="bg-gray-200 rounded-xl overflow-hidden aspect-square w-full">
-              <image
-                src="photo2/400/400"
-                alt="Left side image"
-                className="w-full h-full object-cover"
-              />
-            </div>
-          </motion.div>
-          <div className="flex-1 space-y-6">
-            {content[1].map((text, index) => (
-              <motion.div
-                key={`second-${index}`}
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.2 }}
-                className="group relative overflow-hidden"
-              >
-                <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 p-8 border border-gray-100 dark:border-gray-700">
-                  <div className="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-red-500 to-red-700"/>
-                  <p className="text-gray-700 dark:text-gray-200 text-lg leading-relaxed pl-4">
-                    {text}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Enhanced Tables Section */}
-      <div className="space-y-12">
-        <div className="flex overflow-x-auto mb-6 pb-2">
-          {tables.map((table, index) => (
-            <button
-              key={index}
-              onClick={() => setActiveTab(index)}
-              className={`px-6 py-3 text-sm font-medium rounded-lg mr-4 transition-all duration-200
-                ${activeTab === index 
-                  ? 'bg-gradient-to-r from-red-500 to-red-700 text-white shadow-lg' 
-                  : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-red-50 dark:hover:bg-red-900/20'
-                }`}
             >
-              {table.title}
-            </button>
-          ))}
+            Take a Survey of your Project
+            </Link>
+        </div>
+        </nav>
+
+        {/* Main Content */}
+        <div className="container mx-auto px-4 py-12">
+        {/* Enhanced Header */}
+        <motion.h1 
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="text-4xl font-extrabold text-center mb-16 bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent"
+        >
+            Integrated Food Systems and Agroecology Framework
+        </motion.h1>
+
+        {/* Enhanced Content Sections */}
+                <div className="container mx-auto p-4 space-y-12">
+          {content.map((text, index) => {
+            const isExpanded = readMore[index] || false;
+            const handleReadMoreToggle = () => toggleReadMore(index);
+            const truncatedText = text.length > 1000 ? `${text.slice(0, 1000)}...` : text;
+        
+            return (
+              <div key={index} className="flex gap-8">
+                {index % 2 === 0 ? (
+                  <>
+                    {/* Text Left, Photo Right */}
+                    <div className="flex-1 space-y-6">
+                      <motion.div
+                        initial={{ opacity: 0, x: -50 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.2 }}
+                        className="group relative overflow-hidden"
+                      >
+                        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 p-8 border border-gray-100 dark:border-gray-700">
+                          <div className="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-red-500 to-red-700" />
+                          <p
+                            className="text-gray-700 dark:text-gray-200 text-lg leading-relaxed pl-4 first-letter:text-5xl first-letter:font-bold first-letter:mr-2 first-letter:text-red-700"
+                            style={{ textIndent: '1.5em' }}
+                          >
+                            {isExpanded ? text : truncatedText}
+                          </p>
+                          {text.length > 200 && (
+                            <button
+                              onClick={handleReadMoreToggle}
+                              className="text-red-500 hover:text-red-700 transition mt-2"
+                            >
+                              {isExpanded ? 'Read less' : 'Read more...'}
+                            </button>
+                          )}
+                        </div>
+                      </motion.div>
+                    </div>
+                    <motion.div
+                      initial={{ opacity: 0, x: 50 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      className="w-96 flex items-center"
+                    >
+                      <div className="bg-gray-200 rounded-xl overflow-hidden aspect-square w-full">
+                        <img
+                          src={index === 0 ? photo1 : photo2}
+                          alt={`Image for content ${index + 1}`}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    </motion.div>
+                  </>
+                ) : (
+                  <>
+                    {/* Photo Left, Text Right */}
+                    <motion.div
+                      initial={{ opacity: 0, x: -50 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      className="w-96 flex items-center"
+                    >
+                      <div className="bg-gray-200 rounded-xl overflow-hidden aspect-square w-full">
+                        <img
+                          src={index === 0 ? photo1 : photo2}
+                          alt={`Image for content ${index + 1}`}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    </motion.div>
+                    <div className="flex-1 space-y-6">
+                      <motion.div
+                        initial={{ opacity: 0, x: 50 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: 0.2 }}
+                        className="group relative overflow-hidden"
+                      >
+                        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 p-8 border border-gray-100 dark:border-gray-700">
+                          <div className="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-red-500 to-red-700" />
+                          <p
+                            className="text-gray-700 dark:text-gray-200 text-lg leading-relaxed pl-4 first-letter:text-5xl first-letter:font-bold first-letter:mr-2 first-letter:text-red-700"
+                            style={{ textIndent: '1.5em' }}
+                          >
+                            {isExpanded ? text : truncatedText}
+                          </p>
+                          {text.length > 200 && (
+                            <button
+                              onClick={handleReadMoreToggle}
+                              className="text-red-500 hover:text-red-700 transition mt-2"
+                            >
+                              {isExpanded ? 'Read less' : 'Read more...'}
+                            </button>
+                          )}
+                        </div>
+                      </motion.div>
+                    </div>
+                  </>
+                )}
+              </div>
+            );
+          })}
         </div>
 
-        {tables.map((table, index) => (
-          <motion.div
-            key={index}
-            initial={false}
-            animate={{ 
-              opacity: activeTab === index ? 1 : 0,
-              x: activeTab === index ? 0 : 20
-            }}
-            className={`${activeTab === index ? 'block' : 'hidden'}`}
-          >
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-700">
-              <div className="overflow-x-auto">
-                <table className="min-w-full">
-                  <thead>
-                    <tr className="bg-gradient-to-r from-red-500 to-red-700">
-                      {table.headers.map((header, i) => (
-                        <th key={i} className="px-6 py-4 text-left text-white font-semibold tracking-wider">
-                          {header}
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                    {table.rows.map((row, i) => (
-                      <tr 
-                        key={i}
-                        className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150"
-                      >
-                        {row.map((cell, j) => (
-                          <td key={j} className="px-6 py-4 text-gray-700 dark:text-gray-200">
-                            {cell}
-                          </td>
+        {/* Enhanced Tables Section */}
+        <div className="space-y-12">
+            <div className="flex overflow-x-auto mb-6 pb-2">
+            {tables.map((table, index) => (
+                <button
+                key={index}
+                onClick={() => setActiveTab(index)}
+                className={`px-6 py-3 text-sm font-medium rounded-lg mr-4 transition-all duration-200
+                    ${activeTab === index 
+                    ? 'bg-gradient-to-r from-red-500 to-red-700 text-white shadow-lg' 
+                    : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-red-50 dark:hover:bg-red-900/20'
+                    }`}
+                >
+                {table.title}
+                </button>
+            ))}
+            </div>
+
+            {tables.map((table, index) => (
+            <motion.div
+                key={index}
+                initial={false}
+                animate={{ 
+                opacity: activeTab === index ? 1 : 0,
+                x: activeTab === index ? 0 : 20
+                }}
+                className={`${activeTab === index ? 'block' : 'hidden'}`}
+            >
+                <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-700">
+                <div className="overflow-x-auto">
+                    <table className="min-w-full">
+                    <thead>
+                        <tr className="bg-gradient-to-r from-red-500 to-red-700">
+                        {table.headers.map((header, i) => (
+                            <th key={i} className="px-6 py-4 text-left text-white font-semibold tracking-wider">
+                            {header}
+                            </th>
                         ))}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </motion.div>
-        ))}
-      </div>
-    </div>
-
-      {/* Main Content */}
-      {/* <div className="container mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold text-center mb-12 text-red-700 dark:text-red-500">
-          Integrated Food Systems and Agroecology Framework
-        </h1>
-
-        {content.map((para, index) => {
-          const sentences = para.split('.');
-          const isLong = sentences.length > 5;
-          return (
-            <div key={index} className="mb-8 bg-white dark:bg-gray-800 p-6 rounded-lg shadow">
-              <p className="text-gray-600 dark:text-gray-300">
-                {isLong && !readMore[index]
-                  ? sentences.slice(0, 5).join('.') + '...'
-                  : para}
-                {isLong && (
-                  <button
-                    onClick={() => toggleReadMore(index)}
-                    className="ml-2 text-red-500 hover:underline"
-                  >
-                    {readMore[index] ? 'Show less' : 'Read more'}
-                  </button>
-                )}
-              </p>
-            </div>
-          );
-        })} */}
-
-        {/* Tables */}
-        {/* {tables.map((table, index) => (
-          <div key={index} className="mb-8">
-            <h2 className="text-2xl font-semibold text-gray-800 dark:text-gray-100 mb-4">
-              {table.title}
-            </h2>
-            <table className="min-w-full bg-white dark:bg-gray-800 rounded-lg shadow overflow-hidden">
-              <thead className="bg-gradient-to-r from-red-500 to-red-700 text-white">
-                <tr>
-                  {table.headers.map((header, i) => (
-                    <th key={i} className="px-6 py-3 text-left">{header}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                {table.rows.map((row, i) => (
-                  <tr key={i}>
-                    {row.map((cell, j) => (
-                      <td key={j} className="px-6 py-4">{cell}</td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        ))}
+                        </tr>
+                    </thead>
+                    <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                        {table.rows.map((row, i) => (
+                        <tr 
+                            key={i}
+                            className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150"
+                        >
+                            {row.map((cell, j) => (
+                            <td key={j} className="px-6 py-4 text-gray-700 dark:text-gray-200">
+                                {cell}
+                            </td>
+                            ))}
+                        </tr>
+                        ))}
+                    </tbody>
+                    </table>
+                </div>
+                </div>
+            </motion.div>
+            ))}
+        </div>
+        </div>
 
         <div className="mt-12 text-center">
-          <Link
+        <Link
             to="/login"
             className="inline-block px-8 py-3 text-white rounded-lg bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 transition transform hover:scale-105"
-          >
+        >
             Take a Survey of your Project
-          </Link>
+        </Link>
         </div>
-      </div> */}
 
-
-            <div className="mt-12 text-center">
-          <Link
-            to="/login"
-            className="inline-block px-8 py-3 text-white rounded-lg bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 transition transform hover:scale-105"
-          >
-            Take a Survey of your Project
-          </Link>
-        </div>
-            {/* Footer */}
-      <footer className="bg-gray-800 text-white mt-16 py-8">
+        {/* Footer */}
+        <footer className="bg-gray-800 text-white mt-16 py-8">
         <div className="container mx-auto px-4">
-          <div className="flex flex-wrap justify-between">
+            <div className="flex flex-wrap justify-between">
             <div className="w-full md:w-1/3 mb-6 md:mb-0">
-              <img src={gizLogo} alt="GIZ Logo" className="h-12 w-auto mb-4" />
-              <p className="text-sm">
+                <img src={gizLogo} alt="GIZ Logo" className="h-12 w-auto mb-4" />
+                <p className="text-sm">
                 Deutsche Gesellschaft für Internationale Zusammenarbeit (GIZ) GmbH
-              </p>
+                </p>
             </div>
             <div className="w-full md:w-1/3 mb-6 md:mb-0">
-              <h3 className="text-lg font-semibold mb-4">Contact</h3>
-              <p className="text-sm">Email: contact@giz.de</p>
-              <p className="text-sm">Phone: +49 (0) 123 456 789</p>
+                <h3 className="text-lg font-semibold mb-4">Contact</h3>
+                <p className="text-sm">Email: contact@giz.de</p>
+                <p className="text-sm">Phone: +49 (0) 123 456 789</p>
             </div>
             <div className="w-full md:w-1/3">
-              <h3 className="text-lg font-semibold mb-4">Links</h3>
-              <ul className="text-sm">
+                <h3 className="text-lg font-semibold mb-4">Links</h3>
+                <ul className="text-sm">
                 <li className="mb-2"><a href="#" className="hover:text-red-400">Privacy Policy</a></li>
                 <li className="mb-2"><a href="#" className="hover:text-red-400">Terms of Service</a></li>
                 <li><a href="#" className="hover:text-red-400">Contact Us</a></li>
-              </ul>
+                </ul>
             </div>
-          </div>
-          <div className="text-center mt-8 pt-8 border-t border-gray-700">
+            </div>
+            <div className="text-center mt-8 pt-8 border-t border-gray-700">
             <p className="text-sm">&copy; 2024 GIZ. All rights reserved.</p>
-          </div>
+            </div>
         </div>
-      </footer>
+        </footer>
     </div>
-  );
+);
 };
 
 export default Home;
