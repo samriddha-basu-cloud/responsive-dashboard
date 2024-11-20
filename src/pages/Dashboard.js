@@ -42,7 +42,7 @@ const Dashboard = () => {
         } flex-grow p-4 md:p-6 overflow-auto`}
       >
         {/* Welcome Message */}
-        <div className="mb-6 text-left">
+        <div className="mb-6 mt-16 text-left">
           <h1 className="text-2xl md:text-3xl font-comic text-[#C31A07] font-semibold">
             <span className="text-gray-800 dark:text-gray-200">Welcome,</span>{' '}
             <span
