@@ -20,30 +20,41 @@ import ProgressBar from './ProgressBar';
 const ApplicationForm = () => {
   const [step, setStep] = useState(1);
   const totalSteps = 12;
-
   const location = useLocation();
   const { projectId } = location.state || {};
-
   const [projects, setProjects] = useState([]);
   const [completedSteps, setCompletedSteps] = useState([]);
 
   useEffect(() => {
-    const fetchProjects = async () => {
+    const fetchProjectData = async () => {
+      if (!projectId) return;
+
       try {
         const userDocRef = doc(db, 'users', auth.currentUser.uid);
         const userDoc = await getDoc(userDocRef);
 
         if (userDoc.exists()) {
           const userData = userDoc.data();
-          setProjects(userData.projects || []);
+          const project = userData.projects.find((p) => p.id === projectId);
+
+          if (project && project.sections) {
+            // Determine the farthest completed step based on sections
+            const sectionKeys = Object.keys(project.sections);
+            const completedIndexes = sectionKeys.map((key) =>
+              key.startsWith('Pathway') ? parseInt(key.replace('Pathway', '')) + 2 : 2
+            );
+            const lastCompletedStep = Math.max(1, ...completedIndexes);
+            setStep(lastCompletedStep);
+            setCompletedSteps(Array.from({ length: lastCompletedStep }, (_, i) => i + 1));
+          }
         }
       } catch (error) {
-        console.error('Error fetching projects:', error);
+        console.error('Error fetching project data:', error);
       }
     };
 
-    fetchProjects();
-  }, []);
+    fetchProjectData();
+  }, [projectId]);
 
   const updateProjectProgress = async () => {
     if (!projectId) {
@@ -75,18 +86,18 @@ const ApplicationForm = () => {
   };
 
   const getRomanNumeral = (number) => {
-  const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
-  return number > 0 && number <= romanNumerals.length ? romanNumerals[number - 1] : ''; // Return empty string if out of bounds
-};
+    const romanNumerals = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'];
+    return number > 0 && number <= romanNumerals.length ? romanNumerals[number - 1] : '';
+  };
 
-const sectionNames = [
-  { name: 'Respondent Details', icon: <FaUser /> },
-  { name: 'Project Information', icon: <FaInfoCircle /> },
-  ...Array.from({ length: 10 }, (_, i) => ({
-    name: `Pathway ${i + 1}`,
-    icon: <span>{getRomanNumeral(i + 1)}</span>, // Wrap Roman numeral in JSX
-  })),
-];
+  const sectionNames = [
+    { name: 'Respondent Details', icon: <FaUser /> },
+    { name: 'Project Information', icon: <FaInfoCircle /> },
+    ...Array.from({ length: 10 }, (_, i) => ({
+      name: `Pathway ${i + 1}`,
+      icon: <span>{getRomanNumeral(i + 1)}</span>,
+    })),
+  ];
 
   const progress = Math.round((step / totalSteps) * 100);
 
@@ -96,19 +107,19 @@ const sectionNames = [
 
   const goToStep = (targetStep) => {
     if (targetStep > 1 && !completedSteps.includes(targetStep - 1)) {
-      return; // Prevent navigation to next pathway if the previous one isn't completed
+      return;
     }
     setStep(targetStep);
   };
+
   const skipToEnd = () => setStep(totalSteps);
   const backToBeginning = () => setStep(1);
-
 
   const handlePathwayCompletion = (pathwayStep) => {
     setCompletedSteps((prev) => {
       const updatedSteps = [...new Set([...prev, pathwayStep])];
-      updateProjectProgress(); // Save progress to the database
-      setStep(pathwayStep + 1); // Navigate to the next step after updating state
+      updateProjectProgress();
+      setStep(pathwayStep + 1);
       return updatedSteps;
     });
   };
@@ -148,17 +159,15 @@ const sectionNames = [
 
   return (
     <div className="flex min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100">
-      {/* Sidebar Navigation */}
       <div className="w-64 bg-gray-200 dark:bg-gray-800 fixed h-screen">
         <div className="p-6 flex flex-col items-start space-y-4 h-full overflow-y-auto">
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Navigation</h2>
 
-          {/* Navigation Links */}
           {sectionNames.map((section, index) => (
             <button
               key={index}
               onClick={() => goToStep(index + 1)}
-              className={`w-full text-left py-1 px-4 rounded-md transition-colors duration-300 ${
+              className={`relative w-full text-left py-1 px-4 rounded-md transition-colors duration-300 ${
                 step === index + 1
                   ? 'bg-gradient-to-r from-red-500 to-red-700 text-white shadow-lg'
                   : completedSteps.includes(index + 1) || index + 1 < step
@@ -172,21 +181,28 @@ const sectionNames = [
           ))}
 
           <div className="flex space-x-2 w-full">
-              <button
-                onClick={backToBeginning}
-                className="flex items-center justify-center w-1/2 py-2 px-4 rounded-md bg-gradient-to-r from-blue-500 to-blue-700 text-white hover:from-blue-600 hover:to-blue-800 transition-colors duration-300 shadow-md text-sm"
-              >
-                <FaAngleDoubleLeft className="mr-2 text-xs" />
-                <span className="text-xs">Beginning</span>
-              </button>
+            <button
+              onClick={backToBeginning}
+              className="flex items-center justify-center w-1/2 py-2 px-4 rounded-md bg-gradient-to-r from-blue-500 to-blue-700 text-white hover:from-blue-600 hover:to-blue-800 transition-colors duration-300 shadow-md text-sm"
+            >
+              <FaAngleDoubleLeft className="mr-2 text-xs" />
+              <span className="text-xs">Beginning</span>
+            </button>
+            <div className="relative group w-1/2">
               <button
                 onClick={skipToEnd}
-                className="flex items-center justify-center w-1/2 py-2 px-4 rounded-md bg-gradient-to-r from-green-500 to-green-700 text-white hover:from-green-600 hover:to-green-800 transition-colors duration-300 shadow-md text-sm"
+                className={`flex items-center justify-center w-full py-2 px-4 rounded-md ${
+                  completedSteps.includes(9)
+                    ? 'bg-gradient-to-r from-green-500 to-green-700 text-white hover:from-green-600 hover:to-green-800'
+                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                } transition-colors duration-300 shadow-md text-sm`}
+                disabled={!completedSteps.includes(9)}
               >
                 <span className="text-xs">End</span>
                 <FaAngleDoubleRight className="ml-2 text-xs" />
               </button>
             </div>
+          </div>
 
           <Link
             to="/dashboard"
@@ -197,11 +213,8 @@ const sectionNames = [
         </div>
       </div>
 
-      {/* Main Content */}
       <div className="flex-grow ml-64 p-6">
         <ProgressBar progress={progress} />
-
-        {/* Horizontal Scrollable Logo List */}
         <div className="overflow-x-auto mb-6 px-6 mt-4">
           <div className="flex space-x-6 justify-center pb-4">
             {sectionNames.map((section, index) => (
@@ -214,15 +227,11 @@ const sectionNames = [
                 }`}
                 onClick={() => goToStep(index + 1)}
               >
-                <span className="text-lg font-bold">
-                  {index < 2 ? section.icon : section.icon}
-                </span>
+                <span className="text-lg font-bold">{index < 2 ? section.icon : section.icon}</span>
               </div>
             ))}
           </div>
         </div>
-
-        {/* Section Heading */}
         <div className="flex items-center space-x-4 mb-6">
           <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-red-500 to-red-700 text-white text-lg font-bold">
             {step <= 2 ? sectionNames[step - 1].icon : sectionNames[step - 1].icon}
@@ -230,7 +239,6 @@ const sectionNames = [
           <h2 className="text-2xl font-bold">{sectionNames[step - 1].name}</h2>
         </div>
 
-        {/* Render form sections based on step */}
         {step === 1 && <RespondentDetails onNext={() => handlePathwayCompletion(step)} projectId={projectId} />}
         {step === 2 && (
           <ProjectInformation onNext={() => handlePathwayCompletion(step)} onBack={() => goToStep(step - 1)} projectId={projectId} />
