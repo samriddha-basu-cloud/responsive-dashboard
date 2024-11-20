@@ -6,6 +6,10 @@ module.exports = {
   ],
   theme: {
     extend: {
+      animation: {
+        'spin-slow': 'spin 3s linear infinite',
+        'moon-pulse': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite'
+      },
       colors: {
         ripple: 'rgba(250, 0, 0, 0.2)', // Custom ripple color
       },
