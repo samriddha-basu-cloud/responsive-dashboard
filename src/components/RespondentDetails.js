@@ -15,24 +15,20 @@ const RespondentDetails = ({ onNext, projectId }) => {
   useEffect(() => {
     const fetchDetails = async () => {
       if (!projectId) {
-
+        console.error('No projectId provided.');
         return;
       }
 
       try {
-        const userDocRef = doc(db, 'users', auth.currentUser.uid); // Replace with the correct user ID
+        const userDocRef = doc(db, 'users', auth.currentUser.uid);
         const userDoc = await getDoc(userDocRef);
 
         if (userDoc.exists()) {
-
           const userData = userDoc.data();
           const projects = userData.projects || [];
 
-
-          // Find the project with the matching projectId
           const project = projects.find((proj) => proj.id === projectId);
           if (project) {
-
             if (project.sections?.RespondentDetails) {
               setDetails({
                 name: project.sections.RespondentDetails.name || '',
@@ -40,20 +36,19 @@ const RespondentDetails = ({ onNext, projectId }) => {
                 email: project.sections.RespondentDetails.email || '',
                 phone: project.sections.RespondentDetails.phone || '',
               });
-
             } else {
-              console.log('RespondentDetails not found for this project');
+              console.log('No RespondentDetails section found for this project.');
             }
           } else {
-            console.log('Project with matching projectId not found');
+            console.error('Project with matching projectId not found.');
           }
         } else {
-          console.log('User document does not exist');
+          console.error('User document does not exist.');
         }
       } catch (error) {
         console.error('Error fetching respondent details:', error);
       } finally {
-        setIsLoading(false); // Stop loading
+        setIsLoading(false);
       }
     };
 
@@ -65,10 +60,9 @@ const RespondentDetails = ({ onNext, projectId }) => {
     const updatedDetails = { ...details, [name]: value };
     setDetails(updatedDetails);
 
-    // Update Firestore in real-time for the corresponding project
     if (projectId) {
       try {
-        const userDocRef = doc(db, 'users', auth.currentUser.uid); // Replace with the correct user ID
+        const userDocRef = doc(db, 'users', auth.currentUser.uid);
         const userDoc = await getDoc(userDocRef);
 
         if (userDoc.exists()) {
@@ -104,25 +98,25 @@ const RespondentDetails = ({ onNext, projectId }) => {
   };
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <p className="text-center text-sm sm:text-base">Loading...</p>;
   }
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold mb-6">Respondent's Details</h2>
+    <div className="p-4 sm:p-6 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 rounded-lg shadow-md">
+      <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Respondent's Details</h2>
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Name of the Primary Respondent */}
+        {/* Name */}
         <div>
-          <label className="block text-gray-700 dark:text-gray-200 font-medium mb-1">
-            Name of the primary respondent <span className="text-red-500">*</span>
+          <label className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-200 mb-2">
+            Name of the Primary Respondent <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
             name="name"
             value={details.name}
             onChange={handleChange}
-            placeholder="Please enter your full name"
-            className="w-full p-3 border rounded-md text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+            placeholder="Enter your full name"
+            className="w-full p-3 border rounded-md text-gray-900 dark:bg-gray-800 dark:text-gray-100"
             required
           />
           <p className="text-xs bg-clip-text text-transparent bg-gradient-to-r from-red-500 to-red-700 mt-1">
@@ -130,10 +124,10 @@ const RespondentDetails = ({ onNext, projectId }) => {
           </p>
         </div>
 
-        {/* Designation of the Primary Respondent */}
+        {/* Designation */}
         <div>
-          <label className="block text-gray-700 dark:text-gray-200 font-medium mb-1">
-            Designation of the primary respondent <span className="text-red-500">*</span>
+          <label className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-200 mb-2">
+            Designation of the Primary Respondent <span className="text-red-500">*</span>
           </label>
           <input
             type="text"
@@ -154,10 +148,10 @@ const RespondentDetails = ({ onNext, projectId }) => {
           </p>
         </div>
 
-        {/* Email Address of the Primary Respondent */}
+        {/* Email */}
         <div>
-          <label className="block text-gray-700 dark:text-gray-200 font-medium mb-1">
-            Email address of the primary respondent <span className="text-red-500">*</span>
+          <label className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-200 mb-2">
+            Email Address of the Primary Respondent <span className="text-red-500">*</span>
           </label>
           <input
             type="email"
@@ -173,29 +167,28 @@ const RespondentDetails = ({ onNext, projectId }) => {
           </p>
         </div>
 
-        {/* Phone Number of the Primary Respondent (Optional) */}
+        {/* Phone Number */}
         <div>
-          <label className="block text-gray-700 dark:text-gray-200 font-medium mb-1">
-            Phone number of primary respondent (Not mandatory)
+          <label className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-200 mb-2">
+           Phone number of primary respondent (Not mandatory)
           </label>
           <input
             type="tel"
             name="phone"
             value={details.phone}
             onChange={handleChange}
-            placeholder="e.g., (+Country code) (Region code) Phone number"
-            className="w-full p-3 border rounded-md text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+            placeholder="(+Country Code) (Region Code) Phone Number"
+            className="w-full p-3 border rounded-md text-gray-900 dark:bg-gray-800 dark:text-gray-100"
           />
           <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-            You may skip this question. Please mention country code (ISD) and region code before the phone number. E.g.,{' '}
-            <em>(+Country code) (Region code) Phone number</em>.
+            Include the country and region code, e.g., <em>(+Country Code) (Region Code) Phone Number</em>.
           </p>
         </div>
 
-        {/* Next Button */}
+        {/* Submit Button */}
         <button
           type="submit"
-          className="mt-6 w-full py-3 px-4 rounded-md bg-gradient-to-r from-red-500 to-red-700 text-white hover:from-red-600 hover:to-red-800 transition-colors duration-300"
+          className="w-full py-3 px-4 rounded-md bg-gradient-to-r from-red-500 to-red-700 text-white hover:from-red-600 hover:to-red-800 transition-colors duration-300"
         >
           Next
         </button>

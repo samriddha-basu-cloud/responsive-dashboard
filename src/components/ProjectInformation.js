@@ -146,12 +146,12 @@ const ProjectInformation = ({ onNext, onBack, projectId }) => {
   }
 
   return (
-    <div>
-      <h2 className="text-2xl font-bold mb-6">Basic Information of the Project</h2>
+    <div className="p-4 sm:p-6 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 rounded-lg shadow-md">
+      <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Basic Information of the Project</h2>
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Name of Project */}
         <div>
-          <label className="block text-gray-700 dark:text-gray-200 font-medium mb-1">
+          <label className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-200 mb-2">
             Name of Project <span className="text-red-500">*</span>
           </label>
           <input
@@ -160,14 +160,14 @@ const ProjectInformation = ({ onNext, onBack, projectId }) => {
             value={info.projectName}
             onChange={handleChange}
             placeholder="Please enter full name of the project without abbreviations"
-            className="w-full p-3 border rounded-md text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+            className="w-full p-3 border rounded-md text-gray-900 dark:bg-gray-800 dark:text-gray-100"
             required
           />
         </div>
 
         {/* Locations covered under the project */}
         <div>
-          <label className="block text-gray-700 dark:text-gray-200 font-medium mb-1">
+          <label className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-200 mb-2">
             Locations covered under the project <span className="text-red-500">*</span>
           </label>
           <textarea
@@ -175,7 +175,7 @@ const ProjectInformation = ({ onNext, onBack, projectId }) => {
             value={info.locations}
             onChange={handleChange}
             placeholder="e.g., Country-1 (Region-1, Region-2,...); Country-2 (Region-1, Region-2,...);"
-            className="w-full p-3 border rounded-md text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+            className="w-full p-3 border rounded-md text-gray-900 dark:bg-gray-800 dark:text-gray-100"
             rows="3"
             required
           />
@@ -183,7 +183,7 @@ const ProjectInformation = ({ onNext, onBack, projectId }) => {
 
         {/* Objectives of the project */}
         <div>
-          <label className="block text-gray-700 dark:text-gray-200 font-medium mb-1">
+          <label className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-200 mb-2">
             Objectives of the project <span className="text-red-500">*</span>
           </label>
           <textarea
@@ -191,18 +191,18 @@ const ProjectInformation = ({ onNext, onBack, projectId }) => {
             value={info.objectives}
             onChange={handleChange}
             placeholder="e.g., 1) Objective-1; 2) Objective-2;..."
-            className="w-full p-3 border rounded-md text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+            className="w-full p-3 border rounded-md text-gray-900 dark:bg-gray-800 dark:text-gray-100"
             rows="4"
             required
           />
         </div>
 
         {/* BMZ Core Areas */}
-        <div>
-          <label className="block text-gray-700 dark:text-gray-200 font-medium mb-1">
+        <div className="mb-6 sm:mb-8">
+          <label className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-200 mb-2">
             Which of the following 'BMZ core areas 2030' does the project address directly through its interventions? <span className="text-red-500">*</span>
           </label>
-          <div className="space-y-2">
+          <div className="flex flex-col space-y-2 mb-2">
             {bmzCoreAreasOptions.map((option, index) => (
               <div key={index} className="flex items-start">
                 <input
@@ -213,7 +213,7 @@ const ProjectInformation = ({ onNext, onBack, projectId }) => {
                   onChange={handleBMZCoreAreaChange}
                   className="mr-2 custom-checkbox"
                 />
-                <label htmlFor={`bmz-core-area-${index}`} className="text-gray-700 dark:text-gray-200">
+                <label htmlFor={`bmz-core-area-${index}`} className="text-gray-700 dark:text-gray-200 ">
                   {option}
                 </label>
               </div>
@@ -223,7 +223,7 @@ const ProjectInformation = ({ onNext, onBack, projectId }) => {
 
         {/* Project Start Date */}
         <div>
-          <label className="block text-gray-700 dark:text-gray-200 font-medium mb-1">
+          <label className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-200 mb-2">
             When did the project start? <span className="text-red-500">*</span>
           </label>
           <input
@@ -231,14 +231,14 @@ const ProjectInformation = ({ onNext, onBack, projectId }) => {
             name="startDate"
             value={info.startDate}
             onChange={handleChange}
-            className="w-full p-3 border rounded-md text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+            className="w-full p-3 border rounded-md text-gray-900 dark:bg-gray-800 dark:text-gray-100"
             required
           />
         </div>
 
         {/* Project End Date */}
         <div>
-          <label className="block text-gray-700 dark:text-gray-200 font-medium mb-1">
+          <label className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-200 mb-2">
             When was the project completed? <span className="text-red-500">*</span>
           </label>
           <input
@@ -246,14 +246,14 @@ const ProjectInformation = ({ onNext, onBack, projectId }) => {
             name="endDate"
             value={info.endDate}
             onChange={handleChange}
-            className="w-full p-3 border rounded-md text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+            className="w-full p-3 border rounded-md text-gray-900 dark:bg-gray-800 dark:text-gray-100"
             required
           />
         </div>
 
         {/* Planned Beneficiaries */}
         <div>
-          <label className="block text-gray-700 dark:text-gray-200 font-medium mb-1">
+          <label className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-200 mb-2">
             Total number of primary beneficiaries the project plans or planned to cover <span className="text-red-500">*</span>
           </label>
           <input
@@ -261,14 +261,14 @@ const ProjectInformation = ({ onNext, onBack, projectId }) => {
             name="plannedBeneficiaries"
             value={info.plannedBeneficiaries}
             onChange={handleChange}
-            className="w-full p-3 border rounded-md text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+            className="w-full p-3 border rounded-md text-gray-900 dark:bg-gray-800 dark:text-gray-100"
             required
           />
         </div>
 
         {/* Covered Beneficiaries */}
         <div>
-          <label className="block text-gray-700 dark:text-gray-200 font-medium mb-1">
+          <label className="block text-sm sm:text-base font-medium text-gray-700 dark:text-gray-200 mb-2">
             Total number of primary beneficiaries the project has covered till 30 April 2024 <span className="text-red-500">*</span>
           </label>
           <input
@@ -276,13 +276,13 @@ const ProjectInformation = ({ onNext, onBack, projectId }) => {
             name="coveredBeneficiaries"
             value={info.coveredBeneficiaries}
             onChange={handleChange}
-            className="w-full p-3 border rounded-md text-gray-900 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-100"
+            className="w-full p-3 border rounded-md text-gray-900 dark:bg-gray-800 dark:text-gray-100"
             required
           />
         </div>
 
         {/* Navigation Buttons */}
-        <div className="flex space-x-4">
+        <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 mt-4 sm:mt-6">
           <button
             type="button"
             onClick={onBack}

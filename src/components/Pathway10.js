@@ -4,14 +4,14 @@ import { db, auth } from '../firebase';
 import './PathwayStyles.css'; // Import custom styles
 import { FaCheckCircle } from 'react-icons/fa';
 import SurveyComponent from './SurveyComponent';
-import html2pdf from 'html2pdf.js'; 
+import html2pdf from 'html2pdf.js';
 
 const Question = ({ question, questionId, onAnswerChange, answer, observation, placeholder }) => {
   return (
-    <div className="mb-8">
-      <p className="text-lg font-semibold mb-2">{question}</p>
+    <div className="mb-6 sm:mb-8">
+      <p className="text-base sm:text-lg font-semibold mb-2">{question}</p>
 
-      <div className="flex space-x-4 mb-2">
+      <div className="flex flex-wrap gap-2 sm:space-x-4 mb-2">
         {["Planned", "Ongoing", "Completed", "Not in Focus", "Not Applicable"].map((option) => (
           <label key={option} className="flex items-center">
             <input
@@ -20,10 +20,10 @@ const Question = ({ question, questionId, onAnswerChange, answer, observation, p
               value={option}
               checked={answer === option}
               onChange={(e) => onAnswerChange(questionId, e.target.value, 'answer')}
-              className="mr-2 custom-radio" // Custom radio style for gradient
+              className="mr-1 sm:mr-2 custom-radio"
               required
             />
-            {option}
+            <span className="text-sm sm:text-base">{option}</span>
           </label>
         ))}
       </div>
@@ -31,8 +31,8 @@ const Question = ({ question, questionId, onAnswerChange, answer, observation, p
       <textarea
         placeholder={placeholder}
         value={observation || ''}
-        className="w-full p-2 border rounded-md text-gray-700 dark:bg-gray-800 dark:text-gray-200 mt-2"
-        rows="4"
+        className="w-full p-2 border rounded-md text-sm sm:text-base text-gray-700 dark:bg-gray-800 dark:text-gray-200 mt-2"
+        rows="3"
         onChange={(e) => onAnswerChange(questionId, e.target.value, 'observation')}
       ></textarea>
     </div>
@@ -45,7 +45,6 @@ const Pathway10 = ({ onNext, onBack, projectId }) => {
   const [showThankYouModal, setShowThankYouModal] = useState(false);
   const [showReviewModal, setShowReviewModal] = useState(false);
 
-
   const isAllQuestionsAnswered = () => {
     return answers?.Q10_1?.answer !== undefined && answers?.Q10_2?.answer !== undefined && answers?.Q10_3?.answer !== undefined && answers?.Q10_4?.answer !== undefined && answers?.Q10_5?.answer !== undefined && answers?.Q10_6?.answer !== undefined && answers?.Q10_7?.answer !== undefined && answers?.Q10_8?.answer !== undefined && answers?.Q10_9?.answer !== undefined && answers?.Q10_10?.answer !== undefined && answers?.Q10_11?.answer !== undefined;
   };
@@ -53,7 +52,7 @@ const Pathway10 = ({ onNext, onBack, projectId }) => {
   useEffect(() => {
     const fetchPathwayData = async () => {
       if (!projectId) {
-        console.log('No projectId provided');
+        console.error('No projectId provided');
         return;
       }
 
@@ -136,7 +135,7 @@ const Pathway10 = ({ onNext, onBack, projectId }) => {
           );
 
           await updateDoc(userDocRef, { projects: updatedProjects });
-          setShowThankYouModal(true); 
+          setShowThankYouModal(true);
         }
       } catch (error) {
         console.error('Error submitting the form:', error);
@@ -145,13 +144,13 @@ const Pathway10 = ({ onNext, onBack, projectId }) => {
   };
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <p className="text-center text-sm sm:text-base">Loading...</p>;
   }
 
   return (
-    <div className="p-6 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 rounded-lg shadow-md">
-      <h1 className="text-2xl font-bold mb-6">Pathway-10: Inclusive Growth</h1>
-      <p className="mb-6 text-sm text-gray-500 dark:text-gray-400">
+    <div className="p-4 sm:p-6 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 rounded-lg shadow-md">
+      <h1 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Pathway-10: Inclusive Growth</h1>
+      <p className="mb-4 sm:mb-6 text-xs sm:text-sm text-gray-500 dark:text-gray-400">
         If these key elements of the 'WHAT' are realised in such a way (the 'HOW') that gender sensitivity, inclusiveness,
         do-no-harm, co-creation and sharing of knowledge and innovations, social values of local communities and provision
         of healthy, diversified, seasonally and culturally appropriate diets, fairness, connectivity, strengthened social
@@ -160,9 +159,9 @@ const Pathway10 = ({ onNext, onBack, projectId }) => {
       </p>
 
       {/* Questions for Pathway 10 */}
-      <h2 className="text-xl font-bold mb-4">Principle-1: Gender Sensitivity</h2>
+      <h2 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">Principle-1: Gender Sensitivity</h2>
       <Question
-        question="Q-10.1) Does the project actively focus on addressing gender specific challenges?"
+        question="Q-10.1) Does the project actively focus on addressing gender-specific challenges?"
         questionId="Q10_1"
         answer={answers?.Q10_1?.answer}
         observation={answers?.Q10_1?.observation}
@@ -170,7 +169,7 @@ const Pathway10 = ({ onNext, onBack, projectId }) => {
         placeholder="Please note your observations (if any) related to Q-10.1"
       />
 
-      <h2 className="text-xl font-bold mb-4">Principle-2: Inclusiveness</h2>
+      <h2 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">Principle-2: Inclusiveness</h2>
       <Question
         question="Q-10.2) Does the project actively focus on enhancing agency of the poor, marginalised and vulnerable population in decision making, workforce participation and equitable benefit sharing?"
         questionId="Q10_2"
@@ -180,7 +179,7 @@ const Pathway10 = ({ onNext, onBack, projectId }) => {
         placeholder="Please note your observations (if any) related to Q-10.2"
       />
 
-      <h2 className="text-xl font-bold mb-4">Principle-3: Do-no-harm</h2>
+      <h2 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">Principle-3: Do-no-harm</h2>
       <Question
         question="Q-10.3) Does the project actively focus on identifying and reducing negative impacts of the interventions?"
         questionId="Q10_3"
@@ -190,7 +189,7 @@ const Pathway10 = ({ onNext, onBack, projectId }) => {
         placeholder="Please note your observations (if any) related to Q-10.3"
       />
 
-      <h2 className="text-xl font-bold mb-4">Principle-4: Co-creation of Knowledge</h2>
+      <h2 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">Principle-4: Co-creation of Knowledge</h2>
       <Question
         question="Q-10.4) Does the project actively focus on co-creation and sharing of knowledge?"
         questionId="Q10_4"
@@ -200,7 +199,7 @@ const Pathway10 = ({ onNext, onBack, projectId }) => {
         placeholder="Please note your observations (if any) related to Q-10.4"
       />
 
-      <h2 className="text-xl font-bold mb-4">Principle-5: Social Values</h2>
+      <h2 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">Principle-5: Social Values</h2>
       <Question
         question="Q-10.5) Does the project actively focus on reducing the social disparities arising due to food system?"
         questionId="Q10_5"
@@ -210,7 +209,7 @@ const Pathway10 = ({ onNext, onBack, projectId }) => {
         placeholder="Please note your observations (if any) related to Q-10.5"
       />
 
-      <h2 className="text-xl font-bold mb-4">Principle-6: Diets (Healthy, Diversified, Seasonally and Culturally Appropriate)</h2>
+      <h2 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">Principle-6: Diets (Healthy, Diversified, Seasonally and Culturally Appropriate)</h2>
       <Question
         question="Q-10.6) Does the project actively focus on adequacy and quality of food available to needy and the vulnerable segments of the society within the landscape?"
         questionId="Q10_6"
@@ -229,7 +228,7 @@ const Pathway10 = ({ onNext, onBack, projectId }) => {
         placeholder="Please note your observations (if any) related to Q-10.7"
       />
 
-      <h2 className="text-xl font-bold mb-4">Principle-7: Acceptability (P-10)</h2>
+      <h2 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">Principle-7: Acceptability (P-10)</h2>
       <Question
         question="Q-10.8) Does the project actively focus on identifying the opportunities for participation and accrual of benefits to various social segments from the food system?"
         questionId="Q10_8"
@@ -239,7 +238,7 @@ const Pathway10 = ({ onNext, onBack, projectId }) => {
         placeholder="Please note your observations (if any) related to Q-10.8"
       />
 
-      <h2 className="text-xl font-bold mb-4">Principle-8: Fairness (P-10)</h2>
+      <h2 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">Principle-8: Fairness (P-10)</h2>
       <Question
         question="Q-10.9) Does the project actively focus on ensuring equality in terms of benefit sharing within the food systems within the landscape?"
         questionId="Q10_9"
@@ -249,7 +248,7 @@ const Pathway10 = ({ onNext, onBack, projectId }) => {
         placeholder="Please note your observations (if any) related to Q-10.9"
       />
 
-      <h2 className="text-xl font-bold mb-4">Principle-9: Connectivity (P-10)</h2>
+      <h2 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">Principle-9: Connectivity (P-10)</h2>
       <Question
         question="Q-10.10) Does the project actively focus on creating socio-cultural linkages within different social groups within a landscape?"
         questionId="Q10_10"
@@ -259,7 +258,7 @@ const Pathway10 = ({ onNext, onBack, projectId }) => {
         placeholder="Please note your observations (if any) related to Q-10.10"
       />
 
-      <h2 className="text-xl font-bold mb-4">Principle-10: Participation (P-10)</h2>
+      <h2 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">Principle-10: Participation (P-10)</h2>
       <Question
         question="Q-10.11) Does the project actively focus on promoting platforms, organisations or groups of people to develop, govern and manage the food systems at the local levels?"
         questionId="Q10_11"
@@ -270,11 +269,11 @@ const Pathway10 = ({ onNext, onBack, projectId }) => {
       />
 
       {/* Navigation Buttons */}
-      <div className="flex space-x-4 mt-6">
+      <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4 mt-4 sm:mt-6">
         <button
           type="button"
           onClick={onBack}
-          className="w-full py-3 px-4 rounded-md bg-gray-400 text-white hover:bg-gray-500 transition-colors duration-300"
+          className="w-full py-2 sm:py-3 px-4 rounded-md bg-gray-400 text-white hover:bg-gray-500 transition-colors duration-300 text-sm sm:text-base"
         >
           Back
         </button>
@@ -282,7 +281,7 @@ const Pathway10 = ({ onNext, onBack, projectId }) => {
         <button
           type="submit"
           onClick={handleSubmit}
-          className={`w-full py-3 px-4 rounded-md text-white transition-colors duration-300 ${
+          className={`w-full py-2 sm:py-3 px-4 rounded-md text-white transition-colors duration-300 text-sm sm:text-base ${
             isAllQuestionsAnswered()
               ? 'bg-gradient-to-r from-green-500 to-green-700 hover:from-green-600 hover:to-green-800'
               : 'bg-gray-300 cursor-not-allowed'
@@ -312,7 +311,7 @@ const Pathway10 = ({ onNext, onBack, projectId }) => {
             <button
               onClick={() => {
                 setShowThankYouModal(false);
-                setShowReviewModal(true); // Open the review modal
+                setShowReviewModal(true);
               }}
               className="mt-4 ml-4 px-6 py-2 rounded-md bg-gradient-to-r from-yellow-500 to-yellow-700 text-white hover:from-yellow-600 hover:to-yellow-800 transition-colors duration-300"
             >
