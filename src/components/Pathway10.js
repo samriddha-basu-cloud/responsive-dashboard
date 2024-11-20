@@ -143,6 +143,18 @@ const Pathway10 = ({ onNext, onBack, projectId }) => {
     }
   };
 
+  const prepareChartsForPDF = async () => {
+  const canvasElements = document.querySelectorAll('canvas');
+  canvasElements.forEach((canvas) => {
+    const imageData = canvas.toDataURL('image/png');
+    const img = document.createElement('img');
+    img.src = imageData;
+    img.style.width = canvas.width + 'px';
+    img.style.height = canvas.height + 'px';
+    canvas.parentNode.replaceChild(img, canvas); // Replace canvas with the image
+  });
+};
+
   if (isLoading) {
     return <p className="text-center text-sm sm:text-base">Loading...</p>;
   }
@@ -359,37 +371,29 @@ const Pathway10 = ({ onNext, onBack, projectId }) => {
               </button> */}
               {/* Download Button */}
               <button
-                onClick={() => {
+                onClick={async () => {
                   const element = document.getElementById('review-modal-content');
-                  
-                  // Clone the element for modification
-                  const clonedElement = element.cloneNode(true);
-                  clonedElement.style.width = '90%'; // Adjust width to 90% for PDF rendering
-                  clonedElement.style.padding = '10px'; // Reduce padding for the PDF version
 
-                  // Append to a temporary container to maintain styles
-                  const tempContainer = document.createElement('div');
-                  tempContainer.style.width = '100%'; // Keep full width of viewport
-                  tempContainer.style.display = 'flex';
-                  tempContainer.style.justifyContent = 'center'; // Center align for 90% width
-                  tempContainer.appendChild(clonedElement);
-                  document.body.appendChild(tempContainer);
+                  // Convert charts to images
+                  await prepareChartsForPDF();
 
-                  // Generate the PDF
+                  // Configure PDF generation options
                   const opt = {
-                    margin: 0.5,
+                    margin: 0.2,
                     filename: 'Survey_Review.pdf',
                     image: { type: 'jpeg', quality: 0.98 },
-                    html2canvas: { scale: 2 },
-                    jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' },
+                    html2canvas: {
+                      scale: 2, // Higher resolution
+                      useCORS: true, // Allow cross-origin resources
+                    },
+                    jsPDF: {
+                      unit: 'in',
+                      format: 'a4',
+                      orientation: 'portrait', // Fit content to a single page
+                    },
                   };
-                  html2pdf()
-                    .set(opt)
-                    .from(tempContainer)
-                    .save()
-                    .then(() => {
-                      document.body.removeChild(tempContainer); // Clean up the temporary container
-                    });
+
+                  html2pdf().set(opt).from(element).save();
                 }}
                 className="px-6 py-2 rounded-md bg-gradient-to-r from-red-500 to-red-700 text-white hover:from-red-600 hover:to-red-800 transition-all duration-300"
               >

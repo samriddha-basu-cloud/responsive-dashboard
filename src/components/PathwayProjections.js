@@ -13,6 +13,24 @@ import {
   AlertCircle 
 } from 'lucide-react';
 
+  const convertChartsToImages = async () => {
+    const canvasElements = document.querySelectorAll('canvas');
+    canvasElements.forEach((canvas) => {
+      const imageData = canvas.toDataURL('image/png');
+      const img = document.createElement('img');
+      img.src = imageData;
+      img.style.width = canvas.style.width; // Preserve original width
+      img.style.height = canvas.style.height; // Preserve original height
+      canvas.parentNode.replaceChild(img, canvas);
+    });
+  };
+
+  // Expose this method for external PDF preparation
+  export const prepareForPDF = async () => {
+    await convertChartsToImages();
+  };
+
+
 const PREDEFINED_PATHWAY_QUESTIONS = {
   Q1_1: {
     question: "Q-1.1) Has the project considered closure (as far as possible) of nutrients and biomass resource cycles?",

@@ -36,3 +36,29 @@
     transform: rotate(360deg);
   }
 }
+
+@media print {
+  #review-modal-content {
+    width: 100%;
+    margin: 0;
+    padding: 0.5in;
+    font-size: 12px; /* Adjust font size for fit */
+  }
+
+  canvas {
+    display: none; /* Hide canvas (it will be replaced with an image) */
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .text-sm {
+    font-size: 10px; /* Reduce smaller text for better fit */
+  }
+
+  .text-lg, .font-bold {
+    font-size: 14px;
+  }
+}

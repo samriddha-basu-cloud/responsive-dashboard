@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { doc, getDoc } from 'firebase/firestore';
 import { db, auth } from '../firebase';
+import PathwayProjections from './PathwayProjections';
 
 // Predefined questions for Pathway-1
 const PREDEFINED_PATHWAY_QUESTIONS = {
@@ -257,19 +258,18 @@ const SurveyComponent = ({ projectId }) => {
         const project = projects.find((proj) => proj.id === projectId);
 
         if (project) {
-          // Merge predefined questions with existing data
           const mergedSections = { ...project.sections };
-           for (let i = 1; i <= 10; i++) {
-          const pathwayKey = `Pathway${i}`;
-          mergedSections[pathwayKey] = {
-            ...Object.fromEntries(
-              Object.entries(PREDEFINED_PATHWAY_QUESTIONS).filter(([key]) =>
-                key.startsWith(`Q${i}_`)
-              )
-            ),
-            ...(project.sections?.[pathwayKey] || {})
-          };
-        }
+          for (let i = 1; i <= 10; i++) {
+            const pathwayKey = `Pathway${i}`;
+            mergedSections[pathwayKey] = {
+              ...Object.fromEntries(
+                Object.entries(PREDEFINED_PATHWAY_QUESTIONS).filter(([key]) =>
+                  key.startsWith(`Q${i}_`)
+                )
+              ),
+              ...(project.sections?.[pathwayKey] || {})
+            };
+          }
 
           setData(mergedSections);
           setError(null);
@@ -292,35 +292,31 @@ const SurveyComponent = ({ projectId }) => {
   }, [projectId]);
 
   const sortQuestions = (questions) => {
-    // Comprehensive sorting method for questions
-    return Object.keys(questions || {})
-      .sort((a, b) => {
-        // Split the key into parts
-        const partsA = a.split('_').map(part => 
-          isNaN(parseInt(part)) ? part : parseInt(part)
-        );
-        const partsB = b.split('_').map(part => 
-          isNaN(parseInt(part)) ? part : parseInt(part)
-        );
+    return Object.keys(questions || {}).sort((a, b) => {
+      const partsA = a.split('_').map(part =>
+        isNaN(parseInt(part)) ? part : parseInt(part)
+      );
+      const partsB = b.split('_').map(part =>
+        isNaN(parseInt(part)) ? part : parseInt(part)
+      );
 
-        // Compare parts sequentially
-        for (let i = 0; i < Math.min(partsA.length, partsB.length); i++) {
-          if (typeof partsA[i] !== typeof partsB[i]) {
-            return typeof partsA[i] === 'string' ? 1 : -1;
-          }
-          if (partsA[i] !== partsB[i]) {
-            return partsA[i] > partsB[i] ? 1 : -1;
-          }
+      for (let i = 0; i < Math.min(partsA.length, partsB.length); i++) {
+        if (typeof partsA[i] !== typeof partsB[i]) {
+          return typeof partsA[i] === 'string' ? 1 : -1;
         }
-        return partsA.length - partsB.length;
-      });
+        if (partsA[i] !== partsB[i]) {
+          return partsA[i] > partsB[i] ? 1 : -1;
+        }
+      }
+      return partsA.length - partsB.length;
+    });
   };
 
   const renderQuestionCard = (key, question) => {
     const predefinedQuestion = PREDEFINED_PATHWAY_QUESTIONS[key] || {};
     return (
-      <div 
-        key={key} 
+      <div
+        key={key}
         className="bg-red-50 border-l-4 border-red-600 p-4 mb-4 rounded-r-lg shadow-sm hover:bg-red-100 transition-colors duration-300"
       >
         <h3 className="text-lg font-semibold text-red-800 mb-2">
@@ -395,13 +391,12 @@ const SurveyComponent = ({ projectId }) => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 bg-gray-50 overflow-auto"
-    style={{ height: '90%' }}>
+    <div className="container mx-auto px-4 py-8 bg-gray-50 overflow-auto" style={{ height: '90%' }}>
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Respondent Details */}
         {renderDetailSection(
-          data.RespondentDetails, 
-          "Respondent's Details", 
+          data.RespondentDetails,
+          "Respondent's Details",
           [
             { label: "Name", key: "name", fallback: "N/A" },
             { label: "Designation", key: "designation", fallback: "N/A" },
@@ -412,8 +407,8 @@ const SurveyComponent = ({ projectId }) => {
 
         {/* Project Information */}
         {renderDetailSection(
-          data.ProjectInformation, 
-          "Project Information", 
+          data.ProjectInformation,
+          "Project Information",
           [
             { label: "Project Name", key: "projectName", fallback: "N/A" },
             { label: "Locations", key: "locations", fallback: "N/A" },
@@ -430,9 +425,12 @@ const SurveyComponent = ({ projectId }) => {
         {Object.keys(data)
           .filter(key => key.startsWith('Pathway'))
           .sort((a, b) => parseInt(a.replace('Pathway', ''), 10) - parseInt(b.replace('Pathway', ''), 10))
-          .map(pathwayKey => 
+          .map(pathwayKey =>
             renderSectionWithSortedQuestions(data[pathwayKey], pathwayKey.replace(/Pathway/, 'Pathway-'))
           )}
+
+        {/* Pathway Projections */}
+        <PathwayProjections projectId={projectId} />
       </div>
     </div>
   );
