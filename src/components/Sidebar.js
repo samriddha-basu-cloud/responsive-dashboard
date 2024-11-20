@@ -43,11 +43,11 @@ const LogoutDialog = ({ isOpen, onClose, onConfirm }) => {
   );
 };
 
-const Sidebar = () => {
-  const [isOpen, setIsOpen] = useState(true);
+const Sidebar = ({ isOpen, setIsOpen }) => {
   const [userName, setUserName] = useState('');
   const [userInitials, setUserInitials] = useState('');
   const [showLogoutDialog, setShowLogoutDialog] = useState(false);
+  const [showLogo, setShowLogo] = useState(isOpen); // Set initial state based on isOpen
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -72,6 +72,23 @@ const Sidebar = () => {
     fetchUserData();
   }, []);
 
+  // Ensure logo is shown if sidebar starts in expanded state
+  useEffect(() => {
+    if (isOpen) {
+      setShowLogo(true);
+    }
+  }, [isOpen]);
+
+  const handleSidebarToggle = () => {
+    if (!isOpen) {
+      setIsOpen(true);
+      setTimeout(() => setShowLogo(true), 150); // Delay showing the logo
+    } else {
+      setShowLogo(false);
+      setTimeout(() => setIsOpen(false), 150); // Delay hiding the sidebar
+    }
+  };
+
   const handleLogout = async () => {
     try {
       await signOut(auth);
@@ -86,61 +103,63 @@ const Sidebar = () => {
       name: 'Dashboard',
       icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6',
       route: '/dashboard',
-      key: 'dashboard'
+      key: 'dashboard',
     },
     {
       name: 'Profile',
       icon: 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z',
       route: '/profile',
-      key: 'profile'
+      key: 'profile',
     },
     {
       name: 'Settings',
       icon: 'M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z',
       route: '/settings',
-      key: 'settings'
+      key: 'settings',
     },
   ];
 
-  const isActiveRoute = (route) => {
-    return location.pathname === route;
-  };
+  const isActiveRoute = (route) => location.pathname === route;
 
   return (
     <>
+      {/* Sidebar */}
       <motion.div
         initial={false}
-        animate={{ width: isOpen ? 280 : 88 }}
-        className="h-full flex flex-col bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 shadow-lg"
+        animate={{ width: isOpen ? '280px' : '88px' }}
+        className="fixed inset-y-0 left-0 z-40 h-full flex flex-col bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-700 shadow-lg transition-all duration-300"
       >
         {/* Header */}
-        <div className="px-4 py-6 border-b border-gray-200 dark:border-gray-700">
-          <div className="flex items-center justify-between">
-            <button
-              onClick={() => setIsOpen(!isOpen)}
-              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-              aria-label="Toggle sidebar"
-            >
-              {isOpen ? <FiX size={24} /> : <FiMenu size={24} />}
-            </button>
-            {isOpen && (
+        <div className="flex items-center justify-between px-4 py-6 border-b border-gray-200 dark:border-gray-700">
+          <button
+            onClick={handleSidebarToggle}
+            className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
+            aria-label="Toggle sidebar"
+          >
+            {isOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+          </button>
+          <AnimatePresence>
+            {showLogo && (
               <motion.img
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
+                key="logo"
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                transition={{ duration: 0.2 }}
                 src={gizLogo}
                 alt="Company Logo"
-                className="h-14 w-auto ml-2"
+                className="h-12 w-auto"
               />
             )}
-          </div>
+          </AnimatePresence>
         </div>
 
         {/* Profile Section */}
-        <div className="flex flex-col items-center py-8 border-b border-gray-200 dark:border-gray-700">
+        <div className="flex flex-col items-center py-6 border-b border-gray-200 dark:border-gray-700">
           <motion.div
             animate={{ scale: isOpen ? 1 : 0.8 }}
             className={`rounded-full bg-gradient-to-br from-[#C31A07] to-[#FF6B6B] flex items-center justify-center text-white font-bold shadow-lg ${
-              isOpen ? 'w-24 h-24 text-3xl' : 'w-14 h-14 text-xl'
+              isOpen ? 'w-16 h-16 text-xl' : 'w-12 h-12 text-lg'
             }`}
           >
             {userInitials}
@@ -157,7 +176,7 @@ const Sidebar = () => {
           )}
         </div>
 
-        {/* Navigation */}
+        {/* Navigation Links */}
         <nav className="flex-1 px-4 py-6 space-y-1 overflow-y-auto">
           {navItems.map((item) => (
             <motion.button
@@ -179,11 +198,7 @@ const Sidebar = () => {
               >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} />
               </svg>
-              {isOpen && (
-                <span className="ml-4 text-sm font-medium">
-                  {item.name}
-                </span>
-              )}
+              {isOpen && <span className="ml-4 text-sm font-medium">{item.name}</span>}
             </motion.button>
           ))}
         </nav>
@@ -205,7 +220,7 @@ const Sidebar = () => {
         </div>
       </motion.div>
 
-      {/* Custom Logout Dialog */}
+      {/* Logout Dialog */}
       <AnimatePresence>
         <LogoutDialog
           isOpen={showLogoutDialog}

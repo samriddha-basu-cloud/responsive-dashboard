@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { auth, db } from '../firebase';
 import { doc, getDoc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
-import { FiDownload, FiTrash, FiEdit } from 'react-icons/fi';
+import { FiTrash, FiEdit } from 'react-icons/fi';
 import { FaUser } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
@@ -55,7 +55,6 @@ const ProjectList = () => {
       setProjects((prevProjects) => [...prevProjects, newProject]);
     }
 
-    // Clear state and close modal
     setProjectName('');
     setProjectDescription('');
     setIsModalOpen(false);
@@ -82,7 +81,6 @@ const ProjectList = () => {
       }
     }
 
-    // Close dialog and reset deleteProjectId
     setIsDeleteDialogOpen(false);
     setDeleteProjectId(null);
   };
@@ -123,7 +121,6 @@ const ProjectList = () => {
       }
     }
 
-    // Clear state and close modal
     setProjectName('');
     setProjectDescription('');
     setEditProjectId(null);
@@ -135,13 +132,13 @@ const ProjectList = () => {
   );
 
   return (
-    <div className="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-2xl font-bold">Projects</h2>
-        <div className="flex items-center space-x-2">
+    <div className="p-4 sm:p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
+      <div className="flex flex-col sm:flex-row items-center justify-between mb-4">
+        <h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-0">Projects</h2>
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto">
           <button
             onClick={() => setIsModalOpen(true)}
-            className="px-4 py-2 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 transition-all duration-300"
+            className="w-full sm:w-auto px-4 py-2 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 transition-all duration-300"
             style={{
               background: 'linear-gradient(to right, #C31A07, #9E1305)',
               boxShadow: '0 4px 14px rgba(195, 26, 7, 0.4)',
@@ -149,10 +146,17 @@ const ProjectList = () => {
           >
             + Add Project
           </button>
-          <div className="relative">
+          <div className="relative w-full sm:w-auto">
+            <input
+              type="text"
+              placeholder="Search projects..."
+              className="pl-10 pr-4 py-2 w-full sm:w-auto border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5 absolute top-1/2 transform -translate-y-1/2 left-3 text-gray-400"
+              className="absolute h-5 w-5 top-2.5 left-3 text-gray-400"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -164,13 +168,6 @@ const ProjectList = () => {
                 d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
               />
             </svg>
-            <input
-              type="text"
-              placeholder="Search projects..."
-              className="pl-10 pr-4 py-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600"
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
           </div>
         </div>
       </div>
@@ -179,15 +176,15 @@ const ProjectList = () => {
         {filteredProjects.map((project) => (
           <div
             key={project.id}
-            className="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-700 rounded-lg shadow-md transition-colors duration-300"
+            className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-4 bg-gray-100 dark:bg-gray-700 rounded-lg shadow-md transition-all duration-300"
           >
             <div className="flex-1">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">{project.name}</h3>
+              <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-gray-100">{project.name}</h3>
               <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{project.details}</p>
-              <div className="flex space-x-2 mt-4">
+              <div className="flex flex-wrap items-center gap-2 mt-4">
                 <button
                   onClick={() => handleOpenApplication(project.id)}
-                  className="px-4 py-2 rounded-md text-white flex items-center space-x-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 transition-all duration-300"
+                  className="flex-1 sm:flex-none px-4 py-2 rounded-md text-white flex items-center space-x-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 transition-all duration-300"
                   style={{
                     background: 'linear-gradient(to right, #C31A07, #9E1305)',
                     boxShadow: '0 4px 14px rgba(195, 26, 7, 0.4)',
@@ -196,19 +193,9 @@ const ProjectList = () => {
                   <FaUser className="h-5 w-5" />
                   <span>Profile Form</span>
                 </button>
-                {/* <button
-                  className="px-4 py-2 rounded-md text-white flex items-center space-x-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 transition-all duration-300"
-                  style={{
-                    background: 'linear-gradient(to right, #C31A07, #9E1305)',
-                    boxShadow: '0 4px 14px rgba(195, 26, 7, 0.4)',
-                  }}
-                >
-                  <FiDownload className="h-5 w-5" />
-                  <span>Download Form</span>
-                </button> */}
                 <button
                   onClick={() => handleEditProject(project)}
-                  className="px-4 py-2 rounded-md text-white flex items-center space-x-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 transition-all duration-300"
+                  className="flex-1 sm:flex-none px-4 py-2 rounded-md text-white flex items-center space-x-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 transition-all duration-300"
                   style={{
                     background: 'linear-gradient(to right, #C31A07, #9E1305)',
                     boxShadow: '0 4px 14px rgba(195, 26, 7, 0.4)',
@@ -222,7 +209,7 @@ const ProjectList = () => {
                     setDeleteProjectId(project.id);
                     setIsDeleteDialogOpen(true);
                   }}
-                  className="px-4 py-2 rounded-md text-white flex items-center space-x-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 transition-all duration-300"
+                  className="flex-1 sm:flex-none px-4 py-2 rounded-md text-white flex items-center space-x-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 transition-all duration-300"
                   style={{
                     background: 'linear-gradient(to right, #C31A07, #9E1305)',
                     boxShadow: '0 4px 14px rgba(195, 26, 7, 0.4)',
@@ -234,8 +221,7 @@ const ProjectList = () => {
               </div>
             </div>
 
-            {/* Timeline */}
-            <div className="flex flex-col items-center ml-6">
+            <div className="flex flex-col items-center sm:ml-6 mt-4 sm:mt-0">
               <div className="flex items-center space-x-2">
                 <div className="w-4 h-4 bg-gradient-to-r from-red-500 to-red-700 rounded-full shadow-md"></div>
                 <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Application Started</span>
@@ -260,10 +246,10 @@ const ProjectList = () => {
         ))}
       </div>
 
-      {/* Modals for Add, Edit, and Delete Confirmation */}
+      {/* Modals remain unchanged */}
       {isModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-1/3 relative">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-full sm:w-1/3 relative">
             <button
               onClick={() => {
                 setIsModalOpen(false);
@@ -300,7 +286,7 @@ const ProjectList = () => {
 
       {isEditModalOpen && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-1/3 relative">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg w-full sm:w-1/3 relative">
             <button
               onClick={() => {
                 setIsEditModalOpen(false);
