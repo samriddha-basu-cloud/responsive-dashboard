@@ -16,9 +16,11 @@ import Pathway8 from './Pathway8';
 import Pathway9 from './Pathway9';
 import Pathway10 from './Pathway10';
 import ProgressBar from './ProgressBar';
+import PathwayProjections from './PathwayProjections';
 
 const ApplicationForm = () => {
   const [step, setStep] = useState(1);
+  const [showProjections, setShowProjections] = useState(false); // Toggle projections visibility
   const totalSteps = 12;
   const location = useLocation();
   const { projectId } = location.state || {};
@@ -38,7 +40,6 @@ const ApplicationForm = () => {
           const project = userData.projects.find((p) => p.id === projectId);
 
           if (project && project.sections) {
-            // Determine the farthest completed step based on sections
             const sectionKeys = Object.keys(project.sections);
             const completedIndexes = sectionKeys.map((key) =>
               key.startsWith('Pathway') ? parseInt(key.replace('Pathway', '')) + 2 : 2
@@ -215,6 +216,7 @@ const ApplicationForm = () => {
 
       <div className="flex-grow ml-64 p-6">
         <ProgressBar progress={progress} />
+
         <div className="overflow-x-auto mb-6 px-6 mt-4">
           <div className="flex space-x-6 justify-center pb-4">
             {sectionNames.map((section, index) => (
@@ -232,6 +234,7 @@ const ApplicationForm = () => {
             ))}
           </div>
         </div>
+
         <div className="flex items-center space-x-4 mb-6">
           <div className="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-red-500 to-red-700 text-white text-lg font-bold">
             {step <= 2 ? sectionNames[step - 1].icon : sectionNames[step - 1].icon}
@@ -244,6 +247,19 @@ const ApplicationForm = () => {
           <ProjectInformation onNext={() => handlePathwayCompletion(step)} onBack={() => goToStep(step - 1)} projectId={projectId} />
         )}
         {step > 2 && step <= totalSteps && renderPathwayComponent()}
+
+        {/* Button to Toggle PathwayProjections */}
+        <div className="mt-6">
+          <button
+            onClick={() => setShowProjections(!showProjections)}
+            className="w-full py-2 px-4 rounded-md bg-gradient-to-r from-purple-500 to-purple-700 text-white hover:from-purple-600 hover:to-purple-800 transition-colors duration-300 shadow-md text-sm"
+          >
+            {showProjections ? 'Hide Pathway Projections' : 'Show Pathway Projections'}
+          </button>
+        </div>
+
+        {/* Render PathwayProjections */}
+        {showProjections && <PathwayProjections projectId={projectId} />}
       </div>
     </div>
   );
