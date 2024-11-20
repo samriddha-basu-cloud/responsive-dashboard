@@ -57,11 +57,10 @@ const Home = () => {
     10 pathways consisting of 46 principles formed the basis as developed under the FS/AE framework
     46 principles consisted of 57 activities which contribute to promoting agroecology
     Each activity is converted to question to capture its applicability for the projects
-    Projects could select one option against each activity viz. ongoing, planning, completed or ‘not considered’ 
+    Projects could select one option against each activity viz. ongoing, planning, completed or ‘not considered’
     Tool sharing and deep dive was done by the consultant with each project up to activity level to enhance clarity and capture the most appropriate response
     The projects’ objectives and coverage were also captured through the questionnaire
 `,
-    
   ];
 
   const tables = [
@@ -128,7 +127,7 @@ const Home = () => {
         {/* Main Content */}
         <div className="container mx-auto px-4 py-12">
         {/* Enhanced Header */}
-        <motion.h1 
+        <motion.h1
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             className="text-4xl font-extrabold text-center mb-12 bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent py-2"
@@ -142,7 +141,6 @@ const Home = () => {
             const isExpanded = readMore[index] || false;
             const handleReadMoreToggle = () => toggleReadMore(index);
             const truncatedText = text.length > 1000 ? `${text.slice(0, 1000)}...` : text;
-        
             return (
               <div key={index} className="flex gap-8">
                 {index % 2 === 0 ? (

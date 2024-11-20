@@ -1,10 +1,10 @@
-// src/components/Register.js
 import React, { useState } from 'react';
 import { createUserWithEmailAndPassword, sendEmailVerification } from 'firebase/auth';
 import { auth, db } from '../firebase';
-import { useNavigate, Link } from 'react-router-dom'; // Import Link for navigation
+import { useNavigate, Link } from 'react-router-dom';
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
-import { FaCheckCircle } from 'react-icons/fa'; // Import check icon from react-icons
+import { FaCheckCircle } from 'react-icons/fa';
+import Ripple from './Ripple'; // Import the Ripple component
 
 const Register = () => {
   const [name, setName] = useState('');
@@ -20,8 +20,7 @@ const Register = () => {
   const handlePasswordChange = (e) => {
     const passwordValue = e.target.value;
     setPassword(passwordValue);
-    
-    // Define password criteria
+
     const minLength = /.{8,}/;
     const uppercase = /[A-Z]/;
     const lowercase = /[a-z]/;
@@ -58,22 +57,17 @@ const Register = () => {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
 
-      // Send email verification
       await sendEmailVerification(user);
-
-      // Show verification popup
       setShowPopup(true);
 
-      // Save user details in Firestore with empty projects array
       await setDoc(doc(db, 'users', user.uid), {
         uid: user.uid,
         name: name,
         email: email,
         createdAt: serverTimestamp(),
-        projects: [] // Empty array for projects
+        projects: [],
       });
 
-      // Automatically close the popup and navigate after 4 seconds
       setTimeout(() => {
         setShowPopup(false);
         navigate('/login');
@@ -85,19 +79,24 @@ const Register = () => {
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 relative">
+      {/* Ripple Background */}
+      <Ripple mainCircleSize={210} mainCircleOpacity={0.2} numCircles={8} className='z-0' />
+
       {/* Popup Modal */}
       {showPopup && (
         <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 z-10">
           <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg text-center w-80">
             <FaCheckCircle className="text-green-500 text-4xl mx-auto mb-4" />
             <h3 className="text-lg font-semibold mb-2">Verification Email Sent</h3>
-            <p className="text-gray-700 dark:text-gray-300">Please check your inbox and click the link to verify your email before logging in.</p>
+            <p className="text-gray-700 dark:text-gray-300">
+              Please check your inbox and click the link to verify your email before logging in.
+            </p>
           </div>
         </div>
       )}
 
       {/* Registration Form */}
-      <form onSubmit={handleRegister} className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg w-96">
+      <form onSubmit={handleRegister} className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg w-96 relative z-10">
         <h2 className="text-2xl font-bold mb-4">Register</h2>
         {error && <p className="text-red-500">{error}</p>}
 
@@ -135,7 +134,9 @@ const Register = () => {
             <li className={`${/[A-Z]/.test(password) ? 'text-green-600' : 'text-red-600'}`}>An uppercase letter</li>
             <li className={`${/[a-z]/.test(password) ? 'text-green-600' : 'text-red-600'}`}>A lowercase letter</li>
             <li className={`${/[0-9]/.test(password) ? 'text-green-600' : 'text-red-600'}`}>A digit</li>
-            <li className={`${/[!@#$%^&*(),.?":{}|<>]/.test(password) ? 'text-green-600' : 'text-red-600'}`}>A special character</li>
+            <li className={`${/[!@#$%^&*(),.?":{}|<>]/.test(password) ? 'text-green-600' : 'text-red-600'}`}>
+              A special character
+            </li>
           </ul>
         </div>
 
@@ -157,7 +158,6 @@ const Register = () => {
           Register
         </button>
 
-        {/* Link to Login if already registered */}
         <p className="mt-4 text-gray-700 dark:text-gray-300">
           Already have an account?{' '}
           <Link to="/login" className="text-blue-500 hover:underline">

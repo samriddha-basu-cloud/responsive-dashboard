@@ -1,8 +1,8 @@
-// src/components/Login.js
 import React, { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase';
 import { useNavigate, Link } from 'react-router-dom';
+import Ripple from './Ripple'; // Adjust the import path as needed
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -27,11 +27,17 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
-      <form onSubmit={handleLogin} className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg w-96">
+    <div className="relative flex items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900 overflow-hidden">
+      {/* Ripple Background */}
+      <Ripple mainCircleSize={210} mainCircleOpacity={0.2} numCircles={8} className="z-0" />
+
+      <form
+        onSubmit={handleLogin}
+        className="relative bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg w-96 z-10"
+      >
         <h2 className="text-2xl font-bold mb-4">Login</h2>
         {error && <p className="text-red-500">{error}</p>}
-        
+
         <input
           type="email"
           placeholder="Email"
@@ -50,7 +56,10 @@ const Login = () => {
           className="w-full mb-4 px-4 py-2 border rounded-md"
         />
 
-        <button type="submit" className="w-full bg-gradient-to-r from-red-500 to-red-700 text-white p-2 rounded-md">
+        <button
+          type="submit"
+          className="w-full bg-gradient-to-r from-red-500 to-red-700 text-white p-2 rounded-md"
+        >
           Login
         </button>
 
