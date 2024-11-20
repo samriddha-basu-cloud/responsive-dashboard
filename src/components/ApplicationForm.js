@@ -26,6 +26,7 @@ const ApplicationForm = () => {
   const location = useLocation();
   const { projectId } = location.state || {};
   const [completedSteps, setCompletedSteps] = useState([]);
+  const [projectName, setProjectName] = useState('');
 
   useEffect(() => {
     const fetchProjectData = async () => {
@@ -40,6 +41,7 @@ const ApplicationForm = () => {
           const project = userData.projects.find((p) => p.id === projectId);
 
           if (project && project.sections) {
+            setProjectName(project.name || 'Unnamed Project');
             const sectionKeys = Object.keys(project.sections);
             const completedIndexes = sectionKeys.map((key) =>
               key.startsWith('Pathway') ? parseInt(key.replace('Pathway', '')) + 2 : 2
@@ -164,7 +166,7 @@ const ApplicationForm = () => {
   <div className="flex flex-col min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100">
     {/* Mobile Header with Navigation Toggle */}
     <div className="md:hidden flex justify-between items-center p-4 bg-gray-200 dark:bg-gray-800">
-      <h2 className="text-xl font-bold">Navigation</h2>
+      <h2 className="text-xl font-bold">{projectName || 'Navigation'}</h2>
       <button 
         onClick={() => setIsMobileNavOpen(!isMobileNavOpen)} 
         className="text-2xl"
@@ -207,7 +209,7 @@ const ApplicationForm = () => {
               onClick={backToBeginning}
               className="flex items-center justify-center w-1/2 py-2 px-4 rounded-md bg-blue-500 text-white text-sm"
             >
-              <FaAngleDoubleLeft className="mr-2" />
+              {/* <FaAngleDoubleLeft className="mr-2" /> */}
               Beginning
             </button>
             <button
@@ -220,7 +222,7 @@ const ApplicationForm = () => {
               disabled={!completedSteps.includes(9)}
             >
               End
-              <FaAngleDoubleRight className="ml-2" />
+              {/* <FaAngleDoubleRight className="ml-2" /> */}
             </button>
           </div>
 
@@ -237,7 +239,9 @@ const ApplicationForm = () => {
     {/* Desktop Navigation */}
     <div className="hidden md:block w-64 bg-gray-200 dark:bg-gray-800 fixed h-screen overflow-y-auto">
       <div className="p-6 flex flex-col items-start space-y-4 h-full">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">Navigation</h2>
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+          {projectName || 'Navigation'}
+        </h2>
 
         {sectionNames.map((section, index) => (
           <button
@@ -261,7 +265,7 @@ const ApplicationForm = () => {
             onClick={backToBeginning}
             className="flex items-center justify-center w-1/2 py-2 px-4 rounded-md bg-gradient-to-r from-blue-500 to-blue-700 text-white hover:from-blue-600 hover:to-blue-800 transition-colors duration-300 shadow-md text-sm"
           >
-            <FaAngleDoubleLeft className="mr-2" />
+            {/* <FaAngleDoubleLeft className="mr-2" /> */}
             Beginning
           </button>
           <div className="relative group w-1/2">
@@ -275,7 +279,7 @@ const ApplicationForm = () => {
               disabled={!completedSteps.includes(9)}
             >
               End
-              <FaAngleDoubleRight className="ml-2" />
+              {/* <FaAngleDoubleRight className="ml-2" /> */}
             </button>
           </div>
         </div>
@@ -329,14 +333,16 @@ const ApplicationForm = () => {
       {step > 2 && step <= totalSteps && renderPathwayComponent()}
 
       {/* Button to Toggle PathwayProjections */}
-      <div className="mt-4">
-        <button
-          onClick={() => setShowProjections(!showProjections)}
-          className="w-full py-2 px-4 rounded-md bg-gradient-to-r from-purple-500 to-purple-700 text-white hover:from-purple-600 hover:to-purple-800 transition-colors duration-300 shadow-md text-sm"
-        >
-          {showProjections ? 'Hide Pathway Projections' : 'Show Pathway Projections'}
-        </button>
-      </div>
+        {completedSteps.includes(3) && (
+          <div className="mt-4">
+            <button
+              onClick={() => setShowProjections(!showProjections)}
+              className="w-full py-2 px-4 rounded-md bg-gradient-to-r from-purple-500 to-purple-700 text-white hover:from-purple-600 hover:to-purple-800 transition-colors duration-300 shadow-md text-sm"
+            >
+              {showProjections ? 'Hide Pathway Projections' : 'Show Pathway Projections'}
+            </button>
+          </div>
+        )}
 
       {/* Render PathwayProjections */}
       {showProjections && <PathwayProjections projectId={projectId} />}
