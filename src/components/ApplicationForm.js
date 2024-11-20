@@ -22,6 +22,7 @@ const ApplicationForm = () => {
   const [step, setStep] = useState(1);
   const [showProjections, setShowProjections] = useState(false);
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
+  const [projectionTrigger, setProjectionTrigger] = useState(0); // NEW
   const totalSteps = 12;
   const location = useLocation();
   const { projectId } = location.state || {};
@@ -124,6 +125,7 @@ const ApplicationForm = () => {
       const updatedSteps = [...new Set([...prev, pathwayStep])];
       updateProjectProgress();
       setStep(pathwayStep + 1);
+      setProjectionTrigger((prev) => prev + 1); // Increment to trigger re-render
       return updatedSteps;
     });
   };
@@ -345,7 +347,7 @@ const ApplicationForm = () => {
         )}
 
       {/* Render PathwayProjections */}
-      {showProjections && <PathwayProjections projectId={projectId} />}
+      {showProjections && <PathwayProjections projectId={projectId} trigger={projectionTrigger} />}
     </div>
   </div>
 );

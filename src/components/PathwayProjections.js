@@ -263,7 +263,7 @@ const INTERVENTION_STATUS_COLORS = {
   'Not in Focus': 'text-red-600'
 };
 
-const PathwayProjections = ({ projectId }) => {
+const PathwayProjections = ({ projectId, trigger }) => {
   const [projectData, setProjectData] = useState(null);
   const [activityCounts, setActivityCounts] = useState({});
   const [interventionList, setInterventionList] = useState([]);
@@ -331,7 +331,7 @@ const PathwayProjections = ({ projectId }) => {
     };
 
     fetchProjectData();
-  }, [projectId]);
+  }, [projectId, trigger]);
 
   const calculateActivityStatus = (sections) => {
     const activityStatus = {};
