@@ -274,6 +274,41 @@ const PathwayProjections = ({ projectId }) => {
     interventions: false,
   });
 
+  const generatePieChartData = () => {
+    const pathwayColors = [
+      'rgba(255, 99, 132, 0.6)',   // Red
+      'rgba(54, 162, 235, 0.6)',   // Blue
+      'rgba(255, 206, 86, 0.6)',   // Yellow
+      'rgba(75, 192, 192, 0.6)',   // Teal
+      'rgba(153, 102, 255, 0.6)',  // Purple
+      'rgba(255, 159, 64, 0.6)',   // Orange
+      'rgba(199, 199, 199, 0.6)',  // Grey
+      'rgba(83, 102, 255, 0.6)',   // Indigo
+      'rgba(40, 159, 64, 0.6)',    // Green
+      'rgba(210, 99, 132, 0.6)'    // Dark Pink
+    ];
+
+    const orderedPathways = PATHWAY_ORDER.filter(key => activityCounts[key]);
+
+    // Calculate total activities per pathway
+    const pathwayTotals = orderedPathways.map((key) => 
+      Object.values(activityCounts[key]).reduce((acc, value) => acc + value, 0)
+    );
+
+    return {
+      labels: orderedPathways,
+      datasets: [
+        {
+          label: 'Total Activities per Pathway',
+          data: pathwayTotals,
+          backgroundColor: pathwayColors.slice(0, orderedPathways.length),
+          borderColor: pathwayColors.slice(0, orderedPathways.length).map(color => color.replace('0.6', '1')),
+          borderWidth: 1
+        },
+      ],
+    };
+  };
+
   useEffect(() => {
     const fetchProjectData = async () => {
       try {
@@ -339,30 +374,60 @@ const PathwayProjections = ({ projectId }) => {
   };
 
   const generateChartData = (statusKey) => {
-    const colorMap = {
-      Completed: 'rgba(75, 192, 192, 0.6)',
-      Ongoing: 'rgba(54, 162, 235, 0.6)',
-      Planned: 'rgba(255, 206, 86, 0.6)',
-      'Not Applicable': 'rgba(153, 102, 255, 0.6)',
-      'Not in Focus': 'rgba(255, 99, 132, 0.6)'
-    };
+  const pathwayColors = [
+    'rgba(255, 99, 132, 0.6)',   // Red
+    'rgba(54, 162, 235, 0.6)',   // Blue
+    'rgba(255, 206, 86, 0.6)',   // Yellow
+    'rgba(75, 192, 192, 0.6)',   // Teal
+    'rgba(153, 102, 255, 0.6)',  // Purple
+    'rgba(255, 159, 64, 0.6)',   // Orange
+    'rgba(199, 199, 199, 0.6)',  // Grey
+    'rgba(83, 102, 255, 0.6)',   // Indigo
+    'rgba(40, 159, 64, 0.6)',    // Green
+    'rgba(210, 99, 132, 0.6)'    // Dark Pink
+  ];
 
-    // Use predefined order for labels
-    const orderedLabels = PATHWAY_ORDER.filter(key => activityCounts[key]);
+  const statusColorMap = {
+    'Completed': 'rgba(75, 192, 192, 0.6)',      // Teal
+    'Ongoing': 'rgba(54, 162, 235, 0.6)',        // Blue
+    'Planned': 'rgba(255, 206, 86, 0.6)',        // Yellow
+    'Not Applicable': 'rgba(153, 102, 255, 0.6)',// Purple
+    'Not in Focus': 'rgba(255, 99, 132, 0.6)'    // Red
+  };
 
+  // Use predefined order for labels
+  const orderedLabels = PATHWAY_ORDER.filter(key => activityCounts[key]);
+
+  // If pie chart is selected, return data for the specific status across all pathways
+  if (graphType === 'Pie') {
     return {
       labels: orderedLabels,
       datasets: [
         {
           label: statusKey,
-          data: orderedLabels.map((key) => activityCounts[key][statusKey]),
-          backgroundColor: colorMap[statusKey],
-          borderColor: colorMap[statusKey].replace('0.6', '1'),
+          data: orderedLabels.map((key) => activityCounts[key][statusKey] || 0),
+          backgroundColor: pathwayColors.slice(0, orderedLabels.length),
+          borderColor: pathwayColors.slice(0, orderedLabels.length).map(color => color.replace('0.6', '1')),
           borderWidth: 1
         },
       ],
     };
+  }
+
+  // Existing bar/line/radar chart logic with distinct status colors
+  return {
+    labels: orderedLabels,
+    datasets: [
+      {
+        label: statusKey,
+        data: orderedLabels.map((key) => activityCounts[key][statusKey] || 0),
+        backgroundColor: statusColorMap[statusKey],
+        borderColor: statusColorMap[statusKey].replace('0.6', '1'),
+        borderWidth: 1
+      },
+    ],
   };
+};
 
   const generateOverallPercentageData = () => {
     const orderedPathways = PATHWAY_ORDER.filter(key => activityCounts[key]);
@@ -475,110 +540,113 @@ const PathwayProjections = ({ projectId }) => {
   }
 
   return (
-    <div className="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-2xl">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200">
-          Pathway Projections
-        </h2>
-      </div>
+  <div className="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-2xl">
+    <div className="flex justify-between items-center mb-6">
+      <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200">
+        Pathway Projections
+      </h2>
+    </div>
 
-      {/* Overall Pathway Status */}
-      <div className="mb-6 bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-        <div 
-          className="flex justify-between items-center cursor-pointer"
-          onClick={() => setExpanded(prev => ({ ...prev, overallStatus: !prev.overallStatus }))}
-        >
-          <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
-            Overall Pathway Status
-          </h3>
-          {expanded.overallStatus ? <ChevronUp /> : <ChevronDown />}
-        </div>
-        
-        {expanded.overallStatus && (
-          <div className="mt-4">
-            <GraphTypeSelector />
-            <div className="h-80">
-              {renderGraph(generateOverallPercentageData(), graphType)}
-            </div>
+    {/* Overall Pathway Status */}
+    <div className="mb-6 bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+      <div 
+        className="flex justify-between items-center cursor-pointer"
+        onClick={() => setExpanded(prev => ({ ...prev, overallStatus: !prev.overallStatus }))}
+      >
+        <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
+          Overall Pathway Status
+        </h3>
+        {expanded.overallStatus ? <ChevronUp /> : <ChevronDown />}
+      </div>
+      
+      {expanded.overallStatus && (
+        <div className="mt-4">
+          <GraphTypeSelector />
+          <div className="h-80">
+            {graphType === 'Pie' 
+              ? renderGraph(generatePieChartData(), 'Pie')
+              : renderGraph(generateOverallPercentageData(), graphType)
+            }
           </div>
-        )}
-      </div>
-
-      {/* Activity Status */}
-      <div className="mb-6 bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-        <div 
-          className="flex justify-between items-center cursor-pointer"
-          onClick={() => setExpanded(prev => ({ ...prev, activityStatus: !prev.activityStatus }))}
-        >
-          <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
-            Activity Status by Type
-          </h3>
-          {expanded.activityStatus ? <ChevronUp /> : <ChevronDown />}
         </div>
-        
-        {expanded.activityStatus && (
-          <div className="mt-4">
-            <GraphTypeSelector />
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {['Completed', 'Ongoing', 'Planned', 'Not Applicable', 'Not in Focus'].map((status) => (
-                <div key={status} className="h-64">
-                  {renderGraph(generateChartData(status), graphType)}
+      )}
+    </div>
+
+    {/* Activity Status */}
+    <div className="mb-6 bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+      <div 
+        className="flex justify-between items-center cursor-pointer"
+        onClick={() => setExpanded(prev => ({ ...prev, activityStatus: !prev.activityStatus }))}
+      >
+        <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
+          Activity Status by Type
+        </h3>
+        {expanded.activityStatus ? <ChevronUp /> : <ChevronDown />}
+      </div>
+      
+      {expanded.activityStatus && (
+        <div className="mt-4">
+          <GraphTypeSelector />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {['Completed', 'Ongoing', 'Planned', 'Not Applicable', 'Not in Focus'].map((status) => (
+              <div key={status} className="h-64">
+                {renderGraph(generateChartData(status), graphType)}
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+
+    {/* Interventions Section with Enhanced Styling */}
+    <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+      <div 
+        className="flex justify-between items-center cursor-pointer"
+        onClick={() => setExpanded(prev => ({ ...prev, interventions: !prev.interventions }))}
+      >
+        <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 flex items-center">
+          <AlertCircle className="mr-2 text-red-500" /> 
+          Interventions Needed
+        </h3>
+        {expanded.interventions ? <ChevronUp /> : <ChevronDown />}
+      </div>
+      
+      {expanded.interventions && (
+        <div className="mt-4">
+          {interventionList.length > 0 ? (
+            <div className="space-y-4">
+              {interventionList.map((intervention, index) => (
+                <div 
+                  key={index} 
+                  className="bg-white dark:bg-gray-600 p-4 rounded-lg shadow-md border-l-4 border-orange-500"
+                >
+                  <div className="flex items-center mb-2">
+                    <span className="font-bold text-orange-600 dark:text-orange-400 mr-2">
+                      {intervention.pathway}:
+                    </span>
+                    <span 
+                      className={`font-semibold ${
+                        INTERVENTION_STATUS_COLORS[intervention.activity.answer] || 'text-gray-600'
+                      }`}
+                    >
+                      {intervention.activity.answer}
+                    </span>
+                  </div>
+                  {renderInterventionDetails(intervention.activity)}
                 </div>
               ))}
             </div>
-          </div>
-        )}
-      </div>
-
-       {/* Interventions Section with Enhanced Styling */}
-      <div className="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-        <div 
-          className="flex justify-between items-center cursor-pointer"
-          onClick={() => setExpanded(prev => ({ ...prev, interventions: !prev.interventions }))}
-        >
-          <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 flex items-center">
-            <AlertCircle className="mr-2 text-red-500" /> 
-            Interventions Needed
-          </h3>
-          {expanded.interventions ? <ChevronUp /> : <ChevronDown />}
+          ) : (
+            <p className="text-center text-gray-500 dark:text-gray-400 flex items-center justify-center">
+              <AlertCircle className="mr-2 text-green-500" />
+              No interventions needed at this time.
+            </p>
+          )}
         </div>
-        
-        {expanded.interventions && (
-          <div className="mt-4">
-            {interventionList.length > 0 ? (
-              <div className="space-y-4">
-                {interventionList.map((intervention, index) => (
-                  <div 
-                    key={index} 
-                    className="bg-white dark:bg-gray-600 p-4 rounded-lg shadow-md border-l-4 border-orange-500"
-                  >
-                    <div className="flex items-center mb-2">
-                      <span className="font-bold text-orange-600 dark:text-orange-400 mr-2">
-                        {intervention.pathway}:
-                      </span>
-                      <span 
-                        className={`font-semibold ${
-                          INTERVENTION_STATUS_COLORS[intervention.activity.answer] || 'text-gray-600'
-                        }`}
-                      >
-                        {intervention.activity.answer}
-                      </span>
-                    </div>
-                    {renderInterventionDetails(intervention.activity)}
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-center text-gray-500 dark:text-gray-400 flex items-center justify-center">
-                <AlertCircle className="mr-2 text-green-500" />
-                No interventions needed at this time.
-              </p>
-            )}
-          </div>
-        )}
-      </div>
+      )}
     </div>
-  );
+  </div>
+);
 };
 
 export default PathwayProjections;
