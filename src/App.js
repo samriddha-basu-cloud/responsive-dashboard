@@ -7,6 +7,7 @@ import Profile from './pages/Profile';
 import Settings from './pages/Settings';
 import Register from './components/Register';
 import Login from './components/Login';
+import ForgotPassword from './components/ForgotPassword';
 import Home from './pages/Home'; // Import the Home page
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
@@ -29,6 +30,7 @@ function App() {
             {/* Public routes */}
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
             
             {/* Protected routes */}
             <Route
