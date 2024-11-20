@@ -173,7 +173,7 @@ const Profile = () => {
         </AnimatePresence>
 
         {/* Profile Header */}
-        <div className="flex items-center space-x-4 mb-6">
+        <div className="flex items-center space-x-4 mb-6 mt-12">
           <div className="rounded-full bg-gradient-to-br from-[#C31A07] to-[#FF6B6B] text-white text-xl font-bold flex items-center justify-center w-24 h-24">
             {initials}
           </div>
