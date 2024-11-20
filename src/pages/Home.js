@@ -108,234 +108,256 @@ const Home = () => {
   }
 
     return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
-        {/* Navbar */}
-        <nav className="bg-white dark:bg-gray-800 shadow-lg p-4">
-        <div className="container mx-auto flex justify-between items-center">
-            <div className="flex items-center">
-            <img src={gizLogo} alt="GIZ Logo" className="h-12 w-auto" />
-            </div>
-            <Link
-            to="/login"
-            className="px-6 py-2 text-white rounded-lg bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 transition"
-            >
-            Take a Survey of your Project
-            </Link>
+  <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
+    {/* Navbar */}
+    <nav className="bg-white dark:bg-gray-800 shadow-lg p-2 md:p-4">
+      <div className="container mx-auto flex justify-between items-center">
+        <div className="flex items-center">
+          <img src={gizLogo} alt="GIZ Logo" className="h-8 md:h-12 w-auto" />
         </div>
-        </nav>
-
-        {/* Main Content */}
-        <div className="container mx-auto px-4 py-12">
-        {/* Enhanced Header */}
-        <motion.h1
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="text-4xl font-extrabold text-center mb-12 bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent py-2"
+        <Link
+          to="/login"
+          className="px-4 py-1 md:px-6 md:py-2 text-sm md:text-base text-white rounded-lg bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 transition"
         >
-            Integrated Food Systems and Agroecology Framework
-        </motion.h1>
+          Take a Survey of your Project
+        </Link>
+      </div>
+    </nav>
 
-        {/* Enhanced Content Sections */}
-                <div className="container mx-auto p-4 space-y-12">
-          {content.map((text, index) => {
-            const isExpanded = readMore[index] || false;
-            const handleReadMoreToggle = () => toggleReadMore(index);
-            const truncatedText = text.length > 1000 ? `${text.slice(0, 1000)}...` : text;
-            return (
-              <div key={index} className="flex gap-8">
-                {index % 2 === 0 ? (
-                  <>
-                    {/* Text Left, Photo Right */}
-                    <div className="flex-1 space-y-6">
-                      <motion.div
-                        initial={{ opacity: 0, x: -50 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.2 }}
-                        className="group relative overflow-hidden"
-                      >
-                        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 p-8 border border-gray-100 dark:border-gray-700">
-                          <div className="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-red-500 to-red-700" />
-                          <p
-                            className="text-gray-700 dark:text-gray-200 text-lg leading-relaxed pl-4 first-letter:text-5xl first-letter:font-bold first-letter:mr-2 first-letter:text-red-700"
-                            style={{ textIndent: '1.5em' }}
-                          >
-                            {isExpanded ? text : truncatedText}
-                          </p>
-                          {text.length > 200 && (
-                            <button
-                              onClick={handleReadMoreToggle}
-                              className="text-red-500 hover:text-red-700 transition mt-2"
-                            >
-                              {isExpanded ? 'Read less' : 'Read more...'}
-                            </button>
-                          )}
-                        </div>
-                      </motion.div>
-                    </div>
-                    <motion.div
-                      initial={{ opacity: 0, x: 50 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      className="w-96 flex items-center"
-                    >
-                      <div className="bg-gray-200 rounded-xl overflow-hidden aspect-square w-full">
-                        <img
-                          src={index === 0 ? photo1 : photo2}
-                          alt={`Image for content ${index + 1}`}
-                          className="items-center object-cover"
-                        />
-                      </div>
-                    </motion.div>
-                  </>
-                ) : (
-                  <>
-                    {/* Photo Left, Text Right */}
+    {/* Main Content */}
+    <div className="container mx-auto px-2 md:px-4 py-6 md:py-12">
+      {/* Enhanced Header */}
+      <motion.h1
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="text-2xl md:text-4xl font-extrabold text-center mb-6 md:mb-12 bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent py-1 md:py-2"
+      >
+        Integrated Food Systems and Agroecology Framework
+      </motion.h1>
+
+      {/* Enhanced Content Sections */}
+      <div className="container mx-auto p-2 md:p-4 space-y-8 md:space-y-12">
+        {content.map((text, index) => {
+          const isExpanded = readMore[index] || false;
+          const handleReadMoreToggle = () => toggleReadMore(index);
+          const truncatedText = text.length > 1000 ? `${text.slice(0, 1000)}...` : text;
+          return (
+            <div
+              key={index}
+              className="flex flex-col md:flex-row gap-4 md:gap-8 items-center md:items-stretch"
+            >
+              {index % 2 === 0 ? (
+                <>
+                  {/* Text Left, Photo Right */}
+                  <div className="flex-1 space-y-3 md:space-y-6">
                     <motion.div
                       initial={{ opacity: 0, x: -50 }}
                       animate={{ opacity: 1, x: 0 }}
-                      className="w-96 flex items-center"
+                      transition={{ delay: 0.2 }}
+                      className="group relative overflow-hidden"
                     >
-                      <div className="bg-gray-200 rounded-xl overflow-hidden aspect-square w-full">
-                        <img
-                          src={index === 0 ? photo1 : photo2}
-                          alt={`Image for content ${index + 1}`}
-                          className=" justify-center place-items-center object-cover"
-                        />
+                      <div className="bg-white dark:bg-gray-800 rounded-lg md:rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 p-4 md:p-8 border border-gray-100 dark:border-gray-700">
+                        <div className="absolute top-0 left-0 w-1 md:w-2 h-full bg-gradient-to-b from-red-500 to-red-700" />
+                        <p
+                          className="text-sm md:text-lg text-gray-700 dark:text-gray-200 leading-relaxed pl-2 md:pl-4 first-letter:text-3xl md:first-letter:text-5xl first-letter:font-bold first-letter:mr-1 md:first-letter:mr-2 first-letter:text-red-700"
+                          style={{ textIndent: '1.5em' }}
+                        >
+                          {isExpanded ? text : truncatedText}
+                        </p>
+                        {text.length > 200 && (
+                          <button
+                            onClick={handleReadMoreToggle}
+                            className="text-red-500 hover:text-red-700 transition mt-1 md:mt-2 text-sm md:text-base"
+                          >
+                            {isExpanded ? 'Read less' : 'Read more...'}
+                          </button>
+                        )}
                       </div>
                     </motion.div>
-                    <div className="flex-1 space-y-6">
-                      <motion.div
-                        initial={{ opacity: 0, x: 50 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        transition={{ delay: 0.2 }}
-                        className="group relative overflow-hidden"
-                      >
-                        <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 p-8 border border-gray-100 dark:border-gray-700">
-                          <div className="absolute top-0 left-0 w-2 h-full bg-gradient-to-b from-red-500 to-red-700" />
-                          <p
-                            className="text-gray-700 dark:text-gray-200 text-lg leading-relaxed pl-4 first-letter:text-5xl first-letter:font-bold first-letter:mr-2 first-letter:text-red-700"
-                            style={{ textIndent: '1.5em' }}
-                          >
-                            {isExpanded ? text : truncatedText}
-                          </p>
-                          {text.length > 200 && (
-                            <button
-                              onClick={handleReadMoreToggle}
-                              className="text-red-500 hover:text-red-700 transition mt-2"
-                            >
-                              {isExpanded ? 'Read less' : 'Read more...'}
-                            </button>
-                          )}
-                        </div>
-                      </motion.div>
+                  </div>
+                  <motion.div
+                    initial={{ opacity: 0, x: 50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    className="w-full md:w-96 flex items-center"
+                  >
+                    <div className="bg-gray-200 rounded-lg md:rounded-xl overflow-hidden aspect-square w-full">
+                      <img
+                        src={index === 0 ? photo1 : photo2}
+                        alt={`Image for content ${index + 1}`}
+                        className="w-full h-full object-cover"
+                      />
                     </div>
-                  </>
-                )}
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Enhanced Tables Section */}
-        <div className="space-y-12">
-            <div className="flex overflow-x-auto mb-6 pb-2">
-            {tables.map((table, index) => (
-                <button
-                key={index}
-                onClick={() => setActiveTab(index)}
-                className={`px-6 py-3 text-sm font-medium rounded-lg mr-4 transition-all duration-200
-                    ${activeTab === index 
-                    ? 'bg-gradient-to-r from-red-500 to-red-700 text-white shadow-lg' 
-                    : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-red-50 dark:hover:bg-red-900/20'
-                    }`}
-                >
-                {table.title}
-                </button>
-            ))}
-            </div>
-
-            {tables.map((table, index) => (
-            <motion.div
-                key={index}
-                initial={false}
-                animate={{ 
-                opacity: activeTab === index ? 1 : 0,
-                x: activeTab === index ? 0 : 20
-                }}
-                className={`${activeTab === index ? 'block' : 'hidden'}`}
-            >
-                <div className="bg-white dark:bg-gray-800 rounded-xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-700">
-                <div className="overflow-x-auto">
-                    <table className="min-w-full">
-                    <thead>
-                        <tr className="bg-gradient-to-r from-red-500 to-red-700">
-                        {table.headers.map((header, i) => (
-                            <th key={i} className="px-6 py-4 text-left text-white font-semibold tracking-wider">
-                            {header}
-                            </th>
-                        ))}
-                        </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                        {table.rows.map((row, i) => (
-                        <tr 
-                            key={i}
-                            className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150"
+                  </motion.div>
+                </>
+              ) : (
+                <>
+                  {/* Photo Left, Text Right */}
+                  <motion.div
+                    initial={{ opacity: 0, x: -50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    className="w-full md:w-96 flex items-center"
+                  >
+                    <div className="bg-gray-200 rounded-lg md:rounded-xl overflow-hidden aspect-square w-full">
+                      <img
+                        src={index === 0 ? photo1 : photo2}
+                        alt={`Image for content ${index + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  </motion.div>
+                  <div className="flex-1 space-y-3 md:space-y-6">
+                    <motion.div
+                      initial={{ opacity: 0, x: 50 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: 0.2 }}
+                      className="group relative overflow-hidden"
+                    >
+                      <div className="bg-white dark:bg-gray-800 rounded-lg md:rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 p-4 md:p-8 border border-gray-100 dark:border-gray-700">
+                        <div className="absolute top-0 left-0 w-1 md:w-2 h-full bg-gradient-to-b from-red-500 to-red-700" />
+                        <p
+                          className="text-sm md:text-lg text-gray-700 dark:text-gray-200 leading-relaxed pl-2 md:pl-4 first-letter:text-3xl md:first-letter:text-5xl first-letter:font-bold first-letter:mr-1 md:first-letter:mr-2 first-letter:text-red-700"
+                          style={{ textIndent: '1.5em' }}
                         >
-                            {row.map((cell, j) => (
-                            <td key={j} className="px-6 py-4 text-gray-700 dark:text-gray-200">
-                                {cell}
-                            </td>
-                            ))}
-                        </tr>
+                          {isExpanded ? text : truncatedText}
+                        </p>
+                        {text.length > 200 && (
+                          <button
+                            onClick={handleReadMoreToggle}
+                            className="text-red-500 hover:text-red-700 transition mt-1 md:mt-2 text-sm md:text-base"
+                          >
+                            {isExpanded ? 'Read less' : 'Read more...'}
+                          </button>
+                        )}
+                      </div>
+                    </motion.div>
+                  </div>
+                </>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Enhanced Tables Section */}
+      <div className="space-y-6 md:space-y-12">
+        <div className="flex overflow-x-auto mb-3 md:mb-6 pb-1 md:pb-2">
+          {tables.map((table, index) => (
+            <button
+              key={index}
+              onClick={() => setActiveTab(index)}
+              className={`px-4 py-2 md:px-6 md:py-3 text-xs md:text-sm font-medium rounded-lg mr-2 md:mr-4 transition-all duration-200
+                ${
+                  activeTab === index
+                    ? 'bg-gradient-to-r from-red-500 to-red-700 text-white shadow-lg'
+                    : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-red-50 dark:hover:bg-red-900/20'
+                }`}
+            >
+              {table.title}
+            </button>
+          ))}
+        </div>
+
+        {tables.map((table, index) => (
+          <motion.div
+            key={index}
+            initial={false}
+            animate={{
+              opacity: activeTab === index ? 1 : 0,
+              x: activeTab === index ? 0 : 20,
+            }}
+            className={`${activeTab === index ? 'block' : 'hidden'}`}
+          >
+            <div className="bg-white dark:bg-gray-800 rounded-lg md:rounded-xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-700">
+              <div className="overflow-x-auto">
+                <table className="min-w-full text-sm md:text-base">
+                  <thead>
+                    <tr className="bg-gradient-to-r from-red-500 to-red-700">
+                      {table.headers.map((header, i) => (
+                        <th
+                          key={i}
+                          className="px-4 md:px-6 py-2 md:py-4 text-left text-white font-semibold tracking-wider"
+                        >
+                          {header}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                    {table.rows.map((row, i) => (
+                      <tr
+                        key={i}
+                        className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150"
+                      >
+                        {row.map((cell, j) => (
+                          <td
+                            key={j}
+                            className="px-4 md:px-6 py-2 md:py-4 text-gray-700 dark:text-gray-200"
+                          >
+                            {cell}
+                          </td>
                         ))}
-                    </tbody>
-                    </table>
-                </div>
-                </div>
-            </motion.div>
-            ))}
-        </div>
-        </div>
-
-        <div className="mt-12 text-center">
-        <Link
-            to="/login"
-            className="inline-block px-8 py-3 text-white rounded-lg bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 transition transform hover:scale-105"
-        >
-            Take a Survey of your Project
-        </Link>
-        </div>
-
-        {/* Footer */}
-        <footer className="bg-gray-800 text-white mt-16 py-8">
-        <div className="container mx-auto px-4">
-            <div className="flex flex-wrap justify-between">
-            <div className="w-full md:w-1/3 mb-6 md:mb-0">
-                <img src={gizLogo} alt="GIZ Logo" className="h-12 w-auto mb-4" />
-                <p className="text-sm">
-                Deutsche Gesellschaft für Internationale Zusammenarbeit (GIZ) GmbH
-                </p>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             </div>
-            <div className="w-full md:w-1/3 mb-6 md:mb-0">
-                <h3 className="text-lg font-semibold mb-4">Contact</h3>
-                <p className="text-sm">Email: contact@giz.de</p>
-                <p className="text-sm">Phone: +49 (0) 123 456 789</p>
-            </div>
-            <div className="w-full md:w-1/3">
-                <h3 className="text-lg font-semibold mb-4">Links</h3>
-                <ul className="text-sm">
-                <li className="mb-2"><a href="#" className="hover:text-red-400">Privacy Policy</a></li>
-                <li className="mb-2"><a href="#" className="hover:text-red-400">Terms of Service</a></li>
-                <li><a href="#" className="hover:text-red-400">Contact Us</a></li>
-                </ul>
-            </div>
-            </div>
-            <div className="text-center mt-8 pt-8 border-t border-gray-700">
-            <p className="text-sm">&copy; 2024 GIZ. All rights reserved.</p>
-            </div>
-        </div>
-        </footer>
+          </motion.div>
+        ))}
+      </div>
     </div>
+
+    <div className="mt-6 md:mt-12 text-center">
+      <Link
+        to="/login"
+        className="inline-block px-6 py-2 md:px-8 md:py-3 text-sm md:text-base text-white rounded-lg bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 transition transform hover:scale-105"
+      >
+        Take a Survey of your Project
+      </Link>
+    </div>
+
+    {/* Footer */}
+    <footer className="bg-gray-800 text-white mt-8 md:mt-16 py-4 md:py-8">
+  <div className="container mx-auto px-2 md:px-4">
+    <div className="flex flex-wrap justify-center md:justify-between text-center md:text-left">
+      <div className="w-full md:w-1/3 mb-4 md:mb-0">
+        <img src={gizLogo} alt="GIZ Logo" className="h-8 md:h-12 w-auto mx-auto md:mx-0 mb-2 md:mb-4" />
+        <p className="text-xs md:text-sm">
+          Deutsche Gesellschaft für Internationale Zusammenarbeit (GIZ) GmbH
+        </p>
+      </div>
+      <div className="w-full md:w-1/3 mb-4 md:mb-0">
+        <h3 className="text-sm md:text-lg font-semibold mb-2 md:mb-4">Contact</h3>
+        <p className="text-xs md:text-sm">Email: contact@giz.de</p>
+        <p className="text-xs md:text-sm">Phone: +49 (0) 123 456 789</p>
+      </div>
+      <div className="w-full md:w-1/3">
+        <h3 className="text-sm md:text-lg font-semibold mb-2 md:mb-4">Links</h3>
+        <ul className="text-xs md:text-sm">
+          <li className="mb-1 md:mb-2">
+            <a href="#" className="hover:text-red-400">
+              Privacy Policy
+            </a>
+          </li>
+          <li className="mb-1 md:mb-2">
+            <a href="#" className="hover:text-red-400">
+              Terms of Service
+            </a>
+          </li>
+          <li>
+            <a href="#" className="hover:text-red-400">
+              Contact Us
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div className="text-center mt-4 md:mt-8 pt-4 md:pt-8 border-t border-gray-700">
+      <p className="text-xs md:text-sm">&copy; 2024 GIZ. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+  </div>
 );
 };
 
