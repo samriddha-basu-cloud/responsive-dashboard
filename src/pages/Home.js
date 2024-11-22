@@ -6,7 +6,6 @@ import photo1 from '../assets/photo1-giz.jpg';
 import photo2 from '../assets/photo2-giz.jpg';
 import { motion } from 'framer-motion';
 
-
 const Home = () => {
   const [loading, setLoading] = useState(true);
   const [readMore, setReadMore] = useState({});
@@ -98,6 +97,7 @@ const Home = () => {
     },
   ];
 
+
   if (loading) {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 dark:bg-gray-900">
@@ -107,134 +107,126 @@ const Home = () => {
     );
   }
 
-    return (
-  <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
-    {/* Navbar */}
-    <nav className="bg-white dark:bg-gray-800 shadow-lg p-2 md:p-4">
-      <div className="container mx-auto flex justify-between items-center">
-        <div className="flex items-center">
-          <img src={gizLogo} alt="GIZ Logo" className="h-8 md:h-12 w-auto" />
+  return (
+    <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
+      {/* Navbar */}
+      <nav className="bg-white dark:bg-gray-800 shadow-lg p-2 md:p-4">
+        <div className="container mx-auto flex justify-between items-center">
+          <div className="flex items-center">
+            <img src={gizLogo} alt="GIZ Logo" className="h-8 md:h-12 w-auto" />
+          </div>
+          <Link
+            to="/login"
+            className="px-4 py-1 md:px-6 md:py-2 text-sm md:text-base text-white rounded-lg bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 transition"
+          >
+            Take a Survey of your Project
+          </Link>
         </div>
-        <Link
-          to="/login"
-          className="px-4 py-1 md:px-6 md:py-2 text-sm md:text-base text-white rounded-lg bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 transition"
+      </nav>
+
+      {/* Main Content */}
+      <div className="container mx-auto px-2 md:px-4 py-6 md:py-12">
+        {/* Enhanced Header */}
+        <motion.h1
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-2xl md:text-4xl font-extrabold text-center mb-6 md:mb-12 bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent py-1 md:py-2"
         >
-          Take a Survey of your Project
-        </Link>
-      </div>
-    </nav>
+          Integrated Food Systems and Agroecology Framework
+        </motion.h1>
 
-    {/* Main Content */}
-    <div className="container mx-auto px-2 md:px-4 py-6 md:py-12">
-      {/* Enhanced Header */}
-      <motion.h1
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="text-2xl md:text-4xl font-extrabold text-center mb-6 md:mb-12 bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent py-1 md:py-2"
-      >
-        Integrated Food Systems and Agroecology Framework
-      </motion.h1>
+        {/* Enhanced Content Sections */}
+        <div className="container mx-auto p-2 md:p-4 space-y-8 md:space-y-12">
+          {content.map((text, index) => {
+            const isExpanded = readMore[index] || false;
+            const handleReadMoreToggle = () => toggleReadMore(index);
+            const truncatedText = text.length > 1000 ? `${text.slice(0, 1000)}...` : text;
 
-      {/* Enhanced Content Sections */}
-      <div className="container mx-auto p-2 md:p-4 space-y-8 md:space-y-12">
-        {content.map((text, index) => {
-          const isExpanded = readMore[index] || false;
-          const handleReadMoreToggle = () => toggleReadMore(index);
-          const truncatedText = text.length > 1000 ? `${text.slice(0, 1000)}...` : text;
-          return (
-            <div
-              key={index}
-              className="flex flex-col md:flex-row gap-4 md:gap-8 items-center md:items-stretch"
-            >
-              {index % 2 === 0 ? (
-                <>
-                  {/* Text Left, Photo Right */}
-                  <div className="flex-1 space-y-3 md:space-y-6">
-                    <motion.div
-                      initial={{ opacity: 0, x: -50 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.2 }}
-                      className="group relative overflow-hidden"
-                    >
-                      <div className="bg-white dark:bg-gray-800 rounded-lg md:rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 p-4 md:p-8 border border-gray-100 dark:border-gray-700">
-                        <div className="absolute top-0 left-0 w-1 md:w-2 h-full bg-gradient-to-b from-red-500 to-red-700" />
-                        <p
-                          className="text-sm md:text-lg text-gray-700 dark:text-gray-200 leading-relaxed pl-2 md:pl-4 first-letter:text-3xl md:first-letter:text-5xl first-letter:font-bold first-letter:mr-1 md:first-letter:mr-2 first-letter:text-red-700"
-                          style={{ textIndent: '1.5em' }}
+            if (index < 2) {
+              // Only first two sections have images
+              return (
+                <div
+                  key={index}
+                  className="flex flex-col md:flex-row gap-4 md:gap-8 items-center md:items-stretch"
+                >
+                  {index % 2 === 0 ? (
+                    <>
+                      {/* Text Left, Photo Right */}
+                      <div className="flex-1 space-y-3 md:space-y-6">
+                        <motion.div
+                          initial={{ opacity: 0, x: -50 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.2 }}
+                          className="group relative overflow-hidden"
                         >
-                          {isExpanded ? text : truncatedText}
-                        </p>
-                        {text.length > 200 && (
-                          <button
-                            onClick={handleReadMoreToggle}
-                            className="text-red-500 hover:text-red-700 transition mt-1 md:mt-2 text-sm md:text-base"
-                          >
-                            {isExpanded ? 'Read less' : 'Read more...'}
-                          </button>
-                        )}
+                          <div className="bg-white dark:bg-gray-800 rounded-lg md:rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 p-4 md:p-8 border border-gray-100 dark:border-gray-700">
+                            <div className="absolute top-0 left-0 w-1 md:w-2 h-full bg-gradient-to-b from-red-500 to-red-700" />
+                            <p className="text-sm md:text-lg text-gray-700 dark:text-gray-200 leading-relaxed pl-2 md:pl-4 first-letter:text-3xl md:first-letter:text-5xl first-letter:font-bold first-letter:mr-1 md:first-letter:mr-2 first-letter:text-red-700" style={{ textIndent: '1.5em' }}>
+                              {isExpanded ? text : truncatedText}
+                            </p>
+                            {text.length > 200 && (
+                              <button onClick={handleReadMoreToggle} className="text-red-500 hover:text-red-700 transition mt-1 md:mt-2 text-sm md:text-base">
+                                {isExpanded ? 'Read less' : 'Read more...'}
+                              </button>
+                            )}
+                          </div>
+                        </motion.div>
                       </div>
-                    </motion.div>
-                  </div>
-                  <motion.div
-                    initial={{ opacity: 0, x: 50 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    className="w-full md:w-96 flex items-center"
-                  >
-                    <div className="bg-gray-200 rounded-lg md:rounded-xl overflow-hidden aspect-square w-full">
-                      <img
-                        src={index === 0 ? photo1 : photo2}
-                        alt={`Image for content ${index + 1}`}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  </motion.div>
-                </>
-              ) : (
-                <>
-                  {/* Photo Left, Text Right */}
-                  <motion.div
-                    initial={{ opacity: 0, x: -50 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    className="w-full md:w-96 flex items-center"
-                  >
-                    <div className="bg-gray-200 rounded-lg md:rounded-xl overflow-hidden aspect-square w-full">
-                      <img
-                        src={index === 0 ? photo1 : photo2}
-                        alt={`Image for content ${index + 1}`}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  </motion.div>
-                  <div className="flex-1 space-y-3 md:space-y-6">
-                    <motion.div
-                      initial={{ opacity: 0, x: 50 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.2 }}
-                      className="group relative overflow-hidden"
-                    >
-                      <div className="bg-white dark:bg-gray-800 rounded-lg md:rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 p-4 md:p-8 border border-gray-100 dark:border-gray-700">
-                        <div className="absolute top-0 left-0 w-1 md:w-2 h-full bg-gradient-to-b from-red-500 to-red-700" />
-                        <p
-                          className="text-sm md:text-lg text-gray-700 dark:text-gray-200 leading-relaxed pl-2 md:pl-4 first-letter:text-3xl md:first-letter:text-5xl first-letter:font-bold first-letter:mr-1 md:first-letter:mr-2 first-letter:text-red-700"
-                          style={{ textIndent: '1.5em' }}
+                      <motion.div initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} className="w-full md:w-96 flex items-center">
+                        <div className="bg-gray-200 rounded-lg md:rounded-xl overflow-hidden aspect-square w-full">
+                          <img src={photo1} alt="Image for content 1" className="w-full h-full object-cover" />
+                        </div>
+                      </motion.div>
+                    </>
+                  ) : (
+                    <>
+                      {/* Photo Left, Text Right */}
+                      <motion.div initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} className="w-full md:w-96 flex items-center">
+                        <div className="bg-gray-200 rounded-lg md:rounded-xl overflow-hidden aspect-square w-full">
+                          <img src={photo2} alt="Image for content 2" className="w-full h-full object-cover" />
+                        </div>
+                      </motion.div>
+                      <div className="flex-1 space-y-3 md:space-y-6">
+                        <motion.div
+                          initial={{ opacity: 0, x: 50 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.2 }}
+                          className="group relative overflow-hidden"
                         >
-                          {isExpanded ? text : truncatedText}
-                        </p>
-                        {text.length > 200 && (
-                          <button
-                            onClick={handleReadMoreToggle}
-                            className="text-red-500 hover:text-red-700 transition mt-1 md:mt-2 text-sm md:text-base"
-                          >
-                            {isExpanded ? 'Read less' : 'Read more...'}
-                          </button>
-                        )}
+                          <div className="bg-white dark:bg-gray-800 rounded-lg md:rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 p-4 md:p-8 border border-gray-100 dark:border-gray-700">
+                            <div className="absolute top-0 left-0 w-1 md:w-2 h-full bg-gradient-to-b from-red-500 to-red-700" />
+                            <p className="text-sm md:text-lg text-gray-700 dark:text-gray-200 leading-relaxed pl-2 md:pl-4 first-letter:text-3xl md:first-letter:text-5xl first-letter:font-bold first-letter:mr-1 md:first-letter:mr-2 first-letter:text-red-700" style={{ textIndent: '1.5em' }}>
+                              {isExpanded ? text : truncatedText}
+                            </p>
+                            {text.length > 200 && (
+                              <button onClick={handleReadMoreToggle} className="text-red-500 hover:text-red-700 transition mt-1 md:mt-2 text-sm md:text-base">
+                                {isExpanded ? 'Read less' : 'Read more...'}
+                              </button>
+                            )}
+                          </div>
+                        </motion.div>
                       </div>
-                    </motion.div>
+                    </>
+                  )}
+                </div>
+              );
+            }else{
+              return (
+                <div className="group relative overflow-hidden">
+                  <div className="bg-white dark:bg-gray-800 rounded-lg md:rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 p-4 md:p-8 border border-gray-100 dark:border-gray-700">
+                    <div className="absolute top-0 left-0 w-1 md:w-2 h-full bg-gradient-to-b from-red-500 to-red-700" />
+                    <p className="text-sm md:text-lg text-gray-700 dark:text-gray-200 leading-relaxed pl-2 md:pl-4 first-letter:text-3xl md:first-letter:text-5xl first-letter:font-bold first-letter:mr-1 md:first-letter:mr-2 first-letter:text-red-700" style={{ textIndent: '1.5em' }}>
+                      {isExpanded ? text : truncatedText}
+                    </p>
+                    {text.length > 200 && (
+                      <button onClick={handleReadMoreToggle} className="text-red-500 hover:text-red-700 transition mt-1 md:mt-2 text-sm md:text-base">
+                        {isExpanded ? 'Read less' : 'Read more...'}
+                      </button>
+                    )}
                   </div>
-                </>
-              )}
-            </div>
-          );
+                </div>
+              );
+            }
         })}
       </div>
 
