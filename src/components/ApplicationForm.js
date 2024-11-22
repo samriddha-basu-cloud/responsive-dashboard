@@ -19,6 +19,7 @@ import ProgressBar from './ProgressBar';
 import PathwayProjections from './PathwayProjections';
 import ProjectionsModal from './ProjectionsModal';
 import ProjectionsToggleButton from './ProjectionsToggleButton';
+import GizLogo from '../assets/giz-logo.png';
 
 const ApplicationForm = () => {
   const [step, setStep] = useState(1);
@@ -189,7 +190,11 @@ const ApplicationForm = () => {
       )}
     {/* Mobile Header with Navigation Toggle */}
     <div className="md:hidden flex justify-between items-center p-4 bg-gray-200 dark:bg-gray-800">
-      <h2 className="text-xl font-bold">{projectName || 'Navigation'}</h2>
+      <div className="flex items-center space-x-4">
+          <img src={GizLogo} alt="GIZ Logo" className="h-8 w-auto" />
+          <span className="text-gray-400">|</span>
+          <h2 className="text-xl font-bold">{projectName || 'Navigation'}</h2>
+        </div>
       <button 
         onClick={() => setIsMobileNavOpen(!isMobileNavOpen)} 
         className="text-2xl"
@@ -262,7 +267,8 @@ const ApplicationForm = () => {
     {/* Desktop Navigation */}
     <div className="hidden md:block w-64 bg-gray-200 dark:bg-gray-800 fixed h-screen overflow-y-auto">
       <div className="p-6 flex flex-col items-start space-y-4 h-full">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+        <img src={GizLogo} alt="GIZ Logo" className="h-12 w-auto mx-auto" />
+        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2 ml-4">
           {projectName || 'Navigation'}
         </h2>
 
