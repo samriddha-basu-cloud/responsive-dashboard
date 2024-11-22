@@ -107,33 +107,49 @@ const Home = () => {
     );
   }
 
-  return (
-    <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
-      {/* Navbar */}
-      <nav className="bg-white dark:bg-gray-800 shadow-lg p-2 md:p-4">
-        <div className="container mx-auto flex justify-between items-center">
-          <div className="flex items-center">
-            <img src={gizLogo} alt="GIZ Logo" className="h-8 md:h-12 w-auto" />
-          </div>
-          <Link
-            to="/login"
-            className="px-4 py-1 md:px-6 md:py-2 text-sm md:text-base text-white rounded-lg bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 transition"
-          >
-            Take a Survey of your Project
-          </Link>
-        </div>
-      </nav>
+  
 
-      {/* Main Content */}
-      <div className="container mx-auto px-2 md:px-4 py-6 md:py-12">
-        {/* Enhanced Header */}
-        <motion.h1
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-2xl md:text-4xl font-extrabold text-center mb-6 md:mb-12 bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent py-1 md:py-2"
-        >
-          Integrated Food Systems and Agroecology Framework
-        </motion.h1>
+  return (
+  <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
+    {/* Navbar */}
+    <nav className="bg-white dark:bg-gray-800 shadow-lg p-2 md:p-4">
+      <div className="container mx-auto flex justify-between items-center">
+        <div className="flex items-center">
+          <img src={gizLogo} alt="GIZ Logo" className="h-8 md:h-12 w-auto" />
+        </div>
+      </div>
+    </nav>
+
+    {/* Main Content */}
+    <div className="container mx-auto px-2 md:px-4 py-6 md:py-12">
+      {/* Enhanced Header */}
+      <motion.h1
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="text-2xl md:text-4xl font-extrabold text-center mb-6 md:mb-12 bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent py-1 md:py-2"
+      >
+        Integrated Food Systems and Agroecology Framework
+      </motion.h1>
+
+      {/* Centered Link */}
+                        <div className="flex justify-center mb-6 md:mb-12">
+              <Link
+                to="/login"
+                className="px-6 py-3 md:px-8 md:py-4 text-lg md:text-xl text-white rounded-lg bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 transition transform hover:scale-105"
+                style={{
+                  animation: 'pop 1.5s infinite',
+                  '@keyframes pop': {
+                    '0%, 100%': { transform: 'scale(1)' },
+                    '50%': { transform: 'scale(1.1)' },
+                  },
+                }}
+              >
+                Take a Survey of your Project
+              </Link>
+            </div>
+      
+      
+
 
         {/* Enhanced Content Sections */}
         <div className="container mx-auto p-2 md:p-4 space-y-8 md:space-y-12">
@@ -141,7 +157,7 @@ const Home = () => {
             const isExpanded = readMore[index] || false;
             const handleReadMoreToggle = () => toggleReadMore(index);
             const truncatedText = text.length > 1000 ? `${text.slice(0, 1000)}...` : text;
-
+        
             if (index < 2) {
               // Only first two sections have images
               return (
@@ -172,18 +188,18 @@ const Home = () => {
                           </div>
                         </motion.div>
                       </div>
-                      <motion.div initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} className="w-full md:w-96 flex items-center">
-                        <div className="bg-gray-200 rounded-lg md:rounded-xl overflow-hidden aspect-square w-full">
-                          <img src={photo1} alt="Image for content 1" className="w-full h-full object-cover" />
+                      <motion.div initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} className="w-full md:w-auto flex items-center">
+                        <div className="bg-gray-200 rounded-lg md:rounded-xl overflow-hidden w-full h-auto">
+                          <img src={photo1} alt="Image for content 1" className="w-full h-full object-contain" />
                         </div>
                       </motion.div>
                     </>
                   ) : (
                     <>
                       {/* Photo Left, Text Right */}
-                      <motion.div initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} className="w-full md:w-96 flex items-center">
-                        <div className="bg-gray-200 rounded-lg md:rounded-xl overflow-hidden aspect-square w-full">
-                          <img src={photo2} alt="Image for content 2" className="w-full h-full object-cover" />
+                      <motion.div initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} className="w-full md:w-auto flex items-center">
+                        <div className="bg-gray-200 rounded-lg md:rounded-xl overflow-hidden w-full h-auto">
+                          <img src={photo2} alt="Image for content 2" className="w-full h-full object-contain" />
                         </div>
                       </motion.div>
                       <div className="flex-1 space-y-3 md:space-y-6">
@@ -210,7 +226,7 @@ const Home = () => {
                   )}
                 </div>
               );
-            }else{
+            } else {
               return (
                 <div className="group relative overflow-hidden">
                   <div className="bg-white dark:bg-gray-800 rounded-lg md:rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 p-4 md:p-8 border border-gray-100 dark:border-gray-700">
@@ -227,86 +243,86 @@ const Home = () => {
                 </div>
               );
             }
-        })}
-      </div>
-
-      {/* Enhanced Tables Section */}
-      <div className="space-y-6 md:space-y-12">
-        <div className="flex overflow-x-auto mb-3 md:mb-6 pb-1 md:pb-2">
-          {tables.map((table, index) => (
-            <button
-              key={index}
-              onClick={() => setActiveTab(index)}
-              className={`px-4 py-2 md:px-6 md:py-3 text-xs md:text-sm font-medium rounded-lg mr-2 md:mr-4 transition-all duration-200
-                ${
-                  activeTab === index
-                    ? 'bg-gradient-to-r from-red-500 to-red-700 text-white shadow-lg'
-                    : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-red-50 dark:hover:bg-red-900/20'
-                }`}
-            >
-              {table.title}
-            </button>
-          ))}
+          })}
         </div>
 
-        {tables.map((table, index) => (
-          <motion.div
-            key={index}
-            initial={false}
-            animate={{
-              opacity: activeTab === index ? 1 : 0,
-              x: activeTab === index ? 0 : 20,
-            }}
-            className={`${activeTab === index ? 'block' : 'hidden'}`}
-          >
-            <div className="bg-white dark:bg-gray-800 rounded-lg md:rounded-xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-700">
-              <div className="overflow-x-auto">
-                <table className="min-w-full text-sm md:text-base">
-                  <thead>
-                    <tr className="bg-gradient-to-r from-red-500 to-red-700">
-                      {table.headers.map((header, i) => (
-                        <th
-                          key={i}
-                          className="px-4 md:px-6 py-2 md:py-4 text-left text-white font-semibold tracking-wider"
-                        >
-                          {header}
-                        </th>
-                      ))}
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                    {table.rows.map((row, i) => (
-                      <tr
-                        key={i}
-                        className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150"
-                      >
-                        {row.map((cell, j) => (
-                          <td
-                            key={j}
-                            className="px-4 md:px-6 py-2 md:py-4 text-gray-700 dark:text-gray-200"
-                          >
-                            {cell}
-                          </td>
-                        ))}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+            {/* Enhanced Tables Section */}
+            <div className="space-y-6 md:space-y-12">
+              <div className="flex justify-center mb-3 md:mb-6 pb-1 md:pb-2">
+                {tables.map((table, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setActiveTab(index)}
+                    className={`px-6 py-3 md:px-8 md:py-4 text-sm md:text-lg font-medium rounded-lg mr-2 md:mr-4 transition-all duration-200
+                      ${
+                        activeTab === index
+                          ? 'bg-gradient-to-r from-red-500 to-red-700 text-white shadow-lg'
+                          : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-red-50 dark:hover:bg-red-900/20'
+                      }`}
+                  >
+                    {table.title}
+                  </button>
+                ))}
               </div>
+            
+              {tables.map((table, index) => (
+                <motion.div
+                  key={index}
+                  initial={false}
+                  animate={{
+                    opacity: activeTab === index ? 1 : 0,
+                    x: activeTab === index ? 0 : 20,
+                  }}
+                  className={`${activeTab === index ? 'block' : 'hidden'}`}
+                >
+                  <div className="bg-white dark:bg-gray-800 rounded-lg md:rounded-xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-700">
+                    <div className="overflow-x-auto">
+                      <table className="min-w-full text-sm md:text-base">
+                        <thead>
+                          <tr className="bg-gradient-to-r from-red-500 to-red-700">
+                            {table.headers.map((header, i) => (
+                              <th
+                                key={i}
+                                className="px-4 md:px-6 py-2 md:py-4 text-center text-white font-semibold tracking-wider text-lg md:text-xl"
+                              >
+                                {header}
+                              </th>
+                            ))}
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
+                          {table.rows.map((row, i) => (
+                            <tr
+                              key={i}
+                              className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150"
+                            >
+                              {row.map((cell, j) => (
+                                <td
+                                  key={j}
+                                  className="px-4 md:px-6 py-2 md:py-4 text-gray-700 dark:text-gray-200 text-center text-base md:text-lg"
+                                >
+                                  {cell}
+                                </td>
+                              ))}
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
             </div>
-          </motion.div>
-        ))}
-      </div>
     </div>
 
-    <div className="mt-6 md:mt-12 text-center">
-      <Link
-        to="/login"
-        className="inline-block px-6 py-2 md:px-8 md:py-3 text-sm md:text-base text-white rounded-lg bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 transition transform hover:scale-105"
-      >
-        Take a Survey of your Project
-      </Link>
-    </div>
+                <div className="mt-6 md:mt-12 text-center">
+          <Link
+            to="/login"
+            className="inline-block px-8 py-4 md:px-10 md:py-5 text-lg md:text-xl text-white rounded-lg bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 transition transform hover:scale-105 animate-bounce"
+          >
+            Take a Survey of your Project
+          </Link>
+        </div>
 
     {/* Footer */}
     <footer className="bg-gray-800 text-white mt-8 md:mt-16 py-4 md:py-8">
@@ -354,3 +370,4 @@ const Home = () => {
 };
 
 export default Home;
+
