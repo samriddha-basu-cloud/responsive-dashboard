@@ -317,7 +317,7 @@ const ApplicationForm = () => {
     </div>
 
     {/* Main Content Area */}
-    <div className="flex-grow md:ml-64 p-4 md:p-6">
+    <div className="flex-grow md:ml-64 p-4 md:p-6 md:mt-12 pt-4">
       <ProgressBar progress={progress} />
       
 

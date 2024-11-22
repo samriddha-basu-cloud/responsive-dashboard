@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Dashboard from './pages/Dashboard';
 import ApplicationForm from './components/ApplicationForm';
 import Profile from './pages/Profile';
@@ -33,13 +33,20 @@ const Star = ({ className }) => (
 
 const ThemeToggle = () => {
   const { isDarkMode, toggleTheme } = useTheme();
+  const location = useLocation();
+
+  // Determine position based on current route
+  const isApplicationFormRoute = location.pathname === '/application-form';
+  const positionClasses = isApplicationFormRoute
+    ? 'top-3 right-12'
+    : 'bottom-6 right-6';
 
   return (
-    <div className="fixed bottom-4 right-4 z-50">
+    <div className={`fixed ${positionClasses} z-50`}>
       <button 
         onClick={toggleTheme}
         className={`
-          relative w-12 h-12 rounded-full 
+          relative md:w-12 md:h-12 w-10 h-10 rounded-full 
           ${isDarkMode 
             ? 'bg-gradient-to-r from-gray-800 to-gray-700' 
             : 'bg-gradient-to-r from-[#FFD700] to-[#FFA500]'}
@@ -52,9 +59,9 @@ const ThemeToggle = () => {
         {/* Stars for Dark Mode */}
         {isDarkMode && (
           <>
-            <Star className="w-3 h-3 text-white top-2 left-3 animate-twinkle opacity-70" />
-            <Star className="w-2 h-2 text-white bottom-3 right-4 animate-twinkle-delay opacity-50" />
-            <Star className="w-3 h-3 text-white top-4 right-3 animate-twinkle-slow opacity-60" />
+            <Star className="w-2 h-1 text-white top-4 left-6 animate-twinkle opacity-70" />
+            <Star className="w-1 h-2 text-white bottom-5 right-1 animate-twinkle-delay opacity-50" />
+            <Star className="w-1 h-2 text-white top-1 right-3 animate-twinkle-slow opacity-60" />
           </>
         )}
 
