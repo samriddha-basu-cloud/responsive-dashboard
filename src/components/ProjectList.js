@@ -16,6 +16,8 @@ const ProjectList = () => {
   const [editProjectId, setEditProjectId] = useState(null);
   const [deleteProjectId, setDeleteProjectId] = useState(null);
   const [projects, setProjects] = useState([]);
+  const [newProjectIds, setNewProjectIds] = useState(new Set());
+  const [clickedButtons, setClickedButtons] = useState(new Set());
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -38,8 +40,9 @@ const ProjectList = () => {
   const handleAddNewProject = async () => {
     if (!projectName || !projectDescription) return;
 
+    const newProjectId = uuidv4();
     const newProject = {
-      id: uuidv4(),
+      id: newProjectId,
       name: projectName,
       details: projectDescription,
       progress: 0,
@@ -53,6 +56,7 @@ const ProjectList = () => {
       });
 
       setProjects((prevProjects) => [...prevProjects, newProject]);
+      setNewProjectIds(prev => new Set(prev).add(newProjectId));
     }
 
     setProjectName('');
@@ -61,9 +65,57 @@ const ProjectList = () => {
   };
 
   const handleOpenApplication = (projectId) => {
+    setClickedButtons(prev => new Set(prev).add(projectId));
     navigate('/application-form', { state: { projectId } });
   };
 
+const SurveyButton = ({ project }) => {
+  const isNew = newProjectIds.has(project.id);
+  const hasBeenClicked = clickedButtons.has(project.id);
+  const [showTooltip, setShowTooltip] = useState(isNew);
+
+  useEffect(() => {
+    if (isNew) {
+      const timer = setTimeout(() => {
+        setShowTooltip(false);
+      }, 10000);
+      return () => clearTimeout(timer);
+    }
+  }, [isNew]);
+
+  return (
+    <div className="relative group">
+      <button
+        onClick={() => handleOpenApplication(project.id)}
+        className={`flex-1 sm:flex-none px-4 py-2 rounded-md text-white flex items-center justify-center space-x-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 transition-all duration-300 relative overflow-hidden ${
+          isNew && !hasBeenClicked 
+            ? 'animate-golden-pulse' 
+            : ''
+        }`}
+        style={{
+          background: 'linear-gradient(to right, #C31A07, #9E1305)',
+          boxShadow: '0 4px 14px rgba(195, 26, 7, 0.4)',
+        }}
+      >
+        {/* Golden Glow Effect */}
+        {isNew && !hasBeenClicked && (
+          <>
+            <span className="absolute inset-0 bg-gradient-to-r from-yellow-400 via-gold-500 to-yellow-600 opacity-30 animate-golden-glow"></span>
+            <span className="absolute inset-0 border-1 border-yellow-300 rounded-md animate-border-pulse"></span>
+          </>
+        )}
+        <FaRegStickyNote className="h-5 w-5 relative z-10" />
+        <span className="hidden sm:inline ml-2 relative z-10">Survey Form</span>
+      </button>
+      {showTooltip && (
+        <div className="absolute bottom-full left-2/3 transform -translate-x-1/2 mb-2 px-3 py-1 bg-gray-900 text-white text-sm rounded-lg whitespace-nowrap z-50">
+          Please, Fill the survey form for Projections
+          <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-1/2 rotate-45 w-2 h-2 bg-gray-900"></div>
+        </div>
+      )}
+    </div>
+  );
+};
   const handleDeleteProject = async () => {
     const user = auth.currentUser;
     if (user && deleteProjectId) {
@@ -126,6 +178,7 @@ const ProjectList = () => {
     setEditProjectId(null);
     setIsEditModalOpen(false);
   };
+  
 
   const filteredProjects = projects.filter((project) =>
     project.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -182,18 +235,8 @@ const ProjectList = () => {
             <div className="flex-1">
               <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-gray-100">{project.name}</h3>
               <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{project.details}</p>
-                <div className="flex flex-wrap items-center gap-2 mt-4">
-                  <button
-                    onClick={() => handleOpenApplication(project.id)}
-                    className="flex-1 sm:flex-none px-4 py-2 rounded-md text-white flex items-center justify-center space-x-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 transition-all duration-300"
-                    style={{
-                      background: 'linear-gradient(to right, #C31A07, #9E1305)',
-                      boxShadow: '0 4px 14px rgba(195, 26, 7, 0.4)',
-                    }}
-                  >
-                    <FaRegStickyNote className="h-5 w-5" />
-                    <span className="hidden sm:inline ml-2">Survey Form</span>
-                  </button>
+              <div className="flex flex-wrap items-center gap-2 mt-4">
+                <SurveyButton project={project} />
                   
                   {/* Edit Button - Icon on mobile, Icon+text on desktop */}
                   <button
