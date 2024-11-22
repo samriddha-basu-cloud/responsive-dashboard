@@ -3,7 +3,7 @@ import { auth, db } from '../firebase';
 import { doc, getDoc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { v4 as uuidv4 } from 'uuid';
 import { FiTrash, FiEdit } from 'react-icons/fi';
-import { FaUser } from 'react-icons/fa';
+import { FaRegStickyNote } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 
 const ProjectList = () => {
@@ -133,6 +133,7 @@ const ProjectList = () => {
 
   return (
     <div className="p-4 sm:p-6 bg-white dark:bg-gray-800 rounded-lg shadow-lg">
+      {/* Search and Add Project section remains the same */}
       <div className="flex flex-col sm:flex-row items-center justify-between mb-4">
         <h2 className="text-xl sm:text-2xl font-bold mb-2 sm:mb-0">Projects</h2>
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center space-y-2 sm:space-y-0 sm:space-x-2 w-full sm:w-auto">
@@ -150,7 +151,7 @@ const ProjectList = () => {
             <input
               type="text"
               placeholder="Search projects..."
-              className="pl-10 pr-4 py-2 w-full sm:w-auto border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-600 dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600"
+              className="pl-10 pr-4 py-2 w-full sm:w-auto border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-600 dark:bg-gray-700 dark:text-gray-100 dark:border-gray-600"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -181,64 +182,94 @@ const ProjectList = () => {
             <div className="flex-1">
               <h3 className="text-lg sm:text-xl font-semibold text-gray-900 dark:text-gray-100">{project.name}</h3>
               <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">{project.details}</p>
-              <div className="flex flex-wrap items-center gap-2 mt-4">
-                <button
-                  onClick={() => handleOpenApplication(project.id)}
-                  className="flex-1 sm:flex-none px-4 py-2 rounded-md text-white flex items-center space-x-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 transition-all duration-300"
-                  style={{
-                    background: 'linear-gradient(to right, #C31A07, #9E1305)',
-                    boxShadow: '0 4px 14px rgba(195, 26, 7, 0.4)',
-                  }}
-                >
-                  <FaUser className="h-5 w-5" />
-                  <span>Profile Form</span>
-                </button>
-                <button
-                  onClick={() => handleEditProject(project)}
-                  className="flex-1 sm:flex-none px-4 py-2 rounded-md text-white flex items-center space-x-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 transition-all duration-300"
-                  style={{
-                    background: 'linear-gradient(to right, #C31A07, #9E1305)',
-                    boxShadow: '0 4px 14px rgba(195, 26, 7, 0.4)',
-                  }}
-                >
-                  <FiEdit className="h-5 w-5" />
-                  <span>Edit</span>
-                </button>
-                <button
-                  onClick={() => {
-                    setDeleteProjectId(project.id);
-                    setIsDeleteDialogOpen(true);
-                  }}
-                  className="flex-1 sm:flex-none px-4 py-2 rounded-md text-white flex items-center space-x-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 transition-all duration-300"
-                  style={{
-                    background: 'linear-gradient(to right, #C31A07, #9E1305)',
-                    boxShadow: '0 4px 14px rgba(195, 26, 7, 0.4)',
-                  }}
-                >
-                  <FiTrash className="h-5 w-5" />
-                  <span>Delete</span>
-                </button>
-              </div>
+                <div className="flex flex-wrap items-center gap-2 mt-4">
+                  <button
+                    onClick={() => handleOpenApplication(project.id)}
+                    className="flex-1 sm:flex-none px-4 py-2 rounded-md text-white flex items-center justify-center space-x-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 transition-all duration-300"
+                    style={{
+                      background: 'linear-gradient(to right, #C31A07, #9E1305)',
+                      boxShadow: '0 4px 14px rgba(195, 26, 7, 0.4)',
+                    }}
+                  >
+                    <FaRegStickyNote className="h-5 w-5" />
+                    <span className="hidden sm:inline ml-2">Survey Form</span>
+                  </button>
+                  
+                  {/* Edit Button - Icon on mobile, Icon+text on desktop */}
+                  <button
+                    onClick={() => handleEditProject(project)}
+                    className="flex-1 sm:flex-none px-4 py-2 rounded-md text-white flex items-center justify-center space-x-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 transition-all duration-300"
+                    style={{
+                      background: 'linear-gradient(to right, #C31A07, #9E1305)',
+                      boxShadow: '0 4px 14px rgba(195, 26, 7, 0.4)',
+                    }}
+                  >
+                    <FiEdit className="h-5 w-5"/>
+                    <span className="hidden sm:inline ml-2">Edit</span>
+                  </button>
+
+                  {/* Delete Button - Icon on mobile, Icon+text on desktop */}
+                  <button
+                    onClick={() => {
+                      setDeleteProjectId(project.id);
+                      setIsDeleteDialogOpen(true);
+                    }}
+                    className="flex-1 sm:flex-none px-4 py-2 rounded-md text-white flex items-center justify-center space-x-2 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-600 transition-all duration-300"
+                    style={{
+                      background: 'linear-gradient(to right, #C31A07, #9E1305)',
+                      boxShadow: '0 4px 14px rgba(195, 26, 7, 0.4)',
+                    }}
+                  >
+                    <FiTrash className="h-5 w-5" />
+                    <span className="hidden sm:inline ml-2">Delete</span>
+                  </button>
+                </div>
             </div>
 
-            <div className="flex flex-col items-center sm:ml-6 mt-4 sm:mt-0">
-              <div className="flex items-center space-x-2">
-                <div className="w-4 h-4 bg-gradient-to-r from-red-500 to-red-700 rounded-full shadow-md"></div>
-                <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Application Started</span>
+            {/* Progress Timeline - Vertical on desktop, horizontal on mobile */}
+            <div className="flex flex-col sm:ml-6 mt-4 sm:mt-0">
+              {/* Mobile Timeline (Horizontal) */}
+              <div className="flex sm:hidden items-center w-full justify-between px-4">
+                <div className="flex flex-col items-center">
+                  <div className="w-4 h-4 bg-gradient-to-r from-red-500 to-red-700 rounded-full shadow-md"></div>
+                  <span className="text-xs font-medium text-gray-600 dark:text-gray-400 mt-1">Started</span>
+                </div>
+                
+                <div className="relative flex-1 mx-4 h-0.5 bg-gray-300 dark:bg-gray-600">
+                  <div
+                    className="absolute top-0 left-0 h-0.5 bg-gradient-to-r from-red-500 to-red-700 rounded-full shadow"
+                    style={{
+                      width: `${project.progress}%`,
+                    }}
+                  ></div>
+                </div>
+                
+                <div className="flex flex-col items-center">
+                  <div className="w-4 h-4 bg-gradient-to-r from-red-500 to-red-700 rounded-full shadow-md"></div>
+                  <span className="text-xs font-medium text-gray-600 dark:text-gray-400 mt-1">Completed</span>
+                </div>
               </div>
-              <div className="relative w-0.5 h-12 bg-gray-300 dark:bg-gray-600 my-2">
-                <div
-                  className="absolute top-0 left-1/2 transform -translate-x-1/2 w-1 bg-gradient-to-b from-red-500 to-red-700 rounded-full shadow"
-                  style={{
-                    height: `${project.progress}%`,
-                  }}
-                ></div>
+              
+              {/* Desktop Timeline (Vertical) */}
+              <div className="hidden sm:flex flex-col items-center">
+                <div className="flex items-center space-x-2">
+                  <div className="w-4 h-4 bg-gradient-to-r from-red-500 to-red-700 rounded-full shadow-md"></div>
+                  <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Application Started</span>
+                </div>
+                <div className="relative w-0.5 h-12 bg-gray-300 dark:bg-gray-600 my-2">
+                  <div
+                    className="absolute top-0 left-1/2 transform -translate-x-1/2 w-1 bg-gradient-to-b from-red-500 to-red-700 rounded-full shadow"
+                    style={{
+                      height: `${project.progress}%`,
+                    }}
+                  ></div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="w-4 h-4 bg-gradient-to-r from-red-500 to-red-700 rounded-full shadow-md"></div>
+                  <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Application Completed</span>
+                </div>
               </div>
-              <div className="flex items-center space-x-2">
-                <div className="w-4 h-4 bg-gradient-to-r from-red-500 to-red-700 rounded-full shadow-md"></div>
-                <span className="text-sm font-medium text-gray-600 dark:text-gray-400">Application Completed</span>
-              </div>
-              <span className="text-sm font-medium text-gray-600 dark:text-gray-400 mt-2">
+              <span className="text-sm font-medium text-gray-600 dark:text-gray-400 mt-2 text-center">
                 {project.progress}%
               </span>
             </div>
