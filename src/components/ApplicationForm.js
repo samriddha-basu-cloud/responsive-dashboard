@@ -17,6 +17,8 @@ import Pathway9 from './Pathway9';
 import Pathway10 from './Pathway10';
 import ProgressBar from './ProgressBar';
 import PathwayProjections from './PathwayProjections';
+import ProjectionsModal from './ProjectionsModal';
+import ProjectionsToggleButton from './ProjectionsToggleButton';
 
 const ApplicationForm = () => {
   const [step, setStep] = useState(1);
@@ -28,6 +30,7 @@ const ApplicationForm = () => {
   const { projectId } = location.state || {};
   const [completedSteps, setCompletedSteps] = useState([]);
   const [projectName, setProjectName] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchProjectData = async () => {
@@ -166,6 +169,24 @@ const ApplicationForm = () => {
 
   return (
   <div className="flex flex-col min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100">
+
+    {completedSteps.includes(3) && (
+        <>
+          <ProjectionsToggleButton 
+            onClick={() => setIsModalOpen(true)}
+          />
+          
+          <ProjectionsModal 
+            isOpen={isModalOpen} 
+            onClose={() => setIsModalOpen(false)}
+          >
+            <PathwayProjections 
+              projectId={projectId} 
+              trigger={projectionTrigger} 
+            />
+          </ProjectionsModal>
+        </>
+      )}
     {/* Mobile Header with Navigation Toggle */}
     <div className="md:hidden flex justify-between items-center p-4 bg-gray-200 dark:bg-gray-800">
       <h2 className="text-xl font-bold">{projectName || 'Navigation'}</h2>
@@ -298,6 +319,7 @@ const ApplicationForm = () => {
     {/* Main Content Area */}
     <div className="flex-grow md:ml-64 p-4 md:p-6">
       <ProgressBar progress={progress} />
+      
 
       <div className="overflow-x-auto mb-4 px-2 md:px-6 mt-4">
         <div className="flex space-x-2 md:space-x-6 justify-center pb-4">
@@ -334,7 +356,7 @@ const ApplicationForm = () => {
       )}
       {step > 2 && step <= totalSteps && renderPathwayComponent()}
 
-      {/* Button to Toggle PathwayProjections */}
+      {/* Button to Toggle PathwayProjections
         {completedSteps.includes(3) && (
           <div className="mt-4">
             <button
@@ -345,9 +367,9 @@ const ApplicationForm = () => {
             </button>
           </div>
         )}
-
+        */}
       {/* Render PathwayProjections */}
-      {showProjections && <PathwayProjections projectId={projectId} trigger={projectionTrigger} />}
+      {/* {showProjections && <PathwayProjections projectId={projectId} trigger={projectionTrigger} />}  */}
     </div>
   </div>
 );

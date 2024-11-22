@@ -35,14 +35,14 @@ const ThemeToggle = () => {
   const { isDarkMode, toggleTheme } = useTheme();
 
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <div className="fixed bottom-4 right-4 z-50">
       <button 
         onClick={toggleTheme}
         className={`
-          relative w-16 h-16 rounded-full 
+          relative w-12 h-12 rounded-full 
           ${isDarkMode 
             ? 'bg-gradient-to-r from-gray-800 to-gray-700' 
-            : 'bg-gradient-to-r from-[#C31A07] to-[#9E1305]'}
+            : 'bg-gradient-to-r from-[#FFD700] to-[#FFA500]'}
           shadow-lg transition-all duration-500 ease-in-out
           flex items-center justify-center
           overflow-hidden
