@@ -3,6 +3,8 @@ import { FaAngleDoubleLeft, FaAngleDoubleRight, FaUser, FaInfoCircle, FaBars, Fa
 import { Link, useLocation } from 'react-router-dom';
 import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { db, auth } from '../firebase';
+// import TourGuide from './TourGuide';
+import TourGuideOverlay from './TourGuideOverlay';
 import RespondentDetails from './RespondentDetails';
 import ProjectInformation from './ProjectInformation';
 import Pathway1 from './Pathway1';
@@ -21,11 +23,14 @@ import ProjectionsModal from './ProjectionsModal';
 import ProjectionsToggleButton from './ProjectionsToggleButton';
 import GizLogo from '../assets/giz-logo.png';
 import { useNavigate } from 'react-router-dom';
+import TourGuideOverlayMobile from './TourGuideOverlayMobile';
 
 
 const ApplicationForm = () => {
+  const [isTourOpen, setIsTourOpen] = useState(true);
   const [step, setStep] = useState(1);
   const [showProjections, setShowProjections] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const [projectionTrigger, setProjectionTrigger] = useState(0); // NEW
   const totalSteps = 12;
@@ -171,9 +176,29 @@ const ApplicationForm = () => {
     }
   };
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768); // Adjust breakpoint as needed
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
 
   return (
   <div className="flex flex-col min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100">
+      {isTourOpen &&
+        (isMobile ? (
+          <TourGuideOverlayMobile onClose={() => setIsTourOpen(false)} />
+        ) : (
+          <TourGuideOverlay onClose={() => setIsTourOpen(false)} />
+        ))}
+  <div className="flex flex-col min-h-screen bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-100">
+
+    {/* <TourGuide /> */}
 
     {completedSteps.includes(3) && (
         <>
@@ -391,6 +416,7 @@ const ApplicationForm = () => {
       {/* Render PathwayProjections */}
       {/* {showProjections && <PathwayProjections projectId={projectId} trigger={projectionTrigger} />}  */}
     </div>
+  </div>
   </div>
 );
 };
