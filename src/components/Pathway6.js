@@ -119,8 +119,8 @@ const Pathway6 = ({ onNext, onBack, projectId }) => {
   return (
     <div className="p-4 sm:p-6 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 rounded-lg shadow-md">
       <h1 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Pathway-6: Food Consumption Behaviour</h1>
-      <p className="mb-4 sm:mb-6 text-xs sm:text-sm text-gray-500 dark:text-gray-400">
-        If consumer behaviour positively reacts to the more sustainable and nutritious food supply, diets will be improved in quality, quantity, diversity, safety, and adequacy – either directly through consumption of own production or indirectly through savings from less external input or incomes generated in the food supply chain or through economic diversification.
+             <p className="mb-6 sm:mb-8 text-lg sm:text-xl text-gray-700 dark:text-gray-300 p-6 rounded-xl bg-gray-200 dark:bg-gray-800 leading-relaxed tracking-wide shadow-[inset_6px_6px_12px_#c2c2c2,inset_-6px_-6px_12px_#ffffff] dark:shadow-[inset_6px_6px_12px_#404040,inset_-6px_-6px_12px_#606060] font-serif font-bold">
+        <span className="text-red-500 italic">Def.</span> If the consumer behaviour positively reacts to the more sustainable and nutritious food supply, diets will be improved in quality, quantity, diversity, safety and adequacy – either directly through the consumption of own production or indirectly through savings from less external input or incomes that are generated in the food supply chain or through economic diversification.
       </p>
 
       {/* Questions for Pathway 6 */}

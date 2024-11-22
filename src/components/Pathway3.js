@@ -119,9 +119,21 @@ const Pathway3 = ({ onNext, onBack, projectId }) => {
   return (
     <div className="p-4 sm:p-6 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 rounded-lg shadow-md">
       <h1 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Pathway-3: Food Supply Chain</h1>
-      <p className="mb-4 sm:mb-6 text-xs sm:text-sm text-gray-500 dark:text-gray-400">
-        If in addition to primary production, storage, trade, packaging, and processing, retail and marketing of food also follow the principles of recycling and reduction of external inputs, the whole food supply chain will be more sustainable...
-      </p>
+                     <p className="mb-6 sm:mb-8 text-lg sm:text-xl text-gray-700 dark:text-gray-300 p-6 rounded-xl bg-gray-200 dark:bg-gray-800 leading-relaxed tracking-wide shadow-[inset_6px_6px_12px_#c2c2c2,inset_-6px_-6px_12px_#ffffff] dark:shadow-[inset_6px_6px_12px_#404040,inset_-6px_-6px_12px_#606060] font-serif font-bold">
+            <span className="text-red-500 italic">Def.</span> If in addition to the primary production, storage and trade, packaging and processing, retail and marketing of food also follow the principles of recycling and reduction of external inputs and will ensure food quality and safety while preventing food losses, then the whole food supply chain will be more sustainable. Markets need to ensure physical access to acceptable and affordable food (economic access) for those consumers who do not produce themselves. Appropriate information, guidelines and advertising can and must be designed to support this connectivity and fairness as well as the functioning of markets. A proactive approach to connectivity links producers and consumers both in rural areas and from rural to urban areas and ensures proximity and confidence between them:
+            <span className="block mt-2">
+              <ol className="list-decimal list-inside ml-4">
+                <li className="ml-4">through promotion of fair and short distribution networks and market access</li>
+                <li className="ml-4">by re-embedding food systems into local economies.</li>
+              </ol>
+            </span>
+          </p>
+          
+          <style jsx>{`
+            ol.list-decimal {
+              list-style-type: lower-roman;
+            }
+          `}</style>
 
       {/* Questions for Pathway 3 */}
       <h2 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">Principle-1: Storage and Trade</h2>

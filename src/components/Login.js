@@ -3,6 +3,7 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase';
 import { useNavigate, Link } from 'react-router-dom';
 import Ripple from './Ripple';
+import GizLogo from '../assets/giz-logo.png';
 
 const ErrorDialog = ({ message, onClose }) => {
   useEffect(() => {
@@ -105,8 +106,9 @@ const Login = () => {
       >
         <div className="absolute inset-0 bg-gradient-to-br from-red-500/10 to-red-700/10 rounded-2xl pointer-events-none"></div>
         
-        <div className="relative">
-          <h2 className="text-3xl md:text-4xl font-bold mb-2 text-gray-800 dark:text-white text-center">Welcome Back</h2>
+        <div className="relative text-center">
+          <img src={GizLogo} alt="GIZ Logo" className="h-12 w-auto mx-auto mb-4" />
+          <h2 className="text-2xl md:text-3xl font-bold mb-2 text-gray-800 dark:text-white">Welcomes You Back</h2>
           <p className="text-center text-gray-600 dark:text-gray-400 mb-8">Sign in to your account</p>
 
           <div className="space-y-6">

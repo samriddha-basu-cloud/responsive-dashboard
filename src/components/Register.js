@@ -5,6 +5,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import { auth, db } from '../firebase';
 import { FaCheckCircle } from 'react-icons/fa';
 import Ripple from './Ripple';
+import GizLogo from '../assets/giz-logo.png';
 
 const ErrorDialog = ({ message, onClose }) => {
   useState(() => {
@@ -168,6 +169,7 @@ const Register = () => {
         className="relative w-full max-w-md bg-white/80 dark:bg-gray-800/80 backdrop-blur-lg p-8 md:p-10 rounded-2xl shadow-2xl z-10"
       >
         <div className="absolute inset-0 bg-gradient-to-br from-red-500/10 to-red-700/10 rounded-2xl pointer-events-none"></div>
+        <img src={GizLogo} alt="GIZ Logo" className="h-12 w-auto mx-auto mb-4" />
         <h2 className="text-3xl font-bold text-gray-800 dark:text-white mb-4 text-center">Create an Account</h2>
 
         <div className="space-y-6">

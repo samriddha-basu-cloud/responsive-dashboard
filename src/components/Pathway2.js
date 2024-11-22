@@ -119,8 +119,8 @@ const Pathway2 = ({ onNext, onBack, projectId }) => {
   return (
     <div className="p-4 sm:p-6 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 rounded-lg shadow-md">
       <h1 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Pathway-2: Agroecosystems' Synergy</h1>
-      <p className="mb-4 sm:mb-6 text-xs sm:text-sm text-gray-500 dark:text-gray-400">
-        If positive ecological interaction, integration and complementarity among the elements of agroecosystems (animals, crops, trees, soil, and water) with a landscape approach can create synergies, then the effects for sustainable food supply will be even further enhanced.
+      <p className="mb-6 sm:mb-8 text-lg sm:text-xl text-gray-700 dark:text-gray-300 p-6 rounded-xl bg-gray-200 dark:bg-gray-800 leading-relaxed tracking-wide shadow-[inset_6px_6px_12px_#c2c2c2,inset_-6px_-6px_12px_#ffffff] dark:shadow-[inset_6px_6px_12px_#404040,inset_-6px_-6px_12px_#606060] font-serif font-bold">
+        <span className="text-red-500 italic">Def.</span> If positive ecological interaction, integration and complementarity among the elements of agroecosystems (animals, crops, trees, soil and water) with a landscape approach can create synergies, then the effects for sustainable food supply will be even further enhanced. 
       </p>
 
       <h2 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">Principle-1: Synergies</h2>

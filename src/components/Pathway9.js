@@ -154,11 +154,8 @@ const Pathway9 = ({ onNext, onBack, projectId }) => {
       <h1 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">
         Pathway-9: Support Systems – Agroecology Adoption
       </h1>
-      <p className="mb-4 sm:mb-6 text-xs sm:text-sm text-gray-500 dark:text-gray-400">
-        If other systems supporting food production/the food supply chains, such as economic systems (including
-        agriculture and agribusiness) and energy systems, also apply the 13 principles of agroecology, then the
-        transformative effects on food systems will be even stronger.
-      </p>
+       <p className="mb-6 sm:mb-8 text-lg sm:text-xl text-gray-700 dark:text-gray-300 p-6 rounded-xl bg-gray-200 dark:bg-gray-800 leading-relaxed tracking-wide shadow-[inset_6px_6px_12px_#c2c2c2,inset_-6px_-6px_12px_#ffffff] dark:shadow-[inset_6px_6px_12px_#404040,inset_-6px_-6px_12px_#606060] font-serif font-bold">
+If other systems supporting food production/the food supply chains, e.g., economic systems (including agriculture and agribusiness) and energy systems, also apply the 13 principles of agroecology, then the transformative effects on food systems will even be stronger.      </p>
 
       {/* Questions for Pathway 9 */}
       <h2 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">

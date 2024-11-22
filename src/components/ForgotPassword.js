@@ -4,6 +4,7 @@ import { auth, db } from '../firebase'; // Firestore instance
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { Link } from 'react-router-dom';
 import Ripple from './Ripple';
+import GizLogo from '../assets/giz-logo.png';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');
@@ -59,6 +60,7 @@ const ForgotPassword = () => {
         <div className="absolute inset-0 bg-gradient-to-br from-red-500/10 to-red-700/10 rounded-2xl pointer-events-none"></div>
         
         <div className="relative">
+          <img src={GizLogo} alt="GIZ Logo" className="h-12 w-auto mx-auto mb-4" />
           <h2 className="text-3xl md:text-4xl font-bold mb-2 text-gray-800 dark:text-white text-center">
             Reset Password
           </h2>

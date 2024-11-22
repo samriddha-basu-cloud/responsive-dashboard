@@ -119,10 +119,8 @@ const Pathway8 = ({ onNext, onBack, projectId }) => {
   return (
     <div className="p-4 sm:p-6 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 rounded-lg shadow-md">
       <h1 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Pathway-8: Policy & Governance</h1>
-      <p className="mb-4 sm:mb-6 text-xs sm:text-sm text-gray-500 dark:text-gray-400">
-        If appropriate policy and governance, taking these agroecological principles and food systems dimensions into
-        account, is ensured, then the chances for agroecological transformation of food systems to become a success are
-        much higher than without such a favourable political environment.
+        <p className="mb-6 sm:mb-8 text-lg sm:text-xl text-gray-700 dark:text-gray-300 p-6 rounded-xl bg-gray-200 dark:bg-gray-800 leading-relaxed tracking-wide shadow-[inset_6px_6px_12px_#c2c2c2,inset_-6px_-6px_12px_#ffffff] dark:shadow-[inset_6px_6px_12px_#404040,inset_-6px_-6px_12px_#606060] font-serif font-bold">
+        <span className="text-red-500 italic">Def.</span> If appropriate policy and governance, taking these agroecological principles and food systems dimensions into account, is ensured, then the chances for agroecological transformation of food systems to become a success are much higher than without such a favourable political environment.
       </p>
 
       {/* Questions for Pathway 8 */}

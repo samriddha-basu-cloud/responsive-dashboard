@@ -119,8 +119,9 @@ const Pathway1 = ({ onNext, onBack, projectId }) => {
   return (
     <div className="p-4 sm:p-6 bg-white dark:bg-gray-900 text-gray-800 dark:text-gray-100 rounded-lg shadow-md">
       <h1 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Pathway-1: Production Systems</h1>
-      <p className="mb-4 sm:mb-6 text-xs sm:text-sm text-gray-500 dark:text-gray-400">
-        If the primary production systems of agricultural and food products – focusing on small-scale producers, herders, and fisher folk – are based on an efficient use and recycling of local renewable resources...
+      <p className="mb-6 sm:mb-8 text-lg sm:text-xl text-gray-700 dark:text-gray-300 p-6 rounded-xl bg-gray-200 dark:bg-gray-800 leading-relaxed tracking-wide shadow-[inset_6px_6px_12px_#c2c2c2,inset_-6px_-6px_12px_#ffffff] dark:shadow-[inset_6px_6px_12px_#404040,inset_-6px_-6px_12px_#606060] font-serif font-bold">
+        <span className="text-red-500 italic">Def.</span> If the primary production systems of agricultural and food products – focussing on small-scale producers, herders, and fisher folk – are based on an efficient use and recycling of local renewable resources, reduction of external inputs, preservation of soil health, animal health, biodiversity, and diversification without destroying hunters', gatherers' and indigenous people's livelihoods, then more sustainably produced and nutritious food is available and accessible for the primary producers. 
+
       </p>
 
       {/* Questions for Pathway 1 */}
