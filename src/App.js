@@ -36,8 +36,9 @@ const ThemeToggle = () => {
   const location = useLocation();
 
   // Determine position based on current route
-  const isApplicationFormRoute = location.pathname === '/application-form';
-  const positionClasses = isApplicationFormRoute
+    const isApplicationFormRoute = location.pathname === '/application-form';
+  const isDashboardRoute = location.pathname === '/dashboard';
+  const positionClasses = (isApplicationFormRoute || isDashboardRoute)
     ? 'top-3 right-12'
     : 'bottom-6 right-6';
 
