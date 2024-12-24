@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import AestheticLoader from '../components/AestheticLoader';
-import gizLogo from '../assets/giz-logo.png';
+import gizLogo from '../assets/safsym.png';
 import photo1 from '../assets/photo1-giz.jpg';
 import photo2 from '../assets/photo2-giz.jpg';
 import { motion } from 'framer-motion';

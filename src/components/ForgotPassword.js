@@ -4,7 +4,7 @@ import { auth, db } from '../firebase'; // Firestore instance
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { Link } from 'react-router-dom';
 import Ripple from './Ripple';
-import GizLogo from '../assets/giz-logo.png';
+import GizLogo from '../assets/safsym.png';
 
 const ForgotPassword = () => {
   const [email, setEmail] = useState('');

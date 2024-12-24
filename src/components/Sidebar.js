@@ -5,7 +5,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { signOut } from 'firebase/auth';
 import { FiLogOut, FiMenu, FiX } from 'react-icons/fi';
 import { motion, AnimatePresence } from 'framer-motion';
-import gizLogo from '../assets/giz-logo.png';
+import gizLogo from '../assets/safsym.png';
 
 const LogoutDialog = ({ isOpen, onClose, onConfirm }) => {
   if (!isOpen) return null;
@@ -156,8 +156,8 @@ const Sidebar = ({ isOpen, setIsOpen }) => {
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.2 }}
                 src={gizLogo}
-                alt="Company Logo"
-                className="h-12 w-auto"
+                alt="SAFSYM Logo"
+                className="h-24"
               />
             )}
           </AnimatePresence>

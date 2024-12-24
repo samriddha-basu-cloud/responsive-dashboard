@@ -3,6 +3,13 @@ import React from 'react';
 const ProjectionsToggleButton = ({ onClick }) => {
   return (
     <div className="fixed bottom-6 right-6 z-40">
+      <style>
+        {`
+          .text-xxs {
+            font-size: 0.65rem; 
+          }
+        `}
+      </style>
       <button
         onClick={onClick}
         className="group relative flex items-center justify-center rounded-full text-white bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 shadow-lg transform hover:scale-105 active:scale-95 transition-all duration-300 p-8"
@@ -22,12 +29,12 @@ const ProjectionsToggleButton = ({ onClick }) => {
               fill="none"
             />
           </defs>
-          <text className="text-xs fill-current">
+          <text className="text-xxs fill-current font-bold">
             <textPath 
               href="#textCircle"
               className="tracking-wider"
             >
-              VIEW PROJECTIONS • CLICK HERE • 
+              DATA REPRESENTATION • CLICK HERE • 
             </textPath>
           </text>
         </svg>

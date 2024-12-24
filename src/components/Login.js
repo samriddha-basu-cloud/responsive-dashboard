@@ -3,7 +3,8 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase';
 import { useNavigate, Link } from 'react-router-dom';
 import Ripple from './Ripple';
-import GizLogo from '../assets/giz-logo.png';
+import GizLogo from '../assets/safsym.png';
+import { Eye, EyeOff } from 'lucide-react';
 
 const ErrorDialog = ({ message, onClose }) => {
   useEffect(() => {
@@ -55,6 +56,7 @@ const Login = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -91,6 +93,10 @@ const Login = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -135,13 +141,24 @@ const Login = () => {
               </label>
               <div className="relative">
                 <input
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   className="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent dark:text-white transition-all duration-300 placeholder-gray-400 dark:placeholder-gray-500"
                   placeholder="Enter your password"
                 />
+                <button
+                  type="button"
+                  onClick={togglePasswordVisibility}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 focus:outline-none transition-colors duration-200"
+                >
+                  {showPassword ? (
+                    <EyeOff className="h-5 w-5" />
+                  ) : (
+                    <Eye className="h-5 w-5" />
+                  )}
+                </button>
                 <div className="absolute inset-0 rounded-xl ring-1 ring-inset ring-gray-300 dark:ring-gray-600 pointer-events-none"></div>
               </div>
             </div>

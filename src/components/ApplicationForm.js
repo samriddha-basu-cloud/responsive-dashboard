@@ -21,7 +21,7 @@ import ProgressBar from './ProgressBar';
 import PathwayProjections from './PathwayProjections';
 import ProjectionsModal from './ProjectionsModal';
 import ProjectionsToggleButton from './ProjectionsToggleButton';
-import GizLogo from '../assets/giz-logo.png';
+import GizLogo from '../assets/safsym.png';
 import { useNavigate } from 'react-router-dom';
 import TourGuideOverlayMobile from './TourGuideOverlayMobile';
 

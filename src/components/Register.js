@@ -5,7 +5,8 @@ import { useNavigate, Link } from 'react-router-dom';
 import { auth, db } from '../firebase';
 import { FaCheckCircle } from 'react-icons/fa';
 import Ripple from './Ripple';
-import GizLogo from '../assets/giz-logo.png';
+import GizLogo from '../assets/safsym.png';
+import { Eye, EyeOff } from 'lucide-react';
 
 const ErrorDialog = ({ message, onClose }) => {
   useState(() => {
@@ -57,6 +58,8 @@ const Register = () => {
   const [error, setError] = useState('');
   const [isPasswordValid, setIsPasswordValid] = useState(false);
   const [passwordMatch, setPasswordMatch] = useState(true);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
   const navigate = useNavigate();
@@ -142,6 +145,14 @@ const Register = () => {
     }
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
+
   return (
     <div className="relative flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 overflow-hidden p-4">
       {/* Ripple Background */}
@@ -191,14 +202,27 @@ const Register = () => {
             className="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent dark:text-white transition-all duration-300 placeholder-gray-400 dark:placeholder-gray-500"
           />
 
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={handlePasswordChange}
-            required
-            className="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent dark:text-white transition-all duration-300 placeholder-gray-400 dark:placeholder-gray-500"
-          />
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              value={password}
+              onChange={handlePasswordChange}
+              required
+              className="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent dark:text-white transition-all duration-300 placeholder-gray-400 dark:placeholder-gray-500"
+            />
+            <button
+              type="button"
+              onClick={togglePasswordVisibility}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 focus:outline-none transition-colors duration-200"
+            >
+              {showPassword ? (
+                <EyeOff className="h-5 w-5" />
+              ) : (
+                <Eye className="h-5 w-5" />
+              )}
+            </button>
+          </div>
 
           <div className="text-sm text-gray-600 dark:text-gray-400">
             <p>Password must contain:</p>
@@ -215,14 +239,27 @@ const Register = () => {
             </ul>
           </div>
 
-          <input
-            type="password"
-            placeholder="Confirm Password"
-            value={confirmPassword}
-            onChange={handleConfirmPasswordChange}
-            required
-            className="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent dark:text-white transition-all duration-300 placeholder-gray-400 dark:placeholder-gray-500"
-          />
+          <div className="relative">
+            <input
+              type={showConfirmPassword ? "text" : "password"}
+              placeholder="Confirm Password"
+              value={confirmPassword}
+              onChange={handleConfirmPasswordChange}
+              required
+              className="w-full px-4 py-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-transparent dark:text-white transition-all duration-300 placeholder-gray-400 dark:placeholder-gray-500"
+            />
+            <button
+              type="button"
+              onClick={toggleConfirmPasswordVisibility}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 focus:outline-none transition-colors duration-200"
+            >
+              {showConfirmPassword ? (
+                <EyeOff className="h-5 w-5" />
+              ) : (
+                <Eye className="h-5 w-5" />
+              )}
+            </button>
+          </div>
 
           {!passwordMatch && confirmPassword && (
             <p className="text-red-500 text-sm">Passwords do not match.</p>
