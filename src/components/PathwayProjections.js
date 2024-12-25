@@ -3,6 +3,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import { db, auth } from '../firebase';
 import { Bar, Pie, Line, Radar } from 'react-chartjs-2';
 import Chart from 'chart.js/auto';
+import * as XLSX from 'xlsx';
 import { 
   ChevronDown, 
   ChevronUp, 
@@ -447,6 +448,29 @@ const PathwayProjections = ({ projectId, trigger }) => {
   };
 };
 
+const downloadSpreadsheet = () => {
+    const data = [];
+
+    // Format activityCounts into a spreadsheet-friendly structure
+    for (const pathway of Object.keys(activityCounts)) {
+      for (const status of Object.keys(activityCounts[pathway])) {
+        data.push({
+          Pathway: pathway,
+          Status: status,
+          Count: activityCounts[pathway][status],
+        });
+      }
+    }
+
+    // Create a workbook and worksheet
+    const worksheet = XLSX.utils.json_to_sheet(data);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Activity Status');
+
+    // Export the file
+    XLSX.writeFile(workbook, 'Activity_Status_by_Type.xlsx');
+  };
+
   const generateOverallPercentageData = () => {
     const orderedPathways = PATHWAY_ORDER.filter(key => activityCounts[key]);
 
@@ -571,7 +595,7 @@ const PathwayProjections = ({ projectId, trigger }) => {
         className="flex justify-between items-center cursor-pointer"
         onClick={() => setExpanded(prev => ({ ...prev, overallStatus: !prev.overallStatus }))}
       >
-        <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
+        <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 tracking-wider">
           Overall Pathway Status
         </h3>
         {expanded.overallStatus ? <ChevronUp /> : <ChevronDown />}
@@ -596,7 +620,7 @@ const PathwayProjections = ({ projectId, trigger }) => {
         className="flex justify-between items-center cursor-pointer"
         onClick={() => setExpanded(prev => ({ ...prev, activityStatus: !prev.activityStatus }))}
       >
-        <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
+        <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 tracking-wider">
           Activity Status by Type
         </h3>
         {expanded.activityStatus ? <ChevronUp /> : <ChevronDown />}
@@ -613,6 +637,14 @@ const PathwayProjections = ({ projectId, trigger }) => {
               </div>
             ))}
           </div>
+          <div className="mt-6 flex justify-center">
+              <button
+                onClick={downloadSpreadsheet}
+                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
+              >
+                Download Data in Spreadsheet
+              </button>
+            </div>
         </div>
       )}
     </div>
@@ -623,9 +655,10 @@ const PathwayProjections = ({ projectId, trigger }) => {
         className="flex justify-between items-center cursor-pointer"
         onClick={() => setExpanded(prev => ({ ...prev, interventions: !prev.interventions }))}
       >
-        <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 flex items-center">
-          <AlertCircle className="mr-2 text-red-500" /> 
+        <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300 flex items-center tracking-wider">
+          {/* <AlertCircle className="mr-2 text-red-500" />  */}
           Interventions Needed
+          <AlertCircle className="ml-2 text-red-500" /> 
         </h3>
         {expanded.interventions ? <ChevronUp /> : <ChevronDown />}
       </div>

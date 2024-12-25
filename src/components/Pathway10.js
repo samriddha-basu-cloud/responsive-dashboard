@@ -4,6 +4,7 @@ import { db, auth } from '../firebase';
 import './PathwayStyles.css'; // Import custom styles
 import { FaCheckCircle } from 'react-icons/fa';
 import SurveyComponent from './SurveyComponent';
+import gizLogo from '../assets/safsym.png';
 import html2pdf from 'html2pdf.js';
 
 const Question = ({ question, questionId, onAnswerChange, answer, observation, placeholder }) => {
@@ -45,6 +46,7 @@ const Pathway10 = ({ onNext, onBack, projectId }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [showThankYouModal, setShowThankYouModal] = useState(false);
   const [showReviewModal, setShowReviewModal] = useState(false);
+  const [projectName, setProjectName] = useState('');
 
   const isAllQuestionsAnswered = () => {
     return answers?.Q10_1?.answer !== undefined && answers?.Q10_2?.answer !== undefined && answers?.Q10_3?.answer !== undefined && answers?.Q10_4?.answer !== undefined && answers?.Q10_5?.answer !== undefined && answers?.Q10_6?.answer !== undefined && answers?.Q10_7?.answer !== undefined && answers?.Q10_8?.answer !== undefined && answers?.Q10_9?.answer !== undefined && answers?.Q10_10?.answer !== undefined && answers?.Q10_11?.answer !== undefined;
@@ -65,6 +67,10 @@ const Pathway10 = ({ onNext, onBack, projectId }) => {
           const userData = userDoc.data();
           const projects = userData.projects || [];
           const project = projects.find((proj) => proj.id === projectId);
+
+          if (project) {
+            setProjectName(project.name || ''); // Set project name
+          }
 
           if (project && project.sections?.Pathway10) {
             setAnswers(project.sections.Pathway10);
@@ -348,7 +354,10 @@ const Pathway10 = ({ onNext, onBack, projectId }) => {
           >
             {/* Header Section */}
             <div className="flex justify-between items-center pb-4 border-b border-gray-300 dark:border-gray-700">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Review Responses</h2>
+              <img src={gizLogo} alt="GIZ Logo" className="h-8 w-auto" />
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-gray-100 flex-grow text-center tracking-wider">
+                Review Responses of <span className="tracking-wider">{projectName}</span>
+              </h2>
               <button
                 onClick={() => setShowReviewModal(false)}
                 className="text-gray-700 dark:text-gray-300 hover:text-red-500 dark:hover:text-red-400 text-2xl transition-all duration-300"
@@ -364,28 +373,24 @@ const Pathway10 = ({ onNext, onBack, projectId }) => {
               <SurveyComponent projectId={projectId} />
             </div>
 
-            {/* Footer Section */}
-            <div className="flex justify-end items-center pt-4 border-t border-gray-300 dark:border-gray-700 space-x-4">
-              {/* Close Button */}
-              {/* <button
-                onClick={() => setShowReviewModal(false)}
-                className="px-6 py-2 rounded-md bg-gradient-to-r from-gray-400 to-gray-600 text-white hover:from-gray-500 hover:to-gray-700 transition-all duration-300"
-                title="Close Modal"
-              >
-                Close
-              </button> */}
+          {/* Footer Section */}
+            <div className="flex justify-between items-center pt-4 border-t border-gray-300 dark:border-gray-700 space-x-4">
+              {/* Project Name */}
+              <span className="text-gray-700 dark:text-gray-300 font-bold">
+                Project: {projectName}
+              </span>
               {/* Download Button */}
               <button
                 onClick={async () => {
                   const element = document.getElementById('review-modal-content');
-
+            
                   // Convert charts to images
                   await prepareChartsForPDF();
-
+            
                   // Configure PDF generation options
                   const opt = {
                     margin: 0.2,
-                    filename: 'Survey_Review.pdf',
+                    filename: `Survey_Review_of_${projectName}.pdf`,
                     image: { type: 'jpeg', quality: 0.99 },
                     html2canvas: {
                       scale: 4, // Higher resolution
@@ -394,10 +399,10 @@ const Pathway10 = ({ onNext, onBack, projectId }) => {
                     jsPDF: {
                       unit: 'in',
                       format: 'letter',
-                      orientation: 'landscape', // Fit content to a single page
+                      orientation: 'portrait', // Fit content to a single page
                     },
                   };
-
+            
                   html2pdf().set(opt).from(element).save();
                 }}
                 className="px-6 py-2 rounded-md bg-gradient-to-r from-red-500 to-red-700 text-white hover:from-red-600 hover:to-red-800 transition-all duration-300"

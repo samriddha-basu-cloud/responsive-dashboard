@@ -3,6 +3,7 @@ import { doc, getDoc } from 'firebase/firestore';
 import { db, auth } from '../firebase';
 import PathwayProjections from './PathwayProjections';
 
+
 // Predefined questions for Pathway-1
 const PREDEFINED_PATHWAY_QUESTIONS = {
   Q1_1: {
@@ -350,7 +351,7 @@ const SurveyComponent = ({ projectId }) => {
 
   const renderDetailSection = (sectionData, sectionTitle, fields) => (
     <section className="mb-8 bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold text-red-700 border-b-2 border-red-500 pb-3 mb-4">
+      <h2 className="text-2xl font-bold text-red-700 border-b-2 border-red-500 pb-3 mb-4 tracking-wider">
         {sectionTitle}
       </h2>
       <div className="grid md:grid-cols-2 gap-4">
