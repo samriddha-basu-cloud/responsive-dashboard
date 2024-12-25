@@ -331,11 +331,20 @@ const Pathway10 = ({ onNext, onBack, projectId }) => {
 
       {/* Review Modal */}
       {showReviewModal && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+         <div className="fixed inset-0 flex items-center justify-center bg-opacity-50 z-50 mx-auto" style={{maxWidth: '70%'}}>
           <div
             id="review-modal-content"
             className="bg-white dark:bg-gray-800 rounded-lg shadow-2xl w-3/4 h-5/6 p-6 relative flex flex-col justify-between"
-            style={{ height: '90%' }}
+            style={{
+              maxWidth: '100%',
+              overflow: 'hidden',
+              boxSizing: 'border-box',
+              margin: '0 auto',
+              padding: '16px',
+              transform: 'scale(1)',
+              transformOrigin: 'top left',
+              width: '100%',
+            }}
           >
             {/* Header Section */}
             <div className="flex justify-between items-center pb-4 border-b border-gray-300 dark:border-gray-700">
