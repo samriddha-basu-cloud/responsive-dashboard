@@ -448,28 +448,188 @@ const PathwayProjections = ({ projectId, trigger }) => {
   };
 };
 
-const downloadSpreadsheet = () => {
-    const data = [];
+// const downloadSpreadsheet = () => {
+//     const data = [];
 
-    // Format activityCounts into a spreadsheet-friendly structure
-    for (const pathway of Object.keys(activityCounts)) {
-      for (const status of Object.keys(activityCounts[pathway])) {
-        data.push({
-          Pathway: pathway,
-          Status: status,
-          Count: activityCounts[pathway][status],
+//     // Format activityCounts into a spreadsheet-friendly structure
+//     for (const pathway of Object.keys(activityCounts)) {
+//       for (const status of Object.keys(activityCounts[pathway])) {
+//         data.push({
+//           Pathway: pathway,
+//           Status: status,
+//           Count: activityCounts[pathway][status],
+//         });
+//       }
+//     }
+
+//     // Create a workbook and worksheet
+//     const worksheet = XLSX.utils.json_to_sheet(data);
+//     const workbook = XLSX.utils.book_new();
+//     XLSX.utils.book_append_sheet(workbook, worksheet, 'Activity Status');
+
+//     // Export the file
+//     XLSX.writeFile(workbook, 'Activity_Status_by_Type.xlsx');
+//   };
+
+const downloadDetailedSpreadsheet = () => {
+  // Create detailed data structure
+  const detailedData = [];
+  
+  // Style configurations for the worksheet
+  const headerStyle = {
+    font: { bold: true, color: { rgb: "FFFFFF" } },
+    fill: { fgColor: { rgb: "4472C4" } },
+    alignment: { horizontal: "center", vertical: "center", wrapText: true },
+    border: {
+      top: { style: "thin" },
+      right: { style: "thin" },
+      bottom: { style: "thin" },
+      left: { style: "thin" }
+    }
+  };
+
+  // Style for all cells
+  const cellStyle = {
+    alignment: { horizontal: "center", vertical: "center", wrapText: true },
+    border: {
+      top: { style: "thin" },
+      right: { style: "thin" },
+      bottom: { style: "thin" },
+      left: { style: "thin" }
+    }
+  };
+
+  // Process data pathway by pathway
+  PATHWAY_ORDER.forEach((pathway) => {
+    if (activityCounts[pathway]) {
+      // Get questions and sort them by questionId
+      const pathwayQuestions = Object.keys(projectData.sections[pathway] || {})
+        .filter(key => PREDEFINED_PATHWAY_QUESTIONS[key])
+        .sort((a, b) => {
+          const aNum = a.replace('Q', '');
+          const bNum = b.replace('Q', '');
+          
+          const [aMajor, aMinor] = aNum.split('_').map(Number);
+          const [bMajor, bMinor] = bNum.split('_').map(Number);
+          
+          if (aMajor !== bMajor) {
+            return aMajor - bMajor;
+          }
+          return aMinor - bMinor;
+        })
+        .map(key => ({
+          questionId: key,
+          question: PREDEFINED_PATHWAY_QUESTIONS[key].question,
+          status: projectData.sections[pathway][key].answer || 'Not Set',
+          notes: projectData.sections[pathway][key].notes || ''
+        }));
+
+      // Add each question as a row with pathway info
+      pathwayQuestions.forEach((item, index) => {
+        detailedData.push({
+          Pathway: index === 0 ? pathway : '',
+          'Question ID': item.questionId,
+          Question: item.question,
+          Status: item.status,
+          Notes: item.notes
+        });
+      });
+    }
+  });
+
+  // Create worksheet
+  const worksheet = XLSX.utils.json_to_sheet(detailedData);
+
+  // Set column widths
+  const colWidths = {
+    A: 15,  // Pathway
+    B: 12,  // Question ID
+    C: 85,  // Question
+    D: 15,  // Status
+    E: 30   // Notes
+  };
+
+  worksheet['!cols'] = Object.keys(colWidths).map(key => ({ wch: colWidths[key] }));
+
+  // Add merge cells for pathways
+  const merges = [];
+  let startRow = 1;
+  PATHWAY_ORDER.forEach(pathway => {
+    if (activityCounts[pathway]) {
+      const pathwayQuestionCount = Object.keys(projectData.sections[pathway] || {})
+        .filter(key => PREDEFINED_PATHWAY_QUESTIONS[key]).length;
+      
+      if (pathwayQuestionCount > 1) {
+        merges.push({
+          s: { r: startRow, c: 0 },
+          e: { r: startRow + pathwayQuestionCount - 1, c: 0 }
         });
       }
+      startRow += pathwayQuestionCount;
     }
+  });
 
-    // Create a workbook and worksheet
-    const worksheet = XLSX.utils.json_to_sheet(data);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Activity Status');
+  worksheet['!merges'] = merges;
 
-    // Export the file
-    XLSX.writeFile(workbook, 'Activity_Status_by_Type.xlsx');
-  };
+  // Apply styles to all cells
+  const range = XLSX.utils.decode_range(worksheet['!ref']);
+  for (let R = range.s.r; R <= range.e.r; ++R) {
+    for (let C = range.s.c; C <= range.e.c; ++C) {
+      const address = XLSX.utils.encode_cell({ r: R, c: C });
+      if (!worksheet[address]) continue;
+      
+      // Apply header style to first row, cell style to all other rows
+      worksheet[address].s = R === 0 ? headerStyle : cellStyle;
+    }
+  }
+
+  // Create summary sheet with sorted data
+  const summaryData = PATHWAY_ORDER
+    .filter(pathway => activityCounts[pathway])
+    .map(pathway => {
+      const counts = activityCounts[pathway];
+      return {
+        Pathway: pathway,
+        Completed: counts.Completed || 0,
+        Ongoing: counts.Ongoing || 0,
+        Planned: counts.Planned || 0,
+        'Not in Focus': counts['Not in Focus'] || 0,
+        'Total Questions': Object.values(counts).reduce((a, b) => a + b, 0)
+      };
+    });
+
+  const summarySheet = XLSX.utils.json_to_sheet(summaryData);
+
+  // Apply styles to summary sheet
+  const summaryRange = XLSX.utils.decode_range(summarySheet['!ref']);
+  for (let R = summaryRange.s.r; R <= summaryRange.e.r; ++R) {
+    for (let C = summaryRange.s.c; C <= summaryRange.e.c; ++C) {
+      const address = XLSX.utils.encode_cell({ r: R, c: C });
+      if (!summarySheet[address]) continue;
+      
+      // Apply header style to first row, cell style to all other rows
+      summarySheet[address].s = R === 0 ? headerStyle : cellStyle;
+    }
+  }
+
+  // Set summary sheet column widths
+  summarySheet['!cols'] = [
+    { wch: 15 },  // Pathway
+    { wch: 12 },  // Completed
+    { wch: 12 },  // Ongoing
+    { wch: 12 },  // Planned
+    { wch: 12 },  // Not in Focus
+    { wch: 15 }   // Total Questions
+  ];
+
+  // Create workbook and add sheets
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Detailed Status');
+  XLSX.utils.book_append_sheet(workbook, summarySheet, 'Summary');
+
+  // Export the file
+  XLSX.writeFile(workbook, 'Pathway_Analysis_Detailed.xlsx');
+};
 
   const generateOverallPercentageData = () => {
     const orderedPathways = PATHWAY_ORDER.filter(key => activityCounts[key]);
@@ -638,12 +798,12 @@ const downloadSpreadsheet = () => {
             ))}
           </div>
           <div className="mt-6 flex justify-center">
-              <button
-                onClick={downloadSpreadsheet}
-                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
-              >
-                Download Data in Spreadsheet
-              </button>
+            <button
+              onClick={downloadDetailedSpreadsheet}
+              className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
+            >
+              Download Detailed Report
+            </button>
             </div>
         </div>
       )}
