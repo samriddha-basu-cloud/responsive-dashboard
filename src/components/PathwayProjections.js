@@ -363,7 +363,7 @@ const PathwayProjections = ({ projectId, trigger }) => {
           Completed: 0, 
           Ongoing: 0, 
           Planned: 0, 
-          'Not Applicable': 0, 
+         // 'Not Applicable': 0, 
           'Not in Focus': 0 
         };
 
@@ -409,7 +409,7 @@ const PathwayProjections = ({ projectId, trigger }) => {
     'Completed': 'rgba(75, 192, 192, 0.6)',      // Teal
     'Ongoing': 'rgba(54, 162, 235, 0.6)',        // Blue
     'Planned': 'rgba(255, 206, 86, 0.6)',        // Yellow
-    'Not Applicable': 'rgba(153, 102, 255, 0.6)',// Purple
+   // 'Not Applicable': 'rgba(153, 102, 255, 0.6)',// Purple
     'Not in Focus': 'rgba(255, 99, 132, 0.6)'    // Red
   };
 
@@ -606,7 +606,8 @@ const PathwayProjections = ({ projectId, trigger }) => {
         <div className="mt-4">
           <GraphTypeSelector />
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {['Completed', 'Ongoing', 'Planned', 'Not Applicable', 'Not in Focus'].map((status) => (
+            {/* {['Completed', 'Ongoing', 'Planned', 'Not Applicable', 'Not in Focus'].map((status) => ( */}
+            {['Completed', 'Ongoing', 'Planned', 'Not in Focus'].map((status) => (
               <div key={status} className="h-64">
                 {renderGraph(generateChartData(status), graphType)}
               </div>

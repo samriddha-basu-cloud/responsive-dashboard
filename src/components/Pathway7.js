@@ -9,7 +9,8 @@ const Question = ({ question, questionId, onAnswerChange, answer, observation, p
       <p className="text-base sm:text-lg font-semibold mb-2">{question}</p>
 
       <div className="flex flex-wrap gap-2 sm:space-x-4 mb-2">
-        {["Planned", "Ongoing", "Completed", "Not in Focus", "Not Applicable"].map((option) => (
+        {/* {["Planned", "Ongoing", "Completed", "Not in Focus", "Not Applicable"].map((option) => ( */}
+        {["Planned", "Ongoing", "Completed", "Not in Focus"].map((option) => (
           <label key={option} className="flex items-center">
             <input
               type="radio"

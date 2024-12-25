@@ -331,13 +331,19 @@ const Home = () => {
       <div className="w-full md:w-1/3 mb-4 md:mb-0">
         <img src={gizLogo} alt="GIZ Logo" className="h-8 md:h-12 w-auto mx-auto md:mx-0 mb-2 md:mb-4" />
         <p className="text-xs md:text-sm">
-          Deutsche Gesellschaft für Internationale Zusammenarbeit (GIZ) GmbH
+          Sustainable Agriculture & Food System Mapping Tool
         </p>
       </div>
       <div className="w-full md:w-1/3 mb-4 md:mb-0">
         <h3 className="text-sm md:text-lg font-semibold mb-2 md:mb-4">Contact</h3>
-        <p className="text-xs md:text-sm">Email: contact@giz.de</p>
-        <p className="text-xs md:text-sm">Phone: +49 (0) 123 456 789</p>
+        <p className="text-xs md:text-sm">Sudhir Shukla</p>
+        <p className="text-xs md:text-sm">Email:</p>
+        <p className="text-xs md:text-sm">
+          <a href="mailto:admin@ecociate.com?subject=SAFSYM&priority=high" className="hover:text-red-400">admin@ecociate.com</a>
+        </p>
+        <p className="text-xs md:text-sm">
+          <a href="mailto:sudhir@ecociate.com?subject=SAFSYM&priority=high" className="hover:text-red-400">sudhir@ecociate.com</a>
+        </p>
       </div>
       <div className="w-full md:w-1/3">
         <h3 className="text-sm md:text-lg font-semibold mb-2 md:mb-4">Links</h3>
@@ -361,7 +367,7 @@ const Home = () => {
       </div>
     </div>
     <div className="text-center mt-4 md:mt-8 pt-4 md:pt-8 border-t border-gray-700">
-      <p className="text-xs md:text-sm">&copy; 2024 GIZ. All rights reserved.</p>
+      <p className="text-xs md:text-sm">&copy; 2024 SAFSYM. All rights reserved.</p>
     </div>
   </div>
 </footer>

@@ -357,7 +357,7 @@ const SurveyComponent = ({ projectId }) => {
         {fields.map((field, index) => (
           <div key={index} className="space-y-1">
             <p className="font-semibold text-red-700">{field.label}</p>
-            <p className="text-gray-800">
+            <p className="text-gray-800 dark:text-gray-200">
               {sectionData?.[field.key] || field.fallback}
             </p>
           </div>
@@ -391,7 +391,7 @@ const SurveyComponent = ({ projectId }) => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 bg-gray-50 overflow-auto" style={{ height: '90%' }}>
+    <div className="container mx-auto px-4 py-8 dark:bg-gray-800 bg-gray-50 overflow-auto" style={{ height: '100%' }}>
       <div className="max-w-4xl mx-auto space-y-6">
         {/* Respondent Details */}
         {renderDetailSection(

@@ -12,7 +12,8 @@ const Question = ({ question, questionId, onAnswerChange, answer, observation, p
       <p className="text-base sm:text-lg font-semibold mb-2">{question}</p>
 
       <div className="flex flex-wrap gap-2 sm:space-x-4 mb-2">
-        {["Planned", "Ongoing", "Completed", "Not in Focus", "Not Applicable"].map((option) => (
+        {/* {["Planned", "Ongoing", "Completed", "Not in Focus", "Not Applicable"].map((option) => ( */}
+        {["Planned", "Ongoing", "Completed", "Not in Focus"].map((option) => (
           <label key={option} className="flex items-center">
             <input
               type="radio"
@@ -303,14 +304,13 @@ const Pathway10 = ({ onNext, onBack, projectId }) => {
       {/* Thank You Modal */}
       {showThankYouModal && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-          <div className="bg-white p-6 rounded-lg shadow-lg text-center">
+          <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg text-center">
             <FaCheckCircle className="text-green-500 text-4xl mx-auto mb-4" />
             <h2 className="text-2xl font-bold mb-4">Thank you for the responses.</h2>
-            <p className="text-gray-700">You can review your answers by clicking the Review button.</p>
+            <p className="text-gray-700 dark:text-zinc-100">You can review your answers by clicking the Review button.</p>
             <button
               onClick={() => {
                 setShowThankYouModal(false);
-                window.location.href = '/dashboard';
               }}
               className="mt-4 px-6 py-2 rounded-md bg-gradient-to-r from-gray-500 to-gray-700 text-white hover:from-gray-600 hover:to-gray-800 transition-colors duration-300"
             >
@@ -377,15 +377,15 @@ const Pathway10 = ({ onNext, onBack, projectId }) => {
                   const opt = {
                     margin: 0.2,
                     filename: 'Survey_Review.pdf',
-                    image: { type: 'jpeg', quality: 0.98 },
+                    image: { type: 'jpeg', quality: 0.99 },
                     html2canvas: {
-                      scale: 2, // Higher resolution
+                      scale: 4, // Higher resolution
                       useCORS: true, // Allow cross-origin resources
                     },
                     jsPDF: {
                       unit: 'in',
-                      format: 'a4',
-                      orientation: 'portrait', // Fit content to a single page
+                      format: 'letter',
+                      orientation: 'landscape', // Fit content to a single page
                     },
                   };
 
