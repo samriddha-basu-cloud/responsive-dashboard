@@ -7,6 +7,7 @@ import SurveyComponent from './SurveyComponent';
 import gizLogo from '../assets/safsym.png';
 import html2pdf from 'html2pdf.js';
 import * as XLSX from 'xlsx';
+import { FaFileDownload, FaFileExcel, FaCheck } from 'react-icons/fa';
 
 const Question = ({ question, questionId, onAnswerChange, answer, observation, placeholder }) => {
   return (
@@ -791,53 +792,69 @@ const downloadDetailedSpreadsheet = async () => {
             </div>
 
           {/* Footer Section */}
-            <div className="flex justify-between items-center pt-4 border-t border-gray-300 dark:border-gray-700 space-x-4">
-              {/* Project Name */}
-              <span className="text-gray-700 dark:text-gray-300 font-bold">
-                Project: {projectName}
-              </span>
-              {/* Download Buttons */}
-              <div className="flex space-x-4">
-                <button
-                  onClick={downloadDetailedSpreadsheet}
-                  className="px-6 py-2 rounded-md bg-gradient-to-r from-blue-500 to-blue-700 text-white hover:from-blue-600 hover:to-blue-800 transition-all duration-300"
-                >
-                  Download Spreadsheet
-                </button>
-                <button
-                  onClick={async () => {
-                    const element = document.getElementById('review-modal-content');
-                    await prepareChartsForPDF();
-                    const opt = {
-                      margin: 0.2,
-                      filename: `Survey_Review_of_${projectName}.pdf`,
-                      image: { type: 'jpeg', quality: 0.99 },
-                      html2canvas: {
-                        scale: 4,
-                        useCORS: true,
-                      },
-                      jsPDF: {
-                        unit: 'in',
-                        format: 'letter',
-                        orientation: 'landscape',
-                      },
-                    };
-                    html2pdf().set(opt).from(element).save();
-                  }}
-                  className="px-6 py-2 rounded-md bg-gradient-to-r from-red-500 to-red-700 text-white hover:from-red-600 hover:to-red-800 transition-all duration-300"
-                >
-                  Download Survey
-                </button>
-                <button
-                  onClick={() => {
-                    window.location.href = "/dashboard";
-                  }}
-                  className="px-6 py-2 rounded-md bg-gradient-to-r from-green-500 to-green-700 text-white hover:from-green-600 hover:to-green-800 transition-all duration-300"
-                >
-                  Submit
-                </button>
-              </div>
-            </div>
+           <div className="max-w-7xl mx-auto px-2 sm:px-4">
+    <div className="py-2 sm:py-3 space-y-2 sm:space-y-3">
+      {/* Project Name Section */}
+      <div className="text-center border-b border-gray-200 dark:border-gray-700 pb-2">
+        <h3 className="text-sm sm:text-base font-semibold text-gray-800 dark:text-gray-200">
+          Project: <span className="font-bold text-blue-600 dark:text-blue-400">{projectName}</span>
+        </h3>
+      </div>
+
+      {/* Buttons Container */}
+      <div className="flex justify-center items-center gap-2 sm:gap-3 pt-2">
+        {/* Download Spreadsheet Button */}
+        <button
+          onClick={downloadDetailedSpreadsheet}
+          className="p-2 sm:px-4 sm:py-2 rounded-md bg-gradient-to-r from-blue-500 to-blue-700 text-white hover:from-blue-600 hover:to-blue-800 transition-all duration-300 shadow-sm hover:shadow-md flex items-center justify-center gap-2"
+          title="Download Spreadsheet"
+        >
+          <FaFileExcel className="text-lg sm:text-base" />
+          <span className="hidden sm:inline text-sm">Download Spreadsheet</span>
+        </button>
+
+        {/* Download Survey Button */}
+        <button
+          onClick={async () => {
+            const element = document.getElementById('review-modal-content');
+            await prepareChartsForPDF();
+            const opt = {
+              margin: 0.2,
+              filename: `Survey_Review_of_${projectName}.pdf`,
+              image: { type: 'jpeg', quality: 0.99 },
+              html2canvas: {
+                scale: 4,
+                useCORS: true,
+              },
+              jsPDF: {
+                unit: 'in',
+                format: 'letter',
+                orientation: 'landscape',
+              },
+            };
+            html2pdf().set(opt).from(element).save();
+          }}
+          className="p-2 sm:px-4 sm:py-2 rounded-md bg-gradient-to-r from-red-500 to-red-700 text-white hover:from-red-600 hover:to-red-800 transition-all duration-300 shadow-sm hover:shadow-md flex items-center justify-center gap-2"
+          title="Download Survey"
+        >
+          <FaFileDownload className="text-lg sm:text-base" />
+          <span className="hidden sm:inline text-sm">Download Survey</span>
+        </button>
+
+        {/* Submit Button */}
+        <button
+          onClick={() => {
+            window.location.href = "/dashboard";
+          }}
+          className="p-2 sm:px-4 sm:py-2 rounded-md bg-gradient-to-r from-green-500 to-green-700 text-white hover:from-green-600 hover:to-green-800 transition-all duration-300 shadow-sm hover:shadow-md flex items-center justify-center gap-2"
+          title="Submit"
+        >
+          <FaCheck className="text-lg sm:text-base" />
+          <span className="hidden sm:inline text-sm">Submit</span>
+        </button>
+      </div>
+    </div>
+  </div>
           </div>
         </div>
       )}
