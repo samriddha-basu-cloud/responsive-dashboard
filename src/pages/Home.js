@@ -3,13 +3,14 @@ import { Link } from 'react-router-dom';
 import AestheticLoader from '../components/AestheticLoader';
 import gizLogo from '../assets/safsym.png';
 import photo1 from '../assets/photo1-giz.jpg';
-import photo2 from '../assets/photo2-giz.jpg';
+import photo2 from '../assets/photo2-giz.png';
 import { motion } from 'framer-motion';
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
   const [readMore, setReadMore] = useState({});
   const [activeTab, setActiveTab] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -18,41 +19,44 @@ const Home = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const toggleReadMore = (index) => {
-    setReadMore((prev) => ({
+  const toggleReadMore = (sectionId) => {
+    setReadMore(prev => ({
       ...prev,
-      [index]: !prev[index],
+      [sectionId]: !prev[sectionId]
     }));
   };
 
-  const getContentWithDropCap = (text) => {
-    if (!text) return '';
-    return (
-      <>
-        <span className="float-left text-6xl font-bold text-red-700 mr-2 mt-2 leading-none">
-          {text.charAt(0)}
-        </span>
-        {text.slice(1)}
-      </>
-    );
+  const truncateText = (text, sectionId) => {
+    const words = text.split(' ');
+    if (words.length > 100) {
+      if (readMore[sectionId]) {
+        return (
+          <div>
+            {text}
+            <button 
+              onClick={() => toggleReadMore(sectionId)}
+              className="ml-2 text-red-600 hover:text-red-800 font-medium transition-colors duration-200"
+            >
+              Read Less
+            </button>
+          </div>
+        );
+      }
+      return (
+        <div>
+          {words.slice(0, 100).join(' ')}...
+          <button 
+            onClick={() => toggleReadMore(sectionId)}
+            className="ml-2 text-red-600 hover:text-red-800 font-medium transition-colors duration-200"
+          >
+            Read More
+          </button>
+        </div>
+      );
+    }
+    return text;
   };
 
-  const content = [
-    `The global movement toward systematic and holistic approaches to agriculture and food systems is gaining significant momentum. Initiatives such as BMZ's special initiative, "Transformation of Agricultural and Food Systems," and its Asia Strategy illustrate this shift. Similarly, within GIZ India, the Environment, Climate Change & Biodiversity Cluster prioritizes sustainable development and ecological principles to conserve natural resources and address resource degradation, ultimately aiming to enhance human quality of life.
-      Building on insights from the GIZ India Green Cluster analysis, the Working Group (WG) on Agriculture conducted a mapping exercise for relevant GIZ projects in the Asia-Pacific region. This exercise utilized an integrated framework that combined a theory of change narrative with a Sustainable Agriculture and Food Systems approach to outline pathways for sustainable food systems transformation. This framework was developed collaboratively by GIZ India's Food Systems Transformation (FST) core group, an international expert and an Indian Consultant, incorporating input from project teams, sector experts, GIZ HQ sector projects (Food and Nutrition Security and Agroecology), and international agencies.`,
-
-  `A methodology was developed to gather infrmation aligned with the FS/AE framework, using a self-appreciative inquiry approach. This approach enables participating projects to share relevant information, which is then analyzed and compiled. The findings aim to support the dissemination of FS/AE perspectives within project stakeholders..’.`,
-
-  `There is neither a single consensual definition for agroecology nor an agreement on all the aspects embedded in this concept, a consolidated set of 13 principles – taking FAO’s 10 elements of agroecology into consideration – was elaborated by the High-level Panel of Experts (HLPE) on Food Security and Nutrition of the United Nations Committee on World Food Security (CFS) in 2019 (see Annex 1). Some of these principles are related to the agroecological management and development of agri-food systems (principles 1 through 7, i.e., recycling, input reduction, soil health, animal health, biodiversity, synergy, and economic diversification), others to the wider ranging socioeconomic, cultural and political approach (principles 8 through 13, i.e., co-creation of knowledge, social values and diets, fairness, connectivity, land and natural resource governance, and participation). The 13 principles thus integrate the ‘WHAT’ and the ‘HOW’ of a sustainable transformation of food systems. All agroecological principles contribute, in different direct and indirect ways, to food and nutrition security. The systematic integration of agroecological principles into the food systems framework has the potential to effectively support the progressive achievement of sustainable food and nutrition security as defined in the SDG 2. To make this a reality, multiple stakeholders from the public and private sector, civil society, academia, and parliaments need to work together at various levels, starting and focusing on local level supported by the national and global level.
-`,
-    `The theory of change (ToC) of an integrated agroecology-food systems framework (FS/ AE framework) outlines 10 key pathways that are necessary for achieving transformation, focussing on crucial aspects such as sustainable and resilient production systems, efficient and inclusive supply chain management, connecting consumers and producers, addressing food security and nutrition, and strengthening policy environment. Each pathway has derived from Sub-dimensions of the food systems framework and the 13 agroecological principles outlined by the HLPE. 10 Pathways for Food Systems Transformation through Agroecology (formulated as hypotheses) are elaborated in the following table. If development measures, including projects, are implemented throughout all the above-described pathways in such a way that they strengthen people’s, organisations and societies capacities for anticipation, absorption, adaptation and/or transformation of in the context of crises (be it acute shocks or chronic stresses), then they are more resilient to further crises in future. A diagrammatic elucidation of the theory of change follows.
-
-`,
-    `The German Government subscribes to agroecology and a food systems approach in its development cooperation with partner countries in its core area strategy “Sustainable Agri-Food Systems”. In this core area, conflicts of interest such as those that exist between intensification and extensification, food and the protection of resources, economic activity and nature are weighed up and decided upon on a case-by-case basis. BMZ’s Core Area Strategy as outlined in ‘Sustainable Agri-Food Systems - A World Without Hunger’ mention that, the key guidelines for dealing with these conflicts are sustainability in all its dimensions and the six quality criteria which are 1) human rights, 2) gender equality and disability inclusion, 3) anti-corruption and integrity, 4) poverty reduction and inequality reduction, 5) environmental and climate impact assessment, 6) conflict sensitivity (“Do Not Harm”), and 7) digital technology. The GIZ India Environment, Climate Change & Biodiversity Cluster aimed for the development of an analytical framework (based on the Food Systems and Agroecology approaches by the HLPE) to analyse GIZ’s projects for their contribution to a sustainable transformation of food systems through agroecology. This framework is now being used to map projects across South-East and South Asian countries having GIZ’s projects.`,
-
-    `The theory of change (ToC) of an integrated sustainable agriculture and food systems framework (SA-FS framework) outlines 10 key pathways that are necessary for achieving transformation, focussing on crucial aspects such as sustainable and resilient production systems, efficient and inclusive supply chain management, connecting consumers and producers, addressing food security and nutrition, and strengthening policy environment. Each pathway has derived from Sub-dimensions of the food systems framework and the 13 agroecological principles outlined by the HLPE. 10 Pathways for Food Systems Transformation through Agroecology (formulated as hypotheses) are elaborated in the following table.
-`,
-  ];
 
   const tables = [
     {
@@ -102,209 +106,445 @@ const Home = () => {
   
 
   return (
+
+    
   <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
     {/* Navbar */}
-    <nav className="bg-white dark:bg-gray-800 shadow-lg p-2 md:p-4">
-      <div className="container mx-auto flex justify-between items-center">
-        <div className="flex items-center">
-          <img src={gizLogo} alt="GIZ Logo" className="h-8 md:h-12 w-auto" />
+<nav className="bg-gradient-to-r from-white to-gray-50 dark:from-gray-900 dark:to-gray-800 shadow-xl border-b border-red-200/20 dark:border-red-500/10 backdrop-blur-lg sticky top-0 z-50">
+  <div className="container mx-auto px-4 py-3 md:py-4">
+    <div className="flex justify-between items-center">
+      {/* Logo Container */}
+      <div className="flex items-center space-x-2">
+        <div className="relative group">
+          <div className="absolute -inset-1 bg-gradient-to-r from-red-500/20 to-red-600/20 rounded-lg blur opacity-0 group-hover:opacity-100 transition duration-500"></div>
+          <img 
+            src={gizLogo} 
+            alt="GIZ Logo" 
+            className="h-8 md:h-12 w-auto relative transform group-hover:scale-105 transition duration-300" 
+          />
         </div>
       </div>
-    </nav>
+
+      {/* Right side - can be used for additional nav items */}
+      <div className="flex items-center space-x-4">
+        {/* Add navigation items here if needed */}
+      </div>
+    </div>
+  </div>
+</nav>
 
     {/* Main Content */}
-    <div className="container mx-auto px-2 md:px-4 py-6 md:py-12">
-      {/* Enhanced Header */}
-      <motion.h1
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="text-2xl md:text-4xl font-extrabold text-center mb-6 md:mb-12 bg-gradient-to-r from-red-600 to-red-800 bg-clip-text text-transparent py-1 md:py-2"
-      >
-        Integrated Food Systems and Agroecology Framework
-      </motion.h1>
+   <div className="container mx-auto px-4 md:px-8 py-8 md:py-16">
+  {/* Animated Header */}
+  <motion.h1
+    initial={{ opacity: 0, y: -30 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ duration: 0.8, ease: 'easeInOut' }}
+    className="text-3xl md:text-5xl font-extrabold text-center mb-8 md:mb-16 
+               bg-gradient-to-r from-red-600 via-red-700 to-red-800 bg-clip-text text-transparent py-2 md:py-4 
+               shadow-lg hover:shadow-2xl transition-shadow duration-500"
+  >
+    Mapping Tool - Integrated Framework for Sustainable Agricultural & Food Systems Transformation
+  </motion.h1>
 
-      {/* Centered Link */}
-            <div className="flex justify-center mb-6 md:mb-12">
-              <Link
-                to="/login"
-                className="px-6 py-3 md:px-8 md:py-4 text-lg md:text-xl text-white rounded-lg bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 transition transform hover:scale-105"
-                style={{
-                  animation: 'pop 1.5s infinite',
-                  '@keyframes pop': {
-                    '0%, 100%': { transform: 'scale(1)' },
-                    '50%': { transform: 'scale(1.1)' },
-                  },
-                }}
-              >
-                Take a Survey of your Project
-              </Link>
-            </div>
+  {/* Centered Link with Animation */}
+  <div className="flex justify-center mb-8 md:mb-16">
+    <Link
+      to="/login"
+      className="px-8 py-4 md:px-10 md:py-5 text-lg md:text-2xl font-medium text-white rounded-lg 
+                 bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 
+                 transition transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-red-500/50"
+    >
+      Take a Survey of your Project
+    </Link>
+  </div>
+
       
       
 
-
-        {/* Enhanced Content Sections */}
-        <div className="container mx-auto p-2 md:p-4 space-y-8 md:space-y-12">
-          {content.map((text, index) => {
-            const isExpanded = readMore[index] || false;
-            const handleReadMoreToggle = () => toggleReadMore(index);
-            const truncatedText = text.length > 1000 ? `${text.slice(0, 1000)}...` : text;
-        
-            if (index < 2) {
-              // Only first two sections have images
-              return (
-                <div
-                  key={index}
-                  className="flex flex-col md:flex-row gap-4 md:gap-8 items-center md:items-stretch"
-                >
-                  {index % 2 === 0 ? (
-                    <>
-                      {/* Text Left, Photo Right */}
-                      <div className="flex-1 space-y-3 md:space-y-6">
-                        <motion.div
-                          initial={{ opacity: 0, x: -50 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: 0.2 }}
-                          className="group relative overflow-hidden"
-                        >
-                          <div className="bg-white dark:bg-gray-800 rounded-lg md:rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 p-4 md:p-8 border border-gray-100 dark:border-gray-700">
-                            <div className="absolute top-0 left-0 w-1 md:w-2 h-full bg-gradient-to-b from-red-500 to-red-700" />
-                            <p className="text-sm md:text-lg text-gray-700 dark:text-gray-200 leading-relaxed pl-2 md:pl-4 first-letter:text-3xl md:first-letter:text-5xl first-letter:font-bold first-letter:mr-1 md:first-letter:mr-2 first-letter:text-red-700" style={{ textIndent: '1.5em' }}>
-                              {isExpanded ? text : truncatedText}
-                            </p>
-                            {text.length > 200 && (
-                              <button onClick={handleReadMoreToggle} className="text-red-500 hover:text-red-700 transition mt-1 md:mt-2 text-sm md:text-base">
-                                {isExpanded ? 'Read less' : 'Read more...'}
-                              </button>
-                            )}
-                          </div>
-                        </motion.div>
-                      </div>
-                      <motion.div initial={{ opacity: 0, x: 50 }} animate={{ opacity: 1, x: 0 }} className="w-full md:w-auto flex items-center">
-                        <div className="bg-gray-200 rounded-lg md:rounded-xl overflow-hidden w-full h-auto">
-                          <img src={photo1} alt="Image for content 1" className="w-full h-full object-contain" />
-                        </div>
-                      </motion.div>
-                    </>
-                  ) : (
-                    <>
-                      {/* Photo Left, Text Right */}
-                      <motion.div initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} className="w-full md:w-auto flex items-center">
-                        <div className="bg-gray-200 rounded-lg md:rounded-xl overflow-hidden w-full h-auto">
-                          <img src={photo2} alt="Image for content 2" className="w-full h-full object-contain" />
-                        </div>
-                      </motion.div>
-                      <div className="flex-1 space-y-3 md:space-y-6">
-                        <motion.div
-                          initial={{ opacity: 0, x: 50 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: 0.2 }}
-                          className="group relative overflow-hidden"
-                        >
-                          <div className="bg-white dark:bg-gray-800 rounded-lg md:rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 p-4 md:p-8 border border-gray-100 dark:border-gray-700">
-                            <div className="absolute top-0 left-0 w-1 md:w-2 h-full bg-gradient-to-b from-red-500 to-red-700" />
-                            <p className="text-sm md:text-lg text-gray-700 dark:text-gray-200 leading-relaxed pl-2 md:pl-4 first-letter:text-3xl md:first-letter:text-5xl first-letter:font-bold first-letter:mr-1 md:first-letter:mr-2 first-letter:text-red-700" style={{ textIndent: '1.5em' }}>
-                              {isExpanded ? text : truncatedText}
-                            </p>
-                            {text.length > 200 && (
-                              <button onClick={handleReadMoreToggle} className="text-red-500 hover:text-red-700 transition mt-1 md:mt-2 text-sm md:text-base">
-                                {isExpanded ? 'Read less' : 'Read more...'}
-                              </button>
-                            )}
-                          </div>
-                        </motion.div>
-                      </div>
-                    </>
-                  )}
-                </div>
-              );
-            } else {
-              return (
-                <div className="group relative overflow-hidden">
-                  <div className="bg-white dark:bg-gray-800 rounded-lg md:rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 p-4 md:p-8 border border-gray-100 dark:border-gray-700">
-                    <div className="absolute top-0 left-0 w-1 md:w-2 h-full bg-gradient-to-b from-red-500 to-red-700" />
-                    <p className="text-sm md:text-lg text-gray-700 dark:text-gray-200 leading-relaxed pl-2 md:pl-4 first-letter:text-3xl md:first-letter:text-5xl first-letter:font-bold first-letter:mr-1 md:first-letter:mr-2 first-letter:text-red-700" style={{ textIndent: '1.5em' }}>
-                      {isExpanded ? text : truncatedText}
-                    </p>
-                    {text.length > 200 && (
-                      <button onClick={handleReadMoreToggle} className="text-red-500 hover:text-red-700 transition mt-1 md:mt-2 text-sm md:text-base">
-                        {isExpanded ? 'Read less' : 'Read more...'}
-                      </button>
-                    )}
-                  </div>
-                </div>
-              );
-            }
-          })}
+        {/* About Section */}
+       <div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-black dark:to-gray-900 p-8 rounded-2xl border border-red-500/30 backdrop-blur-xl relative overflow-hidden group">
+      {/* Animated background elements */}
+      <div className="absolute inset-0 bg-grid-black/[0.02] dark:bg-grid-white/[0.02] bg-[size:30px_30px]" />
+      <div className="absolute -top-20 -left-20 w-72 h-72 bg-red-500/10 dark:bg-red-500/20 rounded-full blur-3xl animate-pulse" />
+      <div className="absolute -bottom-20 -right-20 w-72 h-72 bg-red-400/10 dark:bg-red-400/20 rounded-full blur-3xl animate-pulse delay-1000" />
+      
+      {/* Header section */}
+      <div className="bg-gradient-to-r from-red-500 to-red-600 dark:from-red-600 dark:to-red-700 p-6 rounded-xl text-center transform group-hover:scale-[1.02] transition-all duration-500 relative z-10 border border-red-200/20 dark:border-white/10">
+        <h2 className="text-3xl font-bold tracking-wider text-white">About Us</h2>
+      </div>
+      
+      {/* Content section */}
+      <div className="bg-white/80 dark:bg-white/5 p-8 rounded-xl mt-6 backdrop-blur-xl border border-red-200/20 dark:border-white/10 relative z-10">
+        <div className="space-y-6">
+          <p className="text-lg leading-relaxed text-gray-800 dark:text-gray-100">
+            <span className="float-left text-8xl font-serif mr-4 mt-1 leading-[0.8] text-red-600 dark:text-red-500">
+              T
+            </span>
+            his section highlights the outcomes of a comprehensive mapping initiative focused on 
+            developmental projects across the Asia-Pacific region. Our findings showcase how 
+            sustainable farming practices are being adopted through the lens of the Food Systems framework.
+            The initiative encompasses various innovative approaches to agricultural development,
+            focusing on both traditional and modern farming techniques that promote sustainability
+            while ensuring food security for local communities.
+          </p>
+          
+          <div className="text-lg leading-relaxed text-gray-800 dark:text-gray-100">
+            Designed as a resource for programs, this platform provides actionable insights and strategies 
+            for integrating sustainable agriculture principles into practice. By spotlighting practical pathways, 
+            we aim to inspire learning and collaboration, empowering projects to contribute to resilient and sustainable 
+            food systems throughout the region.
+          </div>
         </div>
+      </div>
+      
+      {/* Interactive highlight effects */}
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+        <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 to-red-400/5 dark:from-red-500/10 dark:to-red-400/10 rounded-2xl" />
+      </div>
+    </div>
 
-            {/* Enhanced Tables Section */}
-            <div className="space-y-6 md:space-y-12">
-              <div className="flex justify-center mb-3 md:mb-6 pb-1 md:pb-2">
-                {tables.map((table, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setActiveTab(index)}
-                    className={`px-6 py-3 md:px-8 md:py-4 text-sm md:text-lg font-medium rounded-lg mr-2 md:mr-4 transition-all duration-200
-                      ${
-                        activeTab === index
-                          ? 'bg-gradient-to-r from-red-500 to-red-700 text-white shadow-lg'
-                          : 'bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-red-50 dark:hover:bg-red-900/20'
-                      }`}
+       {/* <div className="flex justify-center my-12">
+  <motion.div
+    initial={{ opacity: 0, scale: 0.9 }}
+    animate={{ opacity: 1, scale: 1 }}
+    whileHover={{ scale: 1.05 }}
+    transition={{ duration: 0.8, ease: "easeInOut" }}
+    className="w-11/12 sm:w-10/12 md:w-8/12 lg:w-7/12 xl:w-7/12"
+  >
+    <img
+      src={photo1}
+      alt="Descriptive Alt Text"
+      className="w-full rounded-lg shadow-lg transition-shadow duration-500 hover:shadow-2xl"
+    />
+  </motion.div>
+</div> */}
+      {/* Image Display */}
+      <div className="flex justify-center my-12">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          whileHover={{ scale: 1.05 }}
+          transition={{ duration: 0.8, ease: "easeInOut" }}
+          className="w-11/12 sm:w-10/12 md:w-8/12 lg:w-7/12 xl:w-7/12 cursor-pointer"
+          onClick={() => setIsModalOpen(true)}
+        >
+          <img
+            src={photo1}
+            alt="Descriptive Alt Text"
+            className="w-full rounded-lg shadow-lg transition-shadow duration-500 hover:shadow-2xl"
+          />
+        </motion.div>
+      </div>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70"
+          onClick={() => setIsModalOpen(false)}
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+            className="w-4/5" // 80% of the screen width
+          >
+            <img
+              src={photo1}
+              alt="Zoomed Image"
+              className="w-full rounded-lg"
+            />
+          </motion.div>
+        </div>
+      )}
+
+{/* Background Section */}
+<div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-8 rounded-2xl border border-red-500/30 backdrop-blur-xl relative overflow-hidden group">
+  {/* Animated background elements */}
+  <div className="absolute inset-0 bg-grid-black/[0.02] dark:bg-grid-white/[0.02] bg-[size:30px_30px]" />
+  <div className="absolute -top-20 -left-20 w-72 h-72 bg-red-500/10 dark:bg-red-500/20 rounded-full blur-3xl animate-pulse" />
+  <div className="absolute -bottom-20 -right-20 w-72 h-72 bg-red-400/10 dark:bg-red-400/20 rounded-full blur-3xl animate-pulse delay-1000" />
+
+  {/* Header section */}
+  <div className="bg-gradient-to-r from-red-500 to-red-600 dark:from-red-600 dark:to-red-700 p-6 rounded-xl text-center transform group-hover:scale-[1.02] transition-all duration-500 relative z-10 border border-red-200/20 dark:border-white/10">
+    <h2 className="text-2xl font-bold tracking-wider text-white">Background - The Genesis</h2>
+  </div>
+
+  {/* Content section */}
+  <div className="bg-white/80 dark:bg-white/5 p-8 rounded-xl mt-6 backdrop-blur-xl border border-red-200/20 dark:border-white/10 relative z-10">
+    <div className="space-y-6">
+      <p className="text-lg leading-relaxed text-gray-800 dark:text-gray-100">
+        The global shift towards comprehensive and holistic approaches to agriculture and food systems is rapidly gaining traction. Notable initiatives, such as BMZ's flagship program, <em className="text-red-600 dark:text-red-500">"Transformation of Agricultural and Food Systems"</em>, and its Asia Strategy, exemplify this evolving paradigm. Likewise, within GIZ India, the Environment, Climate Change & Biodiversity Cluster emphasizes sustainable development and ecological stewardship to conserve natural resources, address environmental degradation, and ultimately enhance the quality of human life.
+      </p>
+      
+      <p className="text-lg leading-relaxed text-gray-800 dark:text-gray-100">
+        Building on insights from the GIZ India Green Cluster analysis, the Working Group (WG) on Agriculture undertook a comprehensive mapping exercise of relevant GIZ projects across the Asia-Pacific region. This initiative employed an integrated framework that blends a theory of change narrative with a Sustainable Agriculture and Food Systems approach, charting actionable pathways for transforming food systems sustainably.
+      </p>
+      
+      <p className="text-lg leading-relaxed text-gray-800 dark:text-gray-100">
+        This framework was collaboratively developed by GIZ India's Food Systems Transformation (FST) core group, an international expert, and an Indian consultant. It incorporated valuable contributions from project teams, sector specialists, GIZ HQ sector projects (Food and Nutrition Security and Agroecology), and leading international agencies. The outcome serves as a foundation for driving meaningful progress in sustainable food systems transformation across the region.
+      </p>
+    </div>
+  </div>
+
+  {/* Interactive highlight effects */}
+  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+    <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 to-red-400/5 dark:from-red-500/10 dark:to-red-400/10 rounded-2xl" />
+  </div>
+</div>
+        
+
+        {/* Theory of Change Section */}
+<div className="mt-12 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-8 rounded-2xl border border-red-500/30 backdrop-blur-xl relative overflow-hidden group">
+  {/* Animated background elements */}
+  <div className="absolute inset-0 bg-grid-black/[0.02] dark:bg-grid-white/[0.02] bg-[size:30px_30px]" />
+  <div className="absolute -top-20 -left-20 w-72 h-72 bg-red-500/10 dark:bg-red-500/20 rounded-full blur-3xl animate-pulse" />
+  <div className="absolute -bottom-20 -right-20 w-72 h-72 bg-red-400/10 dark:bg-red-400/20 rounded-full blur-3xl animate-pulse delay-1000" />
+
+  {/* Header section */}
+  <div className="bg-gradient-to-r from-red-500 to-red-600 dark:from-red-600 dark:to-red-700 p-6 rounded-xl text-center transform group-hover:scale-[1.02] transition-all duration-500 relative z-10 border border-red-200/20 dark:border-white/10">
+    <h2 className="text-2xl font-bold tracking-wider text-white">Theory of Change</h2>
+  </div>
+
+  {/* Content section */}
+  <div className="bg-white/80 dark:bg-white/5 p-8 rounded-xl mt-6 backdrop-blur-xl border border-red-200/20 dark:border-white/10 relative z-10">
+    <div className="space-y-6">
+      <p className="text-lg leading-relaxed text-gray-800 dark:text-gray-100">
+        The Theory of Change (ToC) within the <span className="text-red-600 dark:text-red-500">Integrated Sustainable Agriculture and Food Systems Framework (SA-FS Framework)</span> identifies ten critical pathways essential for achieving transformative outcomes. These pathways focus on vital areas such as fostering sustainable and resilient production systems, promoting efficient and inclusive supply chain management, strengthening connections between consumers and producers, addressing food security and nutrition challenges, and enhancing the policy environment to support these objectives.
+      </p>
+      
+      <p className="text-lg leading-relaxed text-gray-800 dark:text-gray-100">
+        Each pathway is derived from sub-dimensions of the Food Systems Framework and is guided by the <span className="text-red-600 dark:text-red-500">13 agroecological principles</span> outlined by the High-Level Panel of Experts (HLPE). Together, these pathways form a cohesive strategy for driving the transformation of food systems through agroecology. 
+      </p>
+      
+      <p className="text-lg leading-relaxed text-gray-800 dark:text-gray-100">
+        The ten pathways for food systems transformation, conceptualized as hypotheses, are detailed in the accompanying table, serving as a roadmap for advancing sustainable agricultural practices and achieving food systems resilience.
+      </p>
+    </div>
+  </div>
+
+  {/* Interactive highlight effects */}
+  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+    <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 to-red-400/5 dark:from-red-500/10 dark:to-red-400/10 rounded-2xl" />
+  </div>
+</div>
+
+        {/* Enhanced Tables Section */}
+<div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-8 rounded-2xl border border-red-500/30 backdrop-blur-xl relative overflow-hidden group mt-12">
+  {/* Animated background elements */}
+  <div className="absolute inset-0 bg-grid-black/[0.02] dark:bg-grid-white/[0.02] bg-[size:30px_30px]" />
+  <div className="absolute -top-20 -left-20 w-72 h-72 bg-red-500/10 dark:bg-red-500/20 rounded-full blur-3xl animate-pulse" />
+  <div className="absolute -bottom-20 -right-20 w-72 h-72 bg-red-400/10 dark:bg-red-400/20 rounded-full blur-3xl animate-pulse delay-1000" />
+
+  {/* Table Navigation */}
+  <div className="flex justify-center mb-6 relative z-10">
+    {tables.map((table, index) => (
+      <button
+        key={index}
+        onClick={() => setActiveTab(index)}
+        className={`
+          px-6 py-3 md:px-8 md:py-4 text-sm md:text-lg font-medium rounded-xl mr-2 md:mr-4 
+          transition-all duration-300 transform hover:scale-105
+          border border-red-200/20 dark:border-white/10 backdrop-blur-sm
+          ${
+            activeTab === index
+              ? 'bg-gradient-to-r from-red-500 to-red-600 dark:from-red-600 dark:to-red-700 text-white shadow-lg'
+              : 'bg-white/80 dark:bg-white/5 text-gray-700 dark:text-gray-200 hover:bg-red-50/80 dark:hover:bg-red-900/20'
+          }
+        `}
+      >
+        {table.title}
+      </button>
+    ))}
+  </div>
+
+  {/* Table Content */}
+  {tables.map((table, index) => (
+    <motion.div
+      key={index}
+      initial={false}
+      animate={{
+        opacity: activeTab === index ? 1 : 0,
+        x: activeTab === index ? 0 : 20,
+      }}
+      className={`relative z-10 ${activeTab === index ? 'block' : 'hidden'}`}
+    >
+      <div className="bg-white/90 dark:bg-gray-900/90 rounded-xl shadow-xl overflow-hidden border border-red-200/20 dark:border-white/10 backdrop-blur-xl">
+        <div className="overflow-x-auto">
+          <table className="min-w-full text-sm md:text-base">
+            <thead>
+              <tr className="bg-gradient-to-r from-red-500 to-red-600 dark:from-red-600 dark:to-red-700">
+                {table.headers.map((header, i) => (
+                  <th
+                    key={i}
+                    className="px-4 md:px-6 py-3 md:py-4 text-center text-white font-semibold tracking-wider text-lg md:text-xl"
                   >
-                    {table.title}
-                  </button>
+                    {header}
+                  </th>
                 ))}
-              </div>
-            
-              {tables.map((table, index) => (
-                <motion.div
-                  key={index}
-                  initial={false}
-                  animate={{
-                    opacity: activeTab === index ? 1 : 0,
-                    x: activeTab === index ? 0 : 20,
-                  }}
-                  className={`${activeTab === index ? 'block' : 'hidden'}`}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-red-100/20 dark:divide-gray-700">
+              {table.rows.map((row, i) => (
+                <tr
+                  key={i}
+                  className="hover:bg-red-50/50 dark:hover:bg-red-900/20 transition-colors duration-200"
                 >
-                  <div className="bg-white dark:bg-gray-800 rounded-lg md:rounded-xl shadow-xl overflow-hidden border border-gray-100 dark:border-gray-700">
-                    <div className="overflow-x-auto">
-                      <table className="min-w-full text-sm md:text-base">
-                        <thead>
-                          <tr className="bg-gradient-to-r from-red-500 to-red-700">
-                            {table.headers.map((header, i) => (
-                              <th
-                                key={i}
-                                className="px-4 md:px-6 py-2 md:py-4 text-center text-white font-semibold tracking-wider text-lg md:text-xl"
-                              >
-                                {header}
-                              </th>
-                            ))}
-                          </tr>
-                        </thead>
-                        <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                          {table.rows.map((row, i) => (
-                            <tr
-                              key={i}
-                              className="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors duration-150"
-                            >
-                              {row.map((cell, j) => (
-                                <td
-                                  key={j}
-                                  className="px-4 md:px-6 py-2 md:py-4 text-gray-700 dark:text-gray-200 text-center text-base md:text-lg"
-                                >
-                                  {cell}
-                                </td>
-                              ))}
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
-                  </div>
-                </motion.div>
+                  {row.map((cell, j) => (
+                    <td
+                      key={j}
+                      className="px-4 md:px-6 py-3 md:py-4 text-gray-700 dark:text-gray-200 text-center text-base md:text-lg"
+                    >
+                      {cell}
+                    </td>
+                  ))}
+                </tr>
               ))}
-            </div>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </motion.div>
+  ))}
+
+  {/* Interactive highlight effects */}
+  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+    <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 to-red-400/5 dark:from-red-500/10 dark:to-red-400/10 rounded-2xl" />
+  </div>
+</div>
+
+            {/* Methodology Section */}
+<div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-8 rounded-2xl border border-red-500/30 backdrop-blur-xl relative overflow-hidden group mt-12">
+  {/* Animated background elements */}
+  <div className="absolute inset-0 bg-grid-black/[0.02] dark:bg-grid-white/[0.02] bg-[size:30px_30px]" />
+  <div className="absolute -top-20 -left-20 w-72 h-72 bg-red-500/10 dark:bg-red-500/20 rounded-full blur-3xl animate-pulse" />
+  <div className="absolute -bottom-20 -right-20 w-72 h-72 bg-red-400/10 dark:bg-red-400/20 rounded-full blur-3xl animate-pulse delay-1000" />
+
+  {/* Header section */}
+  <div className="bg-gradient-to-r from-red-500 to-red-600 dark:from-red-600 dark:to-red-700 p-6 rounded-xl text-center transform group-hover:scale-[1.02] transition-all duration-500 relative z-10 border border-red-200/20 dark:border-white/10">
+    <h2 className="text-2xl font-bold tracking-wider text-white">Methodology for FS/AE Project Profiling</h2>
+  </div>
+
+  {/* Content section */}
+  <div className="bg-white/80 dark:bg-white/5 p-8 rounded-xl mt-6 backdrop-blur-xl border border-red-200/20 dark:border-white/10 relative z-10">
+    <div className="space-y-8">
+      {/* Introduction */}
+      <p className="text-lg leading-relaxed text-gray-800 dark:text-gray-100">
+        A tailored methodology was developed to align with the FS/AE framework, employing a self-appreciative inquiry approach. This approach empowers participating projects to share relevant data, which is systematically analyzed and compiled to support the dissemination of FS/AE perspectives among project stakeholders.
+      </p>
+
+      {/* Framework Basis */}
+      <div className="space-y-4">
+        <h3 className="text-xl font-semibold text-red-600 dark:text-red-500">Framework Basis and Questionnaire Design</h3>
+        <p className="text-lg leading-relaxed text-gray-800 dark:text-gray-100">
+          The SA/FS framework forms the foundation of this methodology, featuring 10 pathways (outlined in the previous section) and 46 principles that are further subdivided into 57 actionable activities promoting agroecology. Each activity is crafted into a question to assess its relevance and applicability to projects. The questionnaire remains adaptable, allowing customization to address specific sector needs while preserving its core pathways and principles. Most questions are close-ended, enabling respondents to select predefined options or input numerical values.
+        </p>
+        
+        <div className="relative group mt-6 mb-8">
+          <div className="overflow-hidden rounded-xl shadow-lg">
+            <img 
+              src={photo2} 
+              alt="Framework Illustration" 
+              className="w-full transform group-hover:scale-105 transition-transform duration-500"
+            />
+          </div>
+        </div>
+        
+        <p className="text-lg leading-relaxed text-gray-800 dark:text-gray-100">
+          This methodology encourages voluntary participation from projects and stakeholders. An open call can be issued to invite relevant participants across the region or beyond. Project teams are encouraged to assign 2–3 members to collaborate with the consultant and ensure accurate and comprehensive data collection through the questionnaire.
+        </p>
+      </div>
+
+      {/* Tool Development */}
+      <div className="space-y-4">
+        <h3 className="text-xl font-semibold text-red-600 dark:text-red-500">Tool Development and Analysis Plan</h3>
+        <p className="text-lg leading-relaxed text-gray-800 dark:text-gray-100">
+          A structured digital tool has been designed to facilitate the data collection process. This tool allows respondents to efficiently input data, with all responses being automatically saved for analysis. The digital approach ensures streamlined data management and enhances the overall accuracy of findings.
+        </p>
+      </div>
+
+      {/* Method for Questionnaire */}
+      <div className="space-y-4">
+        <h3 className="text-xl font-semibold text-red-600 dark:text-red-500">Method to Fill the Questionnaire</h3>
+        <p className="text-lg leading-relaxed text-gray-800 dark:text-gray-100">
+          Respondents are advised to carefully read each question and categorize activities as ongoing, planning, completed, or not in focus. To ensure accurate and detailed responses, project teams should involve multiple members and consult the advisor when clarification is needed.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  {/* Interactive highlight effects */}
+  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+    <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 to-red-400/5 dark:from-red-500/10 dark:to-red-400/10 rounded-2xl" />
+  </div>
+</div>
+
+
+          {/* Dos and Don'ts Section */}
+<div className="mt-12 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-8 rounded-2xl border border-red-500/30 backdrop-blur-xl relative overflow-hidden group">
+ {/* Animated background elements */}
+ <div className="absolute inset-0 bg-grid-black/[0.02] dark:bg-grid-white/[0.02] bg-[size:30px_30px]" />
+ <div className="absolute -top-20 -left-20 w-72 h-72 bg-red-500/10 dark:bg-red-500/20 rounded-full blur-3xl animate-pulse" />
+ <div className="absolute -bottom-20 -right-20 w-72 h-72 bg-red-400/10 dark:bg-red-400/20 rounded-full blur-3xl animate-pulse delay-1000" />
+
+ {/* Header section */}
+ <div className="bg-gradient-to-r from-red-500 to-red-600 dark:from-red-600 dark:to-red-700 p-6 rounded-xl text-center transform group-hover:scale-[1.02] transition-all duration-500 relative z-10 border border-red-200/20 dark:border-white/10">
+   <h2 className="text-2xl font-bold tracking-wider text-white">Dos and Don'ts</h2>
+ </div>
+
+ {/* Table section */}
+ <div className="bg-white/80 dark:bg-white/5 p-8 rounded-xl mt-6 backdrop-blur-xl border border-red-200/20 dark:border-white/10 relative z-10">
+   <div className="overflow-x-auto">
+     <table className="min-w-full">
+       <thead>
+         <tr className="bg-gradient-to-r from-red-500 to-red-600 dark:from-red-600 dark:to-red-700">
+           <th className="px-6 py-4 text-left text-lg font-semibold text-white tracking-wider">Dos</th>
+           <th className="px-6 py-4 text-left text-lg font-semibold text-white tracking-wider">Don'ts</th>
+         </tr>
+       </thead>
+       <tbody className="divide-y divide-red-100/20 dark:divide-gray-700">
+         <tr className="hover:bg-red-50/50 dark:hover:bg-red-900/20 transition-colors duration-200">
+           <td className="px-6 py-4 text-gray-800 dark:text-gray-100 text-lg">
+             Carefully read each question before answering.
+           </td>
+           <td className="px-6 py-4 text-gray-800 dark:text-gray-100 text-lg">
+             Do not skip questions or leave responses blank.
+           </td>
+         </tr>
+         <tr className="hover:bg-red-50/50 dark:hover:bg-red-900/20 transition-colors duration-200">
+           <td className="px-6 py-4 text-gray-800 dark:text-gray-100 text-lg">
+             Involve team members for accurate inputs.
+           </td>
+           <td className="px-6 py-4 text-gray-800 dark:text-gray-100 text-lg">
+             Avoid guessing or assuming information.
+           </td>
+         </tr>
+         <tr className="hover:bg-red-50/50 dark:hover:bg-red-900/20 transition-colors duration-200">
+           <td className="px-6 py-4 text-gray-800 dark:text-gray-100 text-lg">
+             Provide responses that reflect the current status accurately.
+           </td>
+           <td className="px-6 py-4 text-gray-800 dark:text-gray-100 text-lg">
+             Do not overstate or exaggerate activities.
+           </td>
+         </tr>
+         <tr className="hover:bg-red-50/50 dark:hover:bg-red-900/20 transition-colors duration-200">
+           <td className="px-6 py-4 text-gray-800 dark:text-gray-100 text-lg">
+             Wherever needed, include observations with examples.
+           </td>
+           <td className="px-6 py-4 text-gray-800 dark:text-gray-100 text-lg">
+             Do not rush through the questionnaire.
+           </td>
+         </tr>
+       </tbody>
+     </table>
+   </div>
+ </div>
+
+ {/* Interactive highlight effects */}
+ <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+   <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 to-red-400/5 dark:from-red-500/10 dark:to-red-400/10 rounded-2xl" />
+ </div>
+</div>          
     </div>
 
                 <div className="mt-6 md:mt-12 text-center">
@@ -316,50 +556,85 @@ const Home = () => {
           </Link>
         </div>
 
-    {/* Footer */}
-    <footer className="bg-gray-800 text-white mt-8 md:mt-16 py-4 md:py-8">
-  <div className="container mx-auto px-2 md:px-4">
+    <footer className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white mt-8 md:mt-16 py-8 md:py-12">
+  <div className="container mx-auto px-4 md:px-8">
     <div className="flex flex-wrap justify-center md:justify-between text-center md:text-left">
-      <div className="w-full md:w-1/3 mb-4 md:mb-0">
-        <img src={gizLogo} alt="GIZ Logo" className="h-8 md:h-12 w-auto mx-auto md:mx-0 mb-2 md:mb-4" />
-        <p className="text-xs md:text-sm">
+      {/* Logo and Description */}
+      <div className="w-full md:w-1/3 mb-8 md:mb-0">
+        <img
+          src={gizLogo}
+          alt="GIZ Logo"
+          className="h-10 md:h-14 w-auto mx-auto md:mx-0 mb-4 hover:scale-110 transition-transform duration-300"
+        />
+        <p className="text-sm md:text-base text-gray-400 hover:text-gray-300 transition duration-300">
           Sustainable Agriculture & Food System Mapping Tool
         </p>
       </div>
-      <div className="w-full md:w-1/3 mb-4 md:mb-0">
-        <h3 className="text-sm md:text-lg font-semibold mb-2 md:mb-4">Contact</h3>
-        <p className="text-xs md:text-sm">Sudhir Shukla</p>
-        <p className="text-xs md:text-sm">Email:</p>
-        <p className="text-xs md:text-sm">
-          <a href="mailto:admin@ecociate.com?subject=SAFSYM&priority=high" className="hover:text-red-400">admin@ecociate.com</a>
+
+      {/* Contact Section */}
+      <div className="w-full md:w-1/3 mb-8 md:mb-0">
+        <h3 className="text-base md:text-lg font-semibold mb-4 text-gray-300 border-b border-gray-600 pb-2">
+          Contact
+        </h3>
+        <p className="text-sm text-gray-400">Sudhir Shukla</p>
+        <p className="text-sm text-gray-400">Email:</p>
+        <p className="text-sm">
+          <a
+            href="mailto:admin@ecociate.com?subject=SAFSYM&priority=high"
+            className="text-red-400 hover:text-red-300 transition duration-300"
+          >
+            admin@ecociate.com
+          </a>
         </p>
-        <p className="text-xs md:text-sm">
-          <a href="mailto:sudhir@ecociate.com?subject=SAFSYM&priority=high" className="hover:text-red-400">sudhir@ecociate.com</a>
+        <p className="text-sm">
+          <a
+            href="mailto:sudhir@ecociate.com?subject=SAFSYM&priority=high"
+            className="text-red-400 hover:text-red-300 transition duration-300"
+          >
+            sudhir@ecociate.com
+          </a>
         </p>
       </div>
+
+      {/* Links Section */}
       <div className="w-full md:w-1/3">
-        <h3 className="text-sm md:text-lg font-semibold mb-2 md:mb-4">Links</h3>
-        <ul className="text-xs md:text-sm">
-          <li className="mb-1 md:mb-2">
-            <a href="#" className="hover:text-red-400">
+        <h3 className="text-base md:text-lg font-semibold mb-4 text-gray-300 border-b border-gray-600 pb-2">
+          Links
+        </h3>
+        <ul className="text-sm text-gray-400">
+          <li className="mb-2">
+            <a
+              href="#"
+              className="hover:text-red-300 transition duration-300"
+            >
               Privacy Policy
             </a>
           </li>
-          <li className="mb-1 md:mb-2">
-            <a href="#" className="hover:text-red-400">
+          <li className="mb-2">
+            <a
+              href="#"
+              className="hover:text-red-300 transition duration-300"
+            >
               Terms of Service
             </a>
           </li>
           <li>
-            <a href="#" className="hover:text-red-400">
+            <a
+              href="#"
+              className="hover:text-red-300 transition duration-300"
+            >
               Contact Us
             </a>
           </li>
         </ul>
       </div>
     </div>
-    <div className="text-center mt-4 md:mt-8 pt-4 md:pt-8 border-t border-gray-700">
-      <p className="text-xs md:text-sm">&copy; 2024 SAFSYM. All rights reserved.</p>
+
+    {/* Footer Bottom */}
+    <div className="text-center mt-8 pt-8 border-t border-gray-700">
+      <p className="text-xs md:text-sm text-gray-400 hover:text-gray-300 transition duration-300">
+        &copy; 2024 SAFSYM. All rights reserved.
+      </p>
     </div>
   </div>
 </footer>
