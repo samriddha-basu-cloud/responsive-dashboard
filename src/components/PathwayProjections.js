@@ -294,7 +294,7 @@ const PathwayProjections = ({ projectId, trigger }) => {
   });
 
   const generatePieChartData = () => {
-    const pathwayColors = [
+    const pathwayColors = [   
       'rgba(255, 99, 132, 0.6)',   // Red
       'rgba(54, 162, 235, 0.6)',   // Blue
       'rgba(255, 206, 86, 0.6)',   // Yellow
@@ -745,7 +745,7 @@ const downloadDetailedSpreadsheet = () => {
   <div className="p-6 bg-white dark:bg-gray-800 rounded-xl shadow-2xl">
     <div className="flex justify-between items-center mb-6">
       <h2 className="text-2xl font-bold text-gray-800 dark:text-gray-200">
-        Pathway Projections
+        Data Representation
       </h2>
     </div>
 
@@ -760,7 +760,7 @@ const downloadDetailedSpreadsheet = () => {
         </h3>
         {expanded.overallStatus ? <ChevronUp /> : <ChevronDown />}
       </div>
-      
+
       {expanded.overallStatus && (
         <div className="mt-4">
           <GraphTypeSelector />
@@ -776,7 +776,7 @@ const downloadDetailedSpreadsheet = () => {
 
     {/* Activity Status */}
     <div className="mb-6 bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-      <div 
+      <div
         className="flex justify-between items-center cursor-pointer"
         onClick={() => setExpanded(prev => ({ ...prev, activityStatus: !prev.activityStatus }))}
       >
@@ -785,7 +785,7 @@ const downloadDetailedSpreadsheet = () => {
         </h3>
         {expanded.activityStatus ? <ChevronUp /> : <ChevronDown />}
       </div>
-      
+
       {expanded.activityStatus && (
         <div className="mt-4">
           <GraphTypeSelector />

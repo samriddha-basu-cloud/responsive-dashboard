@@ -17,7 +17,7 @@ const ProjectionsModal = ({ isOpen, onClose, children }) => {
           {/* Header */}
           <div className="flex items-center justify-between p-4 border-b dark:border-gray-700">
             <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-              Pathway Projections
+              Data presented in the models.
             </h3>
             <button
               onClick={onClose}
