@@ -5,6 +5,7 @@ import gizLogo from '../assets/safsym.png';
 import photo1 from '../assets/photo1-giz.jpg';
 import photo2 from '../assets/photo2-giz.png';
 import { motion } from 'framer-motion';
+import report from '../assets/Project_Report(Giz).pdf';
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
@@ -158,8 +159,15 @@ const Home = () => {
       Take a Survey of your Project
     </Link>
   </div>
-
-      
+  <div className="flex justify-center mb-8">
+  <button className="px-8 py-4 text-lg font-medium text-white rounded-lg 
+                     bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 
+                     transition transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-red-500/50">
+    <a href={report} download="report" className="inline-block">
+      Download Report
+    </a>
+  </button>
+</div>
       
 
         {/* About Section */}
@@ -544,10 +552,10 @@ const Home = () => {
  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
    <div className="absolute inset-0 bg-gradient-to-br from-red-500/5 to-red-400/5 dark:from-red-500/10 dark:to-red-400/10 rounded-2xl" />
  </div>
-</div>          
+</div>
     </div>
 
-                <div className="mt-6 md:mt-12 text-center">
+         <div className="mt-6 md:mt-12 text-center">
           <Link
             to="/login"
             className="inline-block px-8 py-4 md:px-10 md:py-5 text-lg md:text-xl text-white rounded-lg bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 transition transform hover:scale-105 animate-bounce"

@@ -4,14 +4,14 @@ import { db, auth } from '../firebase';
 import { Bar, Pie, Line, Radar } from 'react-chartjs-2';
 import Chart from 'chart.js/auto';
 import * as XLSX from 'xlsx';
-import { 
-  ChevronDown, 
-  ChevronUp, 
-  BarChart, 
-  PieChart, 
-  LineChart, 
+import {
+  ChevronDown,
+  ChevronUp,
+  BarChart,
+  PieChart,
+  LineChart,
   RadarIcon,
-  AlertCircle 
+  AlertCircle
 } from 'lucide-react';
 
   const convertChartsToImages = async () => {
@@ -266,7 +266,7 @@ const PREDEFINED_PATHWAY_QUESTIONS = {
 };
 
 const PATHWAY_ORDER = [
-  'Pathway1', 'Pathway2', 'Pathway3', 'Pathway4', 'Pathway5', 
+  'Pathway1', 'Pathway2', 'Pathway3', 'Pathway4', 'Pathway5',
   'Pathway6', 'Pathway7', 'Pathway8', 'Pathway9', 'Pathway10'
 ];
 

@@ -360,7 +360,7 @@ const Pathway10 = ({ onNext, onBack, projectId }) => {
 };
 
 const PATHWAY_ORDER = [
-  'Pathway1', 'Pathway2', 'Pathway3', 'Pathway4', 'Pathway5', 
+  'Pathway1', 'Pathway2', 'Pathway3', 'Pathway4', 'Pathway5',
   'Pathway6', 'Pathway7', 'Pathway8', 'Pathway9', 'Pathway10'
 ];
 
@@ -382,7 +382,7 @@ const downloadDetailedSpreadsheet = async () => {
 
     // Create detailed data structure
     let detailedData = [];
-    
+
     // Style configurations
     const headerStyle = {
       font: { bold: true, color: { rgb: "FFFFFF" } },
@@ -449,7 +449,7 @@ const downloadDetailedSpreadsheet = async () => {
     const range = XLSX.utils.decode_range(worksheet['!ref']);
     let currentPathway = '';
     let startRow = 1; // Skip header row
-    
+
     // Apply header styles
     for (let C = range.s.c; C <= range.e.c; ++C) {
       const address = XLSX.utils.encode_cell({ r: 0, c: C });
@@ -460,10 +460,10 @@ const downloadDetailedSpreadsheet = async () => {
     // Apply cell styles and merge pathway cells
     for (let R = 1; R <= range.e.r; ++R) {
       const pathwayCell = worksheet[XLSX.utils.encode_cell({ r: R, c: 0 })];
-      
+
       if (pathwayCell) {
         const pathwayValue = pathwayCell.v;
-        
+
         // Apply style to all cells in the row
         for (let C = 0; C <= range.e.c; ++C) {
           const address = XLSX.utils.encode_cell({ r: R, c: C });
