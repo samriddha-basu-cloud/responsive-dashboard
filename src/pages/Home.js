@@ -164,7 +164,7 @@ const Home = () => {
                      bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 
                      transition transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-red-500/50">
     <a href={report} download="report" className="inline-block">
-      Download Report
+      Download- Tool Description
     </a>
   </button>
 </div>
@@ -179,7 +179,7 @@ const Home = () => {
       
       {/* Header section */}
       <div className="bg-gradient-to-r from-red-500 to-red-600 dark:from-red-600 dark:to-red-700 p-6 rounded-xl text-center transform group-hover:scale-[1.02] transition-all duration-500 relative z-10 border border-red-200/20 dark:border-white/10">
-        <h2 className="text-3xl font-bold tracking-wider text-white">About Us</h2>
+        <h2 className="text-3xl font-bold tracking-wider text-white">Purpose of this Tool</h2>
       </div>
       
       {/* Content section */}
@@ -189,20 +189,11 @@ const Home = () => {
             <span className="float-left text-8xl font-serif mr-4 mt-1 leading-[0.8] text-red-600 dark:text-red-500">
               T
             </span>
-            his section highlights the outcomes of a comprehensive mapping initiative focused on 
-            developmental projects across the Asia-Pacific region. Our findings showcase how 
-            sustainable farming practices are being adopted through the lens of the Food Systems framework.
-            The initiative encompasses various innovative approaches to agricultural development,
-            focusing on both traditional and modern farming techniques that promote sustainability
-            while ensuring food security for local communities.
+            he purpose of this tool is to present the results of a mapping exercise on developmental projects across the Asia-Pacific region.
+            It highlights how these projects are implementing sustainable farming practices through the Food Systems  framework.
+            This tool is intended to help programs to apply principles and activities related to sustainable agriculture and food systems by showcasing practical pathways.
+            It also aims to foster learning in various projects to build stronger, more sustainable food systems in the region.
           </p>
-          
-          <div className="text-lg leading-relaxed text-gray-800 dark:text-gray-100">
-            Designed as a resource for programs, this platform provides actionable insights and strategies 
-            for integrating sustainable agriculture principles into practice. By spotlighting practical pathways, 
-            we aim to inspire learning and collaboration, empowering projects to contribute to resilient and sustainable 
-            food systems throughout the region.
-          </div>
         </div>
       </div>
       
@@ -282,15 +273,15 @@ const Home = () => {
   <div className="bg-white/80 dark:bg-white/5 p-8 rounded-xl mt-6 backdrop-blur-xl border border-red-200/20 dark:border-white/10 relative z-10">
     <div className="space-y-6">
       <p className="text-lg leading-relaxed text-gray-800 dark:text-gray-100">
-        The global shift towards comprehensive and holistic approaches to agriculture and food systems is rapidly gaining traction. Notable initiatives, such as BMZ's flagship program, <em className="text-red-600 dark:text-red-500">"Transformation of Agricultural and Food Systems"</em>, and its Asia Strategy, exemplify this evolving paradigm. Likewise, within GIZ India, the Environment, Climate Change & Biodiversity Cluster emphasizes sustainable development and ecological stewardship to conserve natural resources, address environmental degradation, and ultimately enhance the quality of human life.
+        The global shift towards comprehensive and holistic approaches to agriculture and food systems is rapidly gaining traction. Notable initiatives, such as BMZ's flagship program, <em className="text-red-600 dark:text-red-500">"Transformation of Agricultural and Food Systems"</em>, and its Asia Strategy, exemplify this evolving paradigm. Similarly, within GIZ India, the Environment, Climate Change & Biodiversity Cluster prioritizes sustainable development and ecological principles to conserve natural resources and address resource degradation, ultimately aiming to enhance human quality of life.
       </p>
       
       <p className="text-lg leading-relaxed text-gray-800 dark:text-gray-100">
-        Building on insights from the GIZ India Green Cluster analysis, the Working Group (WG) on Agriculture undertook a comprehensive mapping exercise of relevant GIZ projects across the Asia-Pacific region. This initiative employed an integrated framework that blends a theory of change narrative with a Sustainable Agriculture and Food Systems approach, charting actionable pathways for transforming food systems sustainably.
+      Building on insights from the GIZ India Green Cluster analysis, the Working Group (WG) on Agriculture conducted a mapping exercise for relevant GIZ projects in the Asia-Pacific region. This exercise utilized an integrated framework that combined a theory of change narrative with a Sustainable Agriculture and Food Systems approach to outline pathways for sustainable food systems transformation.
       </p>
       
       <p className="text-lg leading-relaxed text-gray-800 dark:text-gray-100">
-        This framework was collaboratively developed by GIZ India's Food Systems Transformation (FST) core group, an international expert, and an Indian consultant. It incorporated valuable contributions from project teams, sector specialists, GIZ HQ sector projects (Food and Nutrition Security and Agroecology), and leading international agencies. The outcome serves as a foundation for driving meaningful progress in sustainable food systems transformation across the region.
+      This framework was developed collaboratively by GIZ India's Food Systems Transformation (FST) core group, an international expert and an Indian Consultant, incorporating input from project teams, sector experts, GIZ HQ sector projects (Food and Nutrition Security and Agroecology), and international agencies.
       </p>
     </div>
   </div>
@@ -318,15 +309,15 @@ const Home = () => {
   <div className="bg-white/80 dark:bg-white/5 p-8 rounded-xl mt-6 backdrop-blur-xl border border-red-200/20 dark:border-white/10 relative z-10">
     <div className="space-y-6">
       <p className="text-lg leading-relaxed text-gray-800 dark:text-gray-100">
-        The Theory of Change (ToC) within the <span className="text-red-600 dark:text-red-500">Integrated Sustainable Agriculture and Food Systems Framework (SA-FS Framework)</span> identifies ten critical pathways essential for achieving transformative outcomes. These pathways focus on vital areas such as fostering sustainable and resilient production systems, promoting efficient and inclusive supply chain management, strengthening connections between consumers and producers, addressing food security and nutrition challenges, and enhancing the policy environment to support these objectives.
+        The Theory of Change (ToC) within the <span className="text-red-600 dark:text-red-500">Integrated Sustainable Agriculture and Food Systems Framework (SA-FS Framework)</span> outlines 10 key pathways that are necessary for achieving transformation, focussing on crucial aspects such as sustainable and resilient production systems, efficient and inclusive supply chain management, connecting consumers and producers, addressing food security and nutrition, and strengthening policy environment. 
       </p>
       
       <p className="text-lg leading-relaxed text-gray-800 dark:text-gray-100">
-        Each pathway is derived from sub-dimensions of the Food Systems Framework and is guided by the <span className="text-red-600 dark:text-red-500">13 agroecological principles</span> outlined by the High-Level Panel of Experts (HLPE). Together, these pathways form a cohesive strategy for driving the transformation of food systems through agroecology. 
+      Each pathway has derived from Sub-dimensions of the food systems framework and the 13 agroecological principles outlined by the HLPE. 
       </p>
       
       <p className="text-lg leading-relaxed text-gray-800 dark:text-gray-100">
-        The ten pathways for food systems transformation, conceptualized as hypotheses, are detailed in the accompanying table, serving as a roadmap for advancing sustainable agricultural practices and achieving food systems resilience.
+      10 Pathways for Food Systems Transformation through Agroecology (formulated as hypotheses) are elaborated in the following table.
       </p>
     </div>
   </div>
