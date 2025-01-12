@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import AestheticLoader from '../components/AestheticLoader';
 import gizLogo from '../assets/safsym.png';
@@ -6,12 +6,35 @@ import photo1 from '../assets/photo1-giz.jpg';
 import photo2 from '../assets/photo2-giz.png';
 import { motion } from 'framer-motion';
 import report from '../assets/Project_Report(Giz).pdf';
+import { FaDownload } from 'react-icons/fa'; // Import the download icon
+
 
 const Home = () => {
   const [loading, setLoading] = useState(true);
   const [readMore, setReadMore] = useState({});
   const [activeTab, setActiveTab] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showFloatingButton, setShowFloatingButton] = useState(false);
+  const downloadButtonRef = useRef(null);
+
+  useEffect(() => {
+  const observer = new IntersectionObserver(
+    ([entry]) => {
+      setShowFloatingButton(!entry.isIntersecting); // Show floating button when download button is out of view
+    },
+    { threshold: 1.0 } // Trigger only when fully out of view
+  );
+
+  if (downloadButtonRef.current) {
+    observer.observe(downloadButtonRef.current);
+  }
+
+  return () => {
+    if (downloadButtonRef.current) {
+      observer.unobserve(downloadButtonRef.current);
+    }
+  };
+}, []);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -159,12 +182,14 @@ const Home = () => {
       Take a Survey of your Project
     </Link>
   </div>
-  <div className="flex justify-center mb-8">
+  <div ref={downloadButtonRef} className="flex justify-center mb-8">
   <button className="px-8 py-4 text-lg font-medium text-white rounded-lg 
                      bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 
-                     transition transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-red-500/50">
+                     transition transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-red-500/50 
+                     shadow-lg hover:shadow-2xl flex items-center space-x-2">
+    <FaDownload className="text-white" /> {/* Download icon */}
     <a href={report} download="report" className="inline-block">
-      Download- Tool Description
+      Download: Tool Description
     </a>
   </button>
 </div>
@@ -258,7 +283,7 @@ const Home = () => {
       )}
 
 {/* Background Section */}
-<div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-8 rounded-2xl border border-red-500/30 backdrop-blur-xl relative overflow-hidden group">
+<div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-black dark:to-gray-900 p-8 rounded-2xl border border-red-500/30 backdrop-blur-xl relative overflow-hidden group">
   {/* Animated background elements */}
   <div className="absolute inset-0 bg-grid-black/[0.02] dark:bg-grid-white/[0.02] bg-[size:30px_30px]" />
   <div className="absolute -top-20 -left-20 w-72 h-72 bg-red-500/10 dark:bg-red-500/20 rounded-full blur-3xl animate-pulse" />
@@ -272,8 +297,11 @@ const Home = () => {
   {/* Content section */}
   <div className="bg-white/80 dark:bg-white/5 p-8 rounded-xl mt-6 backdrop-blur-xl border border-red-200/20 dark:border-white/10 relative z-10">
     <div className="space-y-6">
+      <span className="float-left text-8xl font-serif mr-4 mt-1 leading-[0.8] text-red-600 dark:text-red-500">
+              T
+            </span>
       <p className="text-lg leading-relaxed text-gray-800 dark:text-gray-100">
-        The global shift towards comprehensive and holistic approaches to agriculture and food systems is rapidly gaining traction. Notable initiatives, such as BMZ's flagship program, <em className="text-red-600 dark:text-red-500">"Transformation of Agricultural and Food Systems"</em>, and its Asia Strategy, exemplify this evolving paradigm. Similarly, within GIZ India, the Environment, Climate Change & Biodiversity Cluster prioritizes sustainable development and ecological principles to conserve natural resources and address resource degradation, ultimately aiming to enhance human quality of life.
+        he global shift towards comprehensive and holistic approaches to agriculture and food systems is rapidly gaining traction. Notable initiatives, such as BMZ's flagship program, <em className="text-red-600 dark:text-red-500">"Transformation of Agricultural and Food Systems"</em>, and its Asia Strategy, exemplify this evolving paradigm. Similarly, within GIZ India, the Environment, Climate Change & Biodiversity Cluster prioritizes sustainable development and ecological principles to conserve natural resources and address resource degradation, ultimately aiming to enhance human quality of life.
       </p>
       
       <p className="text-lg leading-relaxed text-gray-800 dark:text-gray-100">
@@ -294,7 +322,7 @@ const Home = () => {
         
 
         {/* Theory of Change Section */}
-<div className="mt-12 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-8 rounded-2xl border border-red-500/30 backdrop-blur-xl relative overflow-hidden group">
+<div className="mt-12 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-black dark:to-gray-900 p-8 rounded-2xl border border-red-500/30 backdrop-blur-xl relative overflow-hidden group">
   {/* Animated background elements */}
   <div className="absolute inset-0 bg-grid-black/[0.02] dark:bg-grid-white/[0.02] bg-[size:30px_30px]" />
   <div className="absolute -top-20 -left-20 w-72 h-72 bg-red-500/10 dark:bg-red-500/20 rounded-full blur-3xl animate-pulse" />
@@ -308,8 +336,11 @@ const Home = () => {
   {/* Content section */}
   <div className="bg-white/80 dark:bg-white/5 p-8 rounded-xl mt-6 backdrop-blur-xl border border-red-200/20 dark:border-white/10 relative z-10">
     <div className="space-y-6">
+      <span className="float-left text-8xl font-serif mr-4 mt-1 leading-[0.8] text-red-600 dark:text-red-500">
+              T
+            </span>
       <p className="text-lg leading-relaxed text-gray-800 dark:text-gray-100">
-        The Theory of Change (ToC) within the <span className="text-red-600 dark:text-red-500">Integrated Sustainable Agriculture and Food Systems Framework (SA-FS Framework)</span> outlines 10 key pathways that are necessary for achieving transformation, focussing on crucial aspects such as sustainable and resilient production systems, efficient and inclusive supply chain management, connecting consumers and producers, addressing food security and nutrition, and strengthening policy environment. 
+        he Theory of Change (ToC) within the <span className="text-red-600 dark:text-red-500">Integrated Sustainable Agriculture and Food Systems Framework (SA-FS Framework)</span> outlines 10 key pathways that are necessary for achieving transformation, focussing on crucial aspects such as sustainable and resilient production systems, efficient and inclusive supply chain management, connecting consumers and producers, addressing food security and nutrition, and strengthening policy environment. 
       </p>
       
       <p className="text-lg leading-relaxed text-gray-800 dark:text-gray-100">
@@ -329,7 +360,7 @@ const Home = () => {
 </div>
 
         {/* Enhanced Tables Section */}
-<div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-8 rounded-2xl border border-red-500/30 backdrop-blur-xl relative overflow-hidden group mt-12">
+<div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-black dark:to-gray-900 p-8 rounded-2xl border border-red-500/30 backdrop-blur-xl relative overflow-hidden group mt-12">
   {/* Animated background elements */}
   <div className="absolute inset-0 bg-grid-black/[0.02] dark:bg-grid-white/[0.02] bg-[size:30px_30px]" />
   <div className="absolute -top-20 -left-20 w-72 h-72 bg-red-500/10 dark:bg-red-500/20 rounded-full blur-3xl animate-pulse" />
@@ -413,7 +444,7 @@ const Home = () => {
 </div>
 
             {/* Methodology Section */}
-<div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-8 rounded-2xl border border-red-500/30 backdrop-blur-xl relative overflow-hidden group mt-12">
+<div className="bg-gradient-to-br from-gray-50 to-gray-100 dark:from-black dark:to-gray-900 p-8 rounded-2xl border border-red-500/30 backdrop-blur-xl relative overflow-hidden group mt-12">
   {/* Animated background elements */}
   <div className="absolute inset-0 bg-grid-black/[0.02] dark:bg-grid-white/[0.02] bg-[size:30px_30px]" />
   <div className="absolute -top-20 -left-20 w-72 h-72 bg-red-500/10 dark:bg-red-500/20 rounded-full blur-3xl animate-pulse" />
@@ -480,7 +511,7 @@ const Home = () => {
 
 
           {/* Dos and Don'ts Section */}
-<div className="mt-12 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 p-8 rounded-2xl border border-red-500/30 backdrop-blur-xl relative overflow-hidden group">
+<div className="mt-12 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-black dark:to-gray-900 p-8 rounded-2xl border border-red-500/30 backdrop-blur-xl relative overflow-hidden group">
  {/* Animated background elements */}
  <div className="absolute inset-0 bg-grid-black/[0.02] dark:bg-grid-white/[0.02] bg-[size:30px_30px]" />
  <div className="absolute -top-20 -left-20 w-72 h-72 bg-red-500/10 dark:bg-red-500/20 rounded-full blur-3xl animate-pulse" />
@@ -637,7 +668,20 @@ const Home = () => {
     </div>
   </div>
 </footer>
+
+{showFloatingButton && (
+  <div className="fixed sm:bottom-24 bottom-20 right-6">
+    <a
+      href={report}
+      download="Project_Report(Giz).pdf"
+      className="w-10 h-10 sm:w-12 sm:h-12 flex items-center justify-center rounded-full bg-gradient-to-r from-red-500 to-red-700 hover:from-red-600 hover:to-red-800 shadow-lg transition-transform transform hover:scale-110"
+    >
+      <FaDownload className="text-white text-2xl animate-pulse" />
+    </a>
   </div>
+)}
+  </div>
+
 );
 };
 
